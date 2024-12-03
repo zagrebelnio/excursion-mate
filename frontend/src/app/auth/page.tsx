@@ -7,8 +7,8 @@ export default function Register() {
   const mode = searchParams.get('mode');
 
   return (
-    <div>
-      <h1>ExcursionMate</h1>
+    <div className="flex flex-col items-center justify-center h-screen gap-5">
+      <h1 className="text-6xl font-bold text-black">ExcursionMate</h1>
       {mode === 'register' && <RegistrationForm />}  
     </div>
   );
