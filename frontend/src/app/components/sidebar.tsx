@@ -18,7 +18,7 @@ export default function Sidebar() {
   return (
     <>
       <div
-        className={`fixed inset-0 z-10 bg-black bg-opacity-50 ${isOpen ? 'block' : 'hidden'}`}
+        className={`fixed inset-0 z-10 bg-black bg-opacity-50 z-20 ${isOpen ? 'block' : 'hidden'}`}
         onClick={toggleSidebar}
       ></div>
 
@@ -62,7 +62,7 @@ export default function Sidebar() {
 
       {isButtonVisible && (
         <button
-          className="fixed top-4 left-4 text-white bg-black py-2 px-3 rounded-full z-30"
+          className="fixed top-4 left-4 text-white bg-black py-2 px-3 rounded-full z-20"
           onClick={toggleSidebar}
         >
           &#9776;

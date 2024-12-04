@@ -8,9 +8,9 @@ export default function Home() {
         className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center relative"
         style={{ backgroundImage: "url('/backgrounds/image 2.jpg')" }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-20 z-5"></div>
 
-        <div className="absolute top-8 right-8 text-lg flex space-x-4 items-center z-5 gap-4">
+        <div className="absolute top-8 right-8 text-lg flex space-x-4 items-center z-10 gap-4">
           <Link href="/auth?mode=login" className="px-4 py-1 text-white rounded-full font-semibold hover:bg-white hover:text-black transition duration-300 ease-in-out">
             Увійти
           </Link>
@@ -19,7 +19,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <h1 className="text-9xl font-bold text-white text-shadow z-5">ExcursionMate</h1>
+        <h1 className="text-9xl font-bold text-white text-shadow z-10">ExcursionMate</h1>
       </div>
     </div>
   );
