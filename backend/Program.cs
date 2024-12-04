@@ -1,4 +1,5 @@
 using backend.Data;
+using backend.Mappings;
 using backend.Models.Domain;
 using backend.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,7 +22,16 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnectionString"));
 });
 
+builder.Services.AddDbContext<ExcursionDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ExcursionsConnectionString"));
+});
+
+
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<IExcursionRepository, SQLExcursionRepository>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 builder.Services.AddIdentityCore<IdentityUser>().AddRoles<IdentityRole>().AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("ExcursionMate").AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
 
