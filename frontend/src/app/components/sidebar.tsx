@@ -1,8 +1,10 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Sidebar() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
 
@@ -37,22 +39,22 @@ export default function Sidebar() {
         <nav className="mt-4">
           <ul className="space-y-4">
             <li>
-              <Link href="/" className="block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md">
+              <Link href="/" className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/' ? 'bg-gray-100' : ''}`}>
                 Головна
               </Link>
             </li>
             <li>
-              <Link href="/excursions" className="block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md">
+              <Link href="/excursions" className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/excursions' ? 'bg-gray-100' : ''}`}>
                 Екскурсії
               </Link>
             </li>
             <li>
-              <Link href="/profile" className="block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md">
+              <Link href="/profile" className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}>
                 Профіль
               </Link>
             </li>
             <li>
-              <Link href="/logout" className="block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md">
+              <Link href="/logout" className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/logout' ? 'bg-gray-100' : ''}`}>
                 Вийти
               </Link>
             </li>
