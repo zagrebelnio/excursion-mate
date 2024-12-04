@@ -25,9 +25,9 @@ function LoginForm() {
         id="password"
         type="password"
         placeholder="Password"
+        required
         minLength={6}
         maxLength={20}
-        required
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
 
