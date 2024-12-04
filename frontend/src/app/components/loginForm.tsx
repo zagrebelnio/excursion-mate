@@ -14,6 +14,7 @@ function LoginForm() {
         id="email"
         type="email"
         placeholder="Email"
+        required
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
 
@@ -24,6 +25,9 @@ function LoginForm() {
         id="password"
         type="password"
         placeholder="Password"
+        minLength={6}
+        maxLength={20}
+        required
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
 
