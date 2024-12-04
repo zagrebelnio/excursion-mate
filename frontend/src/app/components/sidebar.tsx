@@ -39,22 +39,34 @@ export default function Sidebar() {
         <nav className="mt-4">
           <ul className="space-y-4">
             <li>
-              <Link href="/" className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/' ? 'bg-gray-100' : ''}`}>
+              <Link
+                href="/"
+                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/' ? 'bg-gray-100' : ''}`}
+              >
                 Головна
               </Link>
             </li>
             <li>
-              <Link href="/excursions" className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/excursions' ? 'bg-gray-100' : ''}`}>
+              <Link
+                href="/excursions"
+                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/excursions' ? 'bg-gray-100' : ''}`}
+              >
                 Екскурсії
               </Link>
             </li>
             <li>
-              <Link href="/profile" className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}>
+              <Link
+                href="/profile"
+                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
+              >
                 Профіль
               </Link>
             </li>
             <li>
-              <Link href="/logout" className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/logout' ? 'bg-gray-100' : ''}`}>
+              <Link
+                href="/logout"
+                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/logout' ? 'bg-gray-100' : ''}`}
+              >
                 Вийти
               </Link>
             </li>

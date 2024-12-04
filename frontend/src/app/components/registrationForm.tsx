@@ -5,7 +5,9 @@ import Image from 'next/image';
 function RegistrationForm() {
   return (
     <form className="w-full max-w-xl p-6 bg-white rounded-md shadow-xl">
-      <h2 className="text-xl font-semibold mb-4 text-center">Створити акаунт</h2>
+      <h2 className="text-xl font-semibold mb-4 text-center">
+        Створити акаунт
+      </h2>
 
       <label htmlFor="email" className="block text-sm font-medium mb-1">
         Email
@@ -44,7 +46,13 @@ function RegistrationForm() {
         type="button"
         className="w-full py-2 mb-2 text-black bg-white border rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-100"
       >
-        <Image src="/socials/google.svg" alt="Google" className="w-5 h-5" width="24" height="24" />
+        <Image
+          src="/socials/google.svg"
+          alt="Google"
+          className="w-5 h-5"
+          width="24"
+          height="24"
+        />
         <span>Зареєструватися з Google</span>
       </button>
 
@@ -52,16 +60,19 @@ function RegistrationForm() {
         type="button"
         className="w-full py-2 mb-6 text-black bg-white border rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-100"
       >
-        <Image src="/socials/facebook.svg" alt="Facebook" className="w-5 h-5" width="24" height="24" />
+        <Image
+          src="/socials/facebook.svg"
+          alt="Facebook"
+          className="w-5 h-5"
+          width="24"
+          height="24"
+        />
         <span>Зареєструватися з Facebook</span>
       </button>
 
       <p className="text-center text-sm">
         Вже маєте акаунт?{' '}
-        <Link
-          href="/auth?mode=login"
-          className="text-blue-500 hover:underline"
-        >
+        <Link href="/auth?mode=login" className="text-blue-500 hover:underline">
           Увійти
         </Link>
       </p>

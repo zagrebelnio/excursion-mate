@@ -11,15 +11,23 @@ export default function Home() {
         <div className="absolute inset-0 bg-black bg-opacity-20 z-5"></div>
 
         <div className="absolute top-8 right-8 text-lg flex space-x-4 items-center z-10 gap-4">
-          <Link href="/auth?mode=login" className="px-4 py-1 text-white rounded-full font-semibold hover:bg-white hover:text-black transition duration-300 ease-in-out">
+          <Link
+            href="/auth?mode=login"
+            className="px-4 py-1 text-white rounded-full font-semibold hover:bg-white hover:text-black transition duration-300 ease-in-out"
+          >
             Увійти
           </Link>
-          <Link href="/auth?mode=register" className="px-4 py-1 bg-white rounded-full font-semibold shadow hover:bg-black hover:text-white transition duration-300 ease-in-out">
+          <Link
+            href="/auth?mode=register"
+            className="px-4 py-1 bg-white rounded-full font-semibold shadow hover:bg-black hover:text-white transition duration-300 ease-in-out"
+          >
             Зареєструватись
           </Link>
         </div>
 
-        <h1 className="text-9xl font-bold text-white text-shadow z-10">ExcursionMate</h1>
+        <h1 className="text-9xl font-bold text-white text-shadow z-10">
+          ExcursionMate
+        </h1>
       </div>
     </div>
   );
