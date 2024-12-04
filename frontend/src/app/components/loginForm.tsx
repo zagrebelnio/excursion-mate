@@ -2,10 +2,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-function RegistrationForm() {
+function LoginForm() {
   return (
     <form className="w-full max-w-xl p-6 bg-white rounded-md shadow-xl">
-      <h2 className="text-xl font-semibold mb-4 text-center">Створити акаунт</h2>
+      <h2 className="text-xl font-semibold mb-4 text-center">Увійти в акаунт</h2>
 
       <label htmlFor="email" className="block text-sm font-medium mb-1">
         Email
@@ -35,7 +35,7 @@ function RegistrationForm() {
         type="submit"
         className="w-full py-2 mb-4 text-white bg-black rounded-lg hover:bg-gray-800"
       >
-        Зареєструватися
+        Увійти
       </button>
 
       <p className="text-center text-sm mb-4">або</p>
@@ -45,7 +45,7 @@ function RegistrationForm() {
         className="w-full py-2 mb-2 text-black bg-white border rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-100"
       >
         <Image src="/socials/google.svg" alt="Google" className="w-5 h-5" width="24" height="24" />
-        <span>Зареєструватися з Google</span>
+        <span>Увійти з Google</span>
       </button>
 
       <button
@@ -53,20 +53,20 @@ function RegistrationForm() {
         className="w-full py-2 mb-6 text-black bg-white border rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-100"
       >
         <Image src="/socials/facebook.svg" alt="Facebook" className="w-5 h-5" width="24" height="24" />
-        <span>Зареєструватися з Facebook</span>
+        <span>Увійти з Facebook</span>
       </button>
 
       <p className="text-center text-sm">
-        Вже маєте акаунт?{' '}
+        Ще не зареєстровані?{' '}
         <Link
-          href="/auth?mode=login"
+          href="/auth?mode=register"
           className="text-blue-500 hover:underline"
         >
-          Увійти
+          Зареєструватися
         </Link>
       </p>
     </form>
   );
 }
 
-export default RegistrationForm;
+export default LoginForm;
