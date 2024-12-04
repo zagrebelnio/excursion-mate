@@ -22,7 +22,7 @@ export default function ProfilePage() {
 
           <div className="flex flex-col gap-4">
             <Link
-              href="/edit-profile"
+              href="/profile/edit"
               className="px-4 py-2 border border-black text-black text-center rounded-lg hover:bg-gray-100 transition"
             >
               Edit profile
