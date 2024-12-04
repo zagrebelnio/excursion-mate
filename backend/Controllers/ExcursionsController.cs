@@ -2,6 +2,7 @@
 using backend.Data;
 using backend.Models.DTO;
 using backend.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,7 @@ namespace backend.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
         public async Task<IActionResult> GetAll()
         {
             var excursions = await excursionRepository.GetAllAsync();

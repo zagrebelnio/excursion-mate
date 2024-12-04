@@ -1,4 +1,5 @@
-﻿using backend.Models.DTO;
+﻿using backend.Models.Domain;
+using backend.Models.DTO;
 using backend.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -10,10 +11,10 @@ namespace backend.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<User> userManager;
         private readonly ITokenRepository tokenRepository;
 
-        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
+        public AuthController(UserManager<User> userManager, ITokenRepository tokenRepository)
         {
             this.userManager = userManager;
             this.tokenRepository = tokenRepository;
@@ -24,26 +25,35 @@ namespace backend.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDTO registerRequestDTO)
         {
-            var identityUser = new IdentityUser
+            var existingUserByEmail = await userManager.FindByEmailAsync(registerRequestDTO.Username);
+            if (existingUserByEmail != null)
+            {
+                return BadRequest("User with this email already exists.");
+            }
+            var identityUser = new User
             {
                 UserName = registerRequestDTO.Username,
                 Email = registerRequestDTO.Username,
+                FirstName = registerRequestDTO.FirstName,
+                LastName = registerRequestDTO.LastName,
+                PhotoUrl = null
             };
 
             var identityResult = await userManager.CreateAsync(identityUser, registerRequestDTO.Password);
 
             if (identityResult.Succeeded)
             {
-                if (registerRequestDTO.Roles != null && registerRequestDTO.Roles.Any())
-                {
-                    identityResult = await userManager.AddToRolesAsync(identityUser, registerRequestDTO.Roles);
+                identityResult = await userManager.AddToRoleAsync(identityUser, "User");
 
-                    if (identityResult.Succeeded) return Ok("User vas registered! Please login.");
+                if (identityResult.Succeeded)
+                {
+                    return Ok("User was registered! Please login.");
                 }
             }
 
-            return BadRequest("Something went wrong");
+            return BadRequest(identityResult.Errors.Select(e => e.Description));
         }
+
 
         // POST: /api/Auth/Login
         [HttpPost]
