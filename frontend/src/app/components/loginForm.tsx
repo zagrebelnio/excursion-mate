@@ -5,7 +5,9 @@ import Image from 'next/image';
 function LoginForm() {
   return (
     <form className="w-full max-w-xl p-6 bg-white rounded-md shadow-xl">
-      <h2 className="text-xl font-semibold mb-4 text-center">Увійти в акаунт</h2>
+      <h2 className="text-xl font-semibold mb-4 text-center">
+        Увійти в акаунт
+      </h2>
 
       <label htmlFor="email" className="block text-sm font-medium mb-1">
         Email
@@ -44,7 +46,13 @@ function LoginForm() {
         type="button"
         className="w-full py-2 mb-2 text-black bg-white border rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-100"
       >
-        <Image src="/socials/google.svg" alt="Google" className="w-5 h-5" width="24" height="24" />
+        <Image
+          src="/socials/google.svg"
+          alt="Google"
+          className="w-5 h-5"
+          width="24"
+          height="24"
+        />
         <span>Увійти з Google</span>
       </button>
 
@@ -52,7 +60,13 @@ function LoginForm() {
         type="button"
         className="w-full py-2 mb-6 text-black bg-white border rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-100"
       >
-        <Image src="/socials/facebook.svg" alt="Facebook" className="w-5 h-5" width="24" height="24" />
+        <Image
+          src="/socials/facebook.svg"
+          alt="Facebook"
+          className="w-5 h-5"
+          width="24"
+          height="24"
+        />
         <span>Увійти з Facebook</span>
       </button>
 

@@ -11,7 +11,7 @@ export default function Register() {
     <div className="flex flex-col items-center justify-center h-screen gap-5">
       <h1 className="text-6xl font-bold text-black">ExcursionMate</h1>
       {mode === 'register' && <RegistrationForm />}
-      {mode === 'login' && <LoginForm />} 
+      {mode === 'login' && <LoginForm />}
     </div>
   );
 }
