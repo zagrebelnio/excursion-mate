@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { Slider, Box, Typography } from '@mui/material';
 
 const excursions = [
   {
@@ -32,13 +33,19 @@ export default function ExcursionsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     location: '',
-    minPrice: 0,
-    maxPrice: 100,
+    priceRange: [0, 500],
     date: '',
   });
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      priceRange: newValue as [number, number],
+    }));
   };
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
@@ -51,7 +58,8 @@ export default function ExcursionsPage() {
       excursion.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       excursion.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesLocation = excursion.location.toLowerCase().includes(filters.location.toLowerCase());
-    const matchesPrice = excursion.price >= filters.minPrice && excursion.price <= filters.maxPrice;
+    const matchesPrice =
+      excursion.price >= filters.priceRange[0] && excursion.price <= filters.priceRange[1];
     const matchesDate = filters.date ? excursion.date.includes(filters.date) : true;
 
     return matchesSearch && matchesLocation && matchesPrice && matchesDate;
@@ -77,33 +85,40 @@ export default function ExcursionsPage() {
             placeholder="Location"
             value={filters.location}
             onChange={handleFilterChange}
-            className="p-3 border rounded-lg"
+            className="p-3 border rounded-lg h-12"
           />
           <input
             type="date"
             name="date"
             value={filters.date}
             onChange={handleFilterChange}
-            className="p-3 border rounded-lg"
+            className="p-3 border rounded-lg h-12"
           />
         </div>
-        <div className="flex gap-4">
-          <input
-            type="number"
-            name="minPrice"
-            placeholder="Min Price"
-            value={filters.minPrice}
-            onChange={handleFilterChange}
-            className="p-3 border rounded-lg"
-          />
-          <input
-            type="number"
-            name="maxPrice"
-            placeholder="Max Price"
-            value={filters.maxPrice}
-            onChange={handleFilterChange}
-            className="p-3 border rounded-lg"
-          />
+        <div className="flex flex-col gap-4 w-1/3">
+          <Typography className="font-bold text-gray-700">
+            Price Range: ${filters.priceRange[0]} - ${filters.priceRange[1]}
+          </Typography>
+          <Box sx={{ width: '100%' }}>
+            <Slider
+              value={filters.priceRange}
+              onChange={handleSliderChange}
+              valueLabelDisplay="auto"
+              min={0}
+              max={500}
+              sx={{
+                '& .MuiSlider-thumb': {
+                  bgcolor: 'primary.main',
+                },
+                '& .MuiSlider-track': {
+                  bgcolor: 'primary.main',
+                },
+                '& .MuiSlider-rail': {
+                  bgcolor: 'grey.300',
+                },
+              }}
+            />
+          </Box>
         </div>
       </div>
 
