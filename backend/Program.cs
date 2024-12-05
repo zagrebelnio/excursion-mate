@@ -11,6 +11,9 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+DotNetEnv.Env.Load();
+builder.Configuration.AddEnvironmentVariables();
+
 // Add services to the container.
 builder.Configuration.AddUserSecrets<Program>();
 
@@ -44,10 +47,15 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new Exception("Connection string not found in environment variables.");
+}
 
 builder.Services.AddDbContext<ExcursionDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ExcursionsMateConnectionString"));
+    options.UseSqlServer(connectionString);
 });
 
 
@@ -76,9 +84,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            ValidIssuer = builder.Configuration["JWT_ISSUER"],
+            ValidAudience = builder.Configuration["JWT_AUDIENCE"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]))
         };
     });
 
