@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { format } from 'date-fns';
+import { ThumbUp, ThumbDown } from '@mui/icons-material';
 
 function ExcursionCard({ excursion }) {
   return (
@@ -23,9 +24,15 @@ function ExcursionCard({ excursion }) {
             <p className="text-gray-500">{excursion.location}</p>
             <p className="text-gray-500">{format(new Date(excursion.date), 'dd.MM.yyyy')}</p>
             <p className="text-gray-500">Price: ₴{excursion.price}</p>
-            <div className="flex items-center mt-2">
-              <span className="text-gray-500 mr-2">Likes: {excursion.likes}</span>
-              <span className="text-gray-500">Dislikes: {excursion.dislikes}</span>
+            <div className="flex items-center mt-2 gap-4">
+              <button className="flex items-center gap-1 hover:text-blue-500">
+                <ThumbUp fontSize="small" />
+                <span className="text-gray-500">{excursion.likes}</span>
+              </button>
+              <button className="flex items-center gap-1 hover:text-red-500">
+                <ThumbDown fontSize="small" />
+                <span className="text-gray-500">{excursion.dislikes}</span>
+              </button>
             </div>
           </div>
         </div>
