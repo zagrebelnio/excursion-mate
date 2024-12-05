@@ -59,7 +59,7 @@ export default function ExcursionsPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="bg-white p-6 shadow-md flex justify-center">
+      <div className="bg-white py-4 shadow-md px-20">
         <input
           type="text"
           className="w-1/2 p-3 border rounded-lg"
@@ -69,7 +69,7 @@ export default function ExcursionsPage() {
         />
       </div>
 
-      <div className="flex justify-between p-6 bg-white shadow-md">
+      <div className="flex justify-between pb-4 px-20 bg-white shadow-md">
         <div className="flex gap-4">
           <input
             type="text"
