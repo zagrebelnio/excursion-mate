@@ -70,7 +70,7 @@ export default function ExcursionsPage() {
       <div className="bg-white py-4 shadow-md px-20">
         <input
           type="text"
-          className="w-1/2 p-3 border rounded-lg"
+          className="w-1/2 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           placeholder="Search excursions..."
           value={searchQuery}
           onChange={handleSearchChange}
@@ -85,14 +85,14 @@ export default function ExcursionsPage() {
             placeholder="Location"
             value={filters.location}
             onChange={handleFilterChange}
-            className="p-3 border rounded-lg h-12"
+            className="p-3 border rounded-lg h-12 focus:ring-2 focus:ring-blue-500 outline-none"
           />
           <input
             type="date"
             name="date"
             value={filters.date}
             onChange={handleFilterChange}
-            className="p-3 border rounded-lg h-12"
+            className="p-3 border rounded-lg h-12 focus:ring-2 focus:ring-blue-500 outline-none"
           />
         </div>
         <div className="flex flex-col gap-4 w-1/3">
