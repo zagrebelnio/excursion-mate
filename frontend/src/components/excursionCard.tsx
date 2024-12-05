@@ -2,10 +2,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import { ThumbUp, ThumbDown } from '@mui/icons-material';
-import { ExcursionType } from '../types/excursion';
+import { ExcursionType } from '@/types/excursion';
 
 const ExcursionCard: React.FC<{ excursion: ExcursionType }> = ({
   excursion,
+}: {
+  excursion: ExcursionType;
 }) => {
   return (
     <div

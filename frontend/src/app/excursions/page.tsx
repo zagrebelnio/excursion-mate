@@ -1,9 +1,7 @@
 'use client';
-import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
 import { Slider, Box, Typography } from '@mui/material';
-import ExcursionCard from '../components/excursionCard';
+import ExcursionCard from '@/components/excursionCard';
 
 const excursions = [
   {
