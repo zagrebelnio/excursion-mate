@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Slider, Box, Typography } from '@mui/material';
+import ExcursionCard from '../components/excursionCard';
 
 const excursions = [
   {
@@ -97,7 +98,7 @@ export default function ExcursionsPage() {
         </div>
         <div className="flex flex-col gap-4 w-1/3">
           <Typography className="font-bold text-gray-700">
-            Price Range: ${filters.priceRange[0]} - ${filters.priceRange[1]}
+            Price Range: ₴{filters.priceRange[0]} - ₴{filters.priceRange[1]}
           </Typography>
           <Box sx={{ width: '100%' }}>
             <Slider
@@ -124,33 +125,7 @@ export default function ExcursionsPage() {
 
       <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         {filteredExcursions.map((excursion) => (
-          <div
-            key={excursion.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
-          >
-            <Link href={`/excursions/${excursion.id}`}>
-              <Image
-                src={excursion.image}
-                alt={excursion.title}
-                width={300}
-                height={200}
-                className="w-full h-40 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-xl font-bold">{excursion.title}</h3>
-                <p className="text-gray-600 mt-2">{excursion.description}</p>
-                <div className="mt-4">
-                  <p className="text-gray-500">{excursion.location}</p>
-                  <p className="text-gray-500">{excursion.date}</p>
-                  <p className="text-gray-500">Price: ${excursion.price}</p>
-                  <div className="flex items-center mt-2">
-                    <span className="text-gray-500 mr-2">Likes: {excursion.likes}</span>
-                    <span className="text-gray-500">Dislikes: {excursion.dislikes}</span>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
+          <ExcursionCard key={excursion.id} excursion={excursion} />
         ))}
       </div>
     </div>
