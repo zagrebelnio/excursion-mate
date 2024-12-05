@@ -49,7 +49,9 @@ export default function ExcursionsPage() {
     }));
   };
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
@@ -58,10 +60,15 @@ export default function ExcursionsPage() {
     const matchesSearch =
       excursion.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       excursion.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesLocation = excursion.location.toLowerCase().includes(filters.location.toLowerCase());
+    const matchesLocation = excursion.location
+      .toLowerCase()
+      .includes(filters.location.toLowerCase());
     const matchesPrice =
-      excursion.price >= filters.priceRange[0] && excursion.price <= filters.priceRange[1];
-    const matchesDate = filters.date ? excursion.date.includes(filters.date) : true;
+      excursion.price >= filters.priceRange[0] &&
+      excursion.price <= filters.priceRange[1];
+    const matchesDate = filters.date
+      ? excursion.date.includes(filters.date)
+      : true;
 
     return matchesSearch && matchesLocation && matchesPrice && matchesDate;
   });

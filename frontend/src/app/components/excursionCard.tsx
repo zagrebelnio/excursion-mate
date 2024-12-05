@@ -2,8 +2,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import { ThumbUp, ThumbDown } from '@mui/icons-material';
+import { ExcursionType } from '../types/excursion';
 
-function ExcursionCard({ excursion }) {
+const ExcursionCard: React.FC<{ excursion: ExcursionType }> = ({
+  excursion,
+}) => {
   return (
     <div
       key={excursion.id}
@@ -22,7 +25,9 @@ function ExcursionCard({ excursion }) {
           <p className="text-gray-600 mt-2">{excursion.description}</p>
           <div className="mt-4">
             <p className="text-gray-500">{excursion.location}</p>
-            <p className="text-gray-500">{format(new Date(excursion.date), 'dd.MM.yyyy')}</p>
+            <p className="text-gray-500">
+              {format(new Date(excursion.date), 'dd.MM.yyyy')}
+            </p>
             <p className="text-gray-500">Price: ₴{excursion.price}</p>
             <div className="flex items-center mt-2 gap-4">
               <button className="flex items-center gap-1 hover:text-blue-500">
@@ -39,6 +44,6 @@ function ExcursionCard({ excursion }) {
       </Link>
     </div>
   );
-}
+};
 
 export default ExcursionCard;
