@@ -1,7 +1,7 @@
 'use client';
 import { useSearchParams } from 'next/navigation';
-import RegistrationForm from '../components/registrationForm';
-import LoginForm from '../components/loginForm';
+import RegistrationForm from '@/components/registrationForm';
+import LoginForm from '@/components/loginForm';
 
 export default function Register() {
   const searchParams = useSearchParams();
