@@ -2,21 +2,35 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import axios from '@/lib/axios/axiosInstance';
 
 function RegistrationForm() {
   const [userData, setUserData] = useState({
-    email: '',
+    username: '',
     password: '',
     firstName: '',
     lastName: '',
   });
 
+  async function handleRegister(e: React.FormEvent) {
+    e.preventDefault();
+    try {
+      const response = await axios.post('/api/Auth/Register', userData);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
+  }
+
   return (
-    <form className="w-full max-w-xl p-6 bg-white rounded-md shadow-xl">
+    <form
+      onSubmit={handleRegister}
+      className="w-full max-w-xl p-6 bg-white rounded-md shadow-xl"
+    >
       <h2 className="text-xl font-semibold mb-4 text-center">
         Створити акаунт
       </h2>
-      
+
       <label htmlFor="firstName" className="block text-sm font-medium mb-1">
         First Name
       </label>
@@ -24,6 +38,10 @@ function RegistrationForm() {
         id="firstName"
         type="text"
         placeholder="First Name"
+        value={userData.firstName}
+        onChange={(e) =>
+          setUserData({ ...userData, firstName: e.target.value })
+        }
         required
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
@@ -35,6 +53,8 @@ function RegistrationForm() {
         id="lastName"
         type="text"
         placeholder="Last Name"
+        value={userData.lastName}
+        onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
         required
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
@@ -46,6 +66,8 @@ function RegistrationForm() {
         id="email"
         type="email"
         placeholder="Email"
+        value={userData.username}
+        onChange={(e) => setUserData({ ...userData, username: e.target.value })}
         required
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
@@ -60,6 +82,8 @@ function RegistrationForm() {
         required
         minLength={6}
         maxLength={20}
+        value={userData.password}
+        onChange={(e) => setUserData({ ...userData, password: e.target.value })}
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
 
