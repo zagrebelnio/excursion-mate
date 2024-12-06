@@ -3,13 +3,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { signIn, getSession } from 'next-auth/react';
+import { UserData } from '@/types/auth';
 
 function LoginForm() {
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState<UserData>({
     username: '',
     password: '',
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();

@@ -4,15 +4,16 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { signIn, getSession } from 'next-auth/react';
 import axios from '@/lib/axios/axiosInstance';
+import { UserData } from '@/types/auth';
 
 function RegistrationForm() {
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState<UserData>({
     username: '',
     password: '',
     firstName: '',
     lastName: '',
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();

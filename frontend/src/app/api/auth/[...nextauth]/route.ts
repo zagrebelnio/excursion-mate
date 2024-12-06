@@ -10,7 +10,10 @@ const authOptions = {
         username: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials) {
+      async authorize(credentials: Record<string, string> | undefined) {
+        if (!credentials) {
+          throw new Error('No credentials provided');
+        }
         try {
           const response = await axios.post('/api/Auth/Login', {
             username: credentials?.username,
