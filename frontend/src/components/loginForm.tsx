@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import axios from '@/lib/axios/axiosInstance';
+import { signIn, getSession } from 'next-auth/react';
 
 function LoginForm() {
   const [userData, setUserData] = useState({
@@ -12,11 +12,18 @@ function LoginForm() {
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    try {
-      const response = await axios.post('/api/Auth/Login', userData);
-      console.log(response.data);
-    } catch (error) {
-      console.error('Login failed:', error);
+    const res = await signIn('credentials', {
+      redirect: false,
+      username: userData.username,
+      password: userData.password,
+    });
+
+    if (res?.error) {
+      console.log(res.error);
+    } else {
+      console.log(res);
+      const session = await getSession();
+      console.log('Access Token:', session?.accessToken);
     }
   }
 
