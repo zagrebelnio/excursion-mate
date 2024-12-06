@@ -1,6 +1,15 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
+import { signIn } from 'next-auth/react';
+
+function handleGoogleLogin() {
+  signIn('google');
+}
+
+function handleFacebookLogin() {
+  signIn('facebook');
+}
 
 function LoginForm() {
   return (
@@ -44,6 +53,7 @@ function LoginForm() {
 
       <button
         type="button"
+        onClick={handleGoogleLogin}
         className="w-full py-2 mb-2 text-black bg-white border rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-100"
       >
         <Image
@@ -58,6 +68,7 @@ function LoginForm() {
 
       <button
         type="button"
+        onClick={handleFacebookLogin}
         className="w-full py-2 mb-6 text-black bg-white border rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-100"
       >
         <Image
