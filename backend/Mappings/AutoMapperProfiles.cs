@@ -10,6 +10,7 @@ namespace backend.Mappings
         {
             CreateMap<Excursion, ExcursionDTO>().ReverseMap();
             CreateMap<User, UserProfileDTO>().ReverseMap();
+            CreateMap<UpdateUserProfileDTO, User>().ReverseMap();
         }
     }
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>backend</name>
+    </assembly>
+    <members>
+        <member name="M:backend.Controllers.AuthController.Register(backend.Models.DTO.RegisterRequestDTO)">
+            <summary>
+            Registers a new user in the system
+            </summary>
+            <param name="registerRequestDTO">The data needed to register a new user (firstname, lastname, email and password)</param>
+        </member>
+        <member name="M:backend.Controllers.AuthController.Login(backend.Models.DTO.LoginRequestDTO)">
+            <summary>
+            Authenticates a user and returns a JWT token if the username and password are correct
+            </summary>
+            <param name="loginRequestDTO">The credentials needed to log in, including the username (email) and password.</param>
+        </member>
+        <member name="M:backend.Controllers.ExcursionsController.GetAll">
+            <summary>
+            Retrieves a list of all available excursions (now requires authentication and role "User")
+            </summary>
+        </member>
+        <member name="M:backend.Controllers.UsersController.GetProfile">
+            <summary>
+            Retrieves the profile information of the currently authenticated user (must be authenticated using a Bearer token)
+            </summary>
+        </member>
+        <member name="M:backend.Controllers.UsersController.UpdateProfile(backend.Models.DTO.UpdateUserProfileDTO)">
+            <summary>
+            Updates the profile information of the currently authenticated user (must be authenticated using a Bearer token)
+            </summary>
+            <param name="updateDTO">The updated user profile data, including fields like name, email, and photo (all optionally)</param>
+        </member>
+        <member name="T:backend.Migrations.Initialcommit">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.Initialcommit.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.Initialcommit.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.Initialcommit.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

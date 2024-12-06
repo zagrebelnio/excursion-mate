@@ -20,6 +20,10 @@ namespace backend.Controllers
             this.tokenRepository = tokenRepository;
         }
 
+        /// <summary>
+        /// Registers a new user in the system
+        /// </summary>
+        /// <param name="registerRequestDTO">The data needed to register a new user (firstname, lastname, email and password)</param>
         // POST: api/Auth/Register
         [HttpPost]
         [Route("Register")]
@@ -36,7 +40,7 @@ namespace backend.Controllers
                 Email = registerRequestDTO.Username,
                 FirstName = registerRequestDTO.FirstName,
                 LastName = registerRequestDTO.LastName,
-                PhotoUrl = null
+                Photo = null
             };
 
             var identityResult = await userManager.CreateAsync(identityUser, registerRequestDTO.Password);
@@ -54,7 +58,10 @@ namespace backend.Controllers
             return BadRequest(identityResult.Errors.Select(e => e.Description));
         }
 
-
+        /// <summary>
+        /// Authenticates a user and returns a JWT token if the username and password are correct
+        /// </summary>
+        /// <param name="loginRequestDTO">The credentials needed to log in, including the username (email) and password.</param>
         // POST: /api/Auth/Login
         [HttpPost]
         [Route("Login")]

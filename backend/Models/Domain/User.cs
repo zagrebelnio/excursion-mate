@@ -6,7 +6,7 @@ namespace backend.Models.Domain
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string? PhotoUrl { get; set; }
+        public byte[]? Photo { get; set; }
         public ICollection<Excursion>? Excursions { get; set; }
 
     }
