@@ -94,6 +94,18 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ExcursionDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["Google_ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["Google_ClientSecret"];
+});
+
+builder.Services.AddAuthentication().AddFacebook(facebookOptions =>
+{
+    facebookOptions.AppId = builder.Configuration["Facebook_AppId"];
+    facebookOptions.AppSecret = builder.Configuration["Facebook_AppSecret"];
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
