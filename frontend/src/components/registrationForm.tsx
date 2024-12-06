@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { signIn, getSession } from 'next-auth/react';
 import axios from '@/lib/axios/axiosInstance';
 
 function RegistrationForm() {
@@ -16,7 +17,26 @@ function RegistrationForm() {
     e.preventDefault();
     try {
       const response = await axios.post('/api/Auth/Register', userData);
-      console.log(response.data);
+
+      if (response.status === 200) {
+        console.log('Registration successful');
+
+        const loginResponse = await signIn('credentials', {
+          redirect: false,
+          username: userData.username,
+          password: userData.password,
+        });
+
+        if (loginResponse?.error) {
+          console.error('Auto-login failed:', loginResponse.error);
+        } else {
+          console.log('Auto-login successful:', loginResponse);
+          const session = await getSession();
+          console.log('Access Token:', session?.accessToken);
+        }
+      } else {
+        console.error('Registration failed', response.data);
+      }
     } catch (error) {
       console.error('Registration failed:', error);
     }
