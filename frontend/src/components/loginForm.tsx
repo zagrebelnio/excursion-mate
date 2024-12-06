@@ -1,10 +1,41 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
+import { signIn, getSession } from 'next-auth/react';
+import { UserData } from '@/types/auth';
 
 function LoginForm() {
+  const [userData, setUserData] = useState<UserData>({
+    username: '',
+    password: '',
+  });
+  const [error, setError] = useState<string>('');
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setError('');
+    const res = await signIn('credentials', {
+      redirect: false,
+      username: userData.username,
+      password: userData.password,
+    });
+
+    if (res?.error) {
+      console.log(res.error);
+      setError(res.error);
+    } else {
+      console.log(res);
+      const session = await getSession();
+      console.log('Access Token:', session?.accessToken);
+    }
+  }
+
   return (
-    <form className="w-full max-w-xl p-6 bg-white rounded-md shadow-xl">
+    <form
+      onSubmit={handleLogin}
+      className="w-full max-w-xl p-6 bg-white rounded-md shadow-xl"
+    >
       <h2 className="text-xl font-semibold mb-4 text-center">
         Увійти в акаунт
       </h2>
@@ -17,6 +48,7 @@ function LoginForm() {
         type="email"
         placeholder="Email"
         required
+        onChange={(e) => setUserData({ ...userData, username: e.target.value })}
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
 
@@ -30,8 +62,11 @@ function LoginForm() {
         required
         minLength={6}
         maxLength={20}
+        onChange={(e) => setUserData({ ...userData, password: e.target.value })}
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
+
+      {error && <p className="text-red-500 mb-4">Error: {error}</p>}
 
       <button
         type="submit"

@@ -1,13 +1,86 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
+import { signIn, getSession } from 'next-auth/react';
+import axios from '@/lib/axios/axiosInstance';
+import { UserData } from '@/types/auth';
 
 function RegistrationForm() {
+  const [userData, setUserData] = useState<UserData>({
+    username: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+  });
+  const [error, setError] = useState<string>('');
+
+  async function handleRegister(e: React.FormEvent) {
+    e.preventDefault();
+    setError('');
+    try {
+      const response = await axios.post('/api/Auth/Register', userData);
+
+      if (response.status === 200) {
+        console.log('Registration successful');
+
+        const loginResponse = await signIn('credentials', {
+          redirect: false,
+          username: userData.username,
+          password: userData.password,
+        });
+
+        if (loginResponse?.error) {
+          setError(loginResponse.error);
+        } else {
+          console.log('Auto-login successful:', loginResponse);
+          const session = await getSession();
+          console.log('Access Token:', session?.accessToken);
+        }
+      } else {
+        setError(response.data);
+      }
+    } catch (error) {
+      setError(error.response?.data || 'Registration failed');
+    }
+  }
+
   return (
-    <form className="w-full max-w-xl p-6 bg-white rounded-md shadow-xl">
+    <form
+      onSubmit={handleRegister}
+      className="w-full max-w-xl p-6 bg-white rounded-md shadow-xl"
+    >
       <h2 className="text-xl font-semibold mb-4 text-center">
         Створити акаунт
       </h2>
+
+      <label htmlFor="firstName" className="block text-sm font-medium mb-1">
+        First Name
+      </label>
+      <input
+        id="firstName"
+        type="text"
+        placeholder="First Name"
+        value={userData.firstName}
+        onChange={(e) =>
+          setUserData({ ...userData, firstName: e.target.value })
+        }
+        required
+        className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+      />
+
+      <label htmlFor="lastName" className="block text-sm font-medium mb-1">
+        Last Name
+      </label>
+      <input
+        id="lastName"
+        type="text"
+        placeholder="Last Name"
+        value={userData.lastName}
+        onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
+        required
+        className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+      />
 
       <label htmlFor="email" className="block text-sm font-medium mb-1">
         Email
@@ -16,6 +89,8 @@ function RegistrationForm() {
         id="email"
         type="email"
         placeholder="Email"
+        value={userData.username}
+        onChange={(e) => setUserData({ ...userData, username: e.target.value })}
         required
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
@@ -30,8 +105,12 @@ function RegistrationForm() {
         required
         minLength={6}
         maxLength={20}
+        value={userData.password}
+        onChange={(e) => setUserData({ ...userData, password: e.target.value })}
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
+
+      {error && <p className="text-red-500 mb-4">Error: {error}</p>}
 
       <button
         type="submit"
