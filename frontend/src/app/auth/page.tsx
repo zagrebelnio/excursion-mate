@@ -8,7 +8,7 @@ export default function Register() {
   const mode = searchParams.get('mode');
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-5">
+    <div className="flex flex-col items-center justify-center gap-5 py-10 min-h-screen">
       <h1 className="text-6xl font-bold text-black">ExcursionMate</h1>
       {mode === 'register' && <RegistrationForm />}
       {mode === 'login' && <LoginForm />}
