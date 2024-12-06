@@ -9,6 +9,8 @@ namespace backend.Mappings
         public AutoMapperProfiles()
         {
             CreateMap<Excursion, ExcursionDTO>().ReverseMap();
+            CreateMap<User, UserProfileDTO>().ReverseMap();
+            CreateMap<UpdateUserProfileDTO, User>().ReverseMap();
         }
     }
 }

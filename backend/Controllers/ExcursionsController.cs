@@ -23,6 +23,9 @@ namespace backend.Controllers
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Retrieves a list of all available excursions (now requires authentication and role "User")
+        /// </summary>
         [HttpGet]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
         public async Task<IActionResult> GetAll()
