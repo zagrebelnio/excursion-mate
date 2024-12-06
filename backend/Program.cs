@@ -61,6 +61,7 @@ builder.Services.AddDbContext<ExcursionDbContext>(options =>
 
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IExcursionRepository, SQLExcursionRepository>();
+builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
