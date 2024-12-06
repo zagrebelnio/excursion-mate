@@ -12,9 +12,11 @@ function RegistrationForm() {
     firstName: '',
     lastName: '',
   });
+  const [error, setError] = useState('');
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
+    setError('');
     try {
       const response = await axios.post('/api/Auth/Register', userData);
 
@@ -28,17 +30,17 @@ function RegistrationForm() {
         });
 
         if (loginResponse?.error) {
-          console.error('Auto-login failed:', loginResponse.error);
+          setError(loginResponse.error);
         } else {
           console.log('Auto-login successful:', loginResponse);
           const session = await getSession();
           console.log('Access Token:', session?.accessToken);
         }
       } else {
-        console.error('Registration failed', response.data);
+        setError(response.data);
       }
     } catch (error) {
-      console.error('Registration failed:', error);
+      setError(error.response?.data || 'Registration failed');
     }
   }
 
@@ -106,6 +108,8 @@ function RegistrationForm() {
         onChange={(e) => setUserData({ ...userData, password: e.target.value })}
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
+
+      {error && <p className="text-red-500 mb-4">Error: {error}</p>}
 
       <button
         type="submit"

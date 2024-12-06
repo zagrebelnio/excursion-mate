@@ -9,9 +9,11 @@ function LoginForm() {
     username: '',
     password: '',
   });
+  const [error, setError] = useState('');
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
+    setError('');
     const res = await signIn('credentials', {
       redirect: false,
       username: userData.username,
@@ -20,6 +22,7 @@ function LoginForm() {
 
     if (res?.error) {
       console.log(res.error);
+      setError(res.error);
     } else {
       console.log(res);
       const session = await getSession();
@@ -61,6 +64,8 @@ function LoginForm() {
         onChange={(e) => setUserData({ ...userData, password: e.target.value })}
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
+
+      {error && <p className="text-red-500 mb-4">Error: {error}</p>}
 
       <button
         type="submit"
