@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Slider, Box, Typography } from '@mui/material';
-import ExcursionCard from '@/components/excursionCard';
+import { ExcursionCard } from '@/components/excursionCards';
 import { EXCURSIONS } from '@/store/excursions';
 import { ExcursionType } from '@/types/excursion';
 

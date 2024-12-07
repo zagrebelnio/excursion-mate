@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Slider, Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import ExcursionCard from '@/components/excursionCard';
+import { WideExcursionCard } from '@/components/excursionCards';
 import { EXCURSIONS } from '@/store/excursions';
 
 export default function Home() {
@@ -85,7 +85,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <h1 className="text-9xl font-bold text-white text-shadow z-10">
+        <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white text-shadow z-10">
           ExcursionMate
         </h1>
       </div>
@@ -148,9 +148,9 @@ export default function Home() {
       </div>
 
       {/* Excursion List Section */}
-      <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <div className="p-6 flex flex-col gap-8 max-w-6xl w-screen bg-blue-100">
         {filteredExcursions.slice(0, 5).map((excursion) => (
-          <ExcursionCard key={excursion.id} excursion={excursion} />
+          <WideExcursionCard key={excursion.id} excursion={excursion} />
         ))}
       </div>
 
