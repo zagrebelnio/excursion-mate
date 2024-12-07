@@ -63,7 +63,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black font-poppins pb-10">
-      {/* Heading Section */}
       <div
         className="h-screen flex items-center justify-center bg-cover bg-center relative"
         style={{ backgroundImage: "url('/backgrounds/image 2.jpg')" }}
@@ -90,7 +89,6 @@ export default function Home() {
         </h1>
       </div>
 
-      {/* Search Section */}
       <div className="bg-white py-6 shadow-md px-10">
         <div className="max-w-4xl mx-auto">
           <input
@@ -147,12 +145,13 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Excursion List Section */}
-      <div className="p-6 flex flex-col gap-8 max-w-6xl w-screen bg-blue-100">
-        {filteredExcursions.slice(0, 5).map((excursion) => (
-          <WideExcursionCard key={excursion.id} excursion={excursion} />
-        ))}
-      </div>
+      <section className="w-full bg-blue-100 py-10">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col gap-8">
+          {filteredExcursions.slice(0, 5).map((excursion) => (
+            <WideExcursionCard key={excursion.id} excursion={excursion} />
+          ))}
+        </div>
+      </section>
 
       <div className="text-center my-6">
         <button

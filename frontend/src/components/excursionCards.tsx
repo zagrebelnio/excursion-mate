@@ -54,40 +54,40 @@ export const WideExcursionCard: React.FC<{ excursion: ExcursionType }> = ({
   excursion: ExcursionType;
 }) => {
   return (
-    <div className="flex bg-white rounded-lg shadow-md overflow-hidden cursor-pointer">
-      {/* Image Section */}
-      <div className="w-1/3">
-        <Image
-          src={excursion.image}
-          alt={excursion.title}
-          width={1000}
-          height={600}
-          className="h-full w-full object-cover"
-        />
-      </div>
-      {/* Content Section */}
-      <div className="p-6 flex flex-col justify-between w-2/3">
-        <Link href={`/excursions/${excursion.id}`}>
+    <Link href={`/excursions/${excursion.id}`}>
+      <div className="flex bg-white rounded-lg shadow-md overflow-hidden cursor-pointer">
+        <div className="w-1/3">
+          <Image
+            src={excursion.image}
+            alt={excursion.title}
+            width={1000}
+            height={600}
+            className="h-full w-full object-cover"
+          />
+        </div>
+
+        <div className="p-6 flex flex-col justify-between w-2/3">
           <h3 className="text-2xl font-bold text-gray-800 hover:underline">
             {excursion.title}
           </h3>
-        </Link>
-        <p className="text-gray-600 mt-4 text-justify">
-          {excursion.description}
-        </p>
-        <div className="mt-6 text-sm text-gray-500">
-          <p>
-            <strong>Location:</strong> {excursion.location}
+
+          <p className="text-gray-600 mt-4 text-justify">
+            {excursion.description}
           </p>
-          <p>
-            <strong>Date:</strong>{' '}
-            {format(new Date(excursion.date), 'dd.MM.yyyy')}
-          </p>
-          <p>
-            <strong>Price:</strong> ₴{excursion.price}
-          </p>
+          <div className="mt-6 text-sm text-gray-500">
+            <p>
+              <strong>Location:</strong> {excursion.location}
+            </p>
+            <p>
+              <strong>Date:</strong>{' '}
+              {format(new Date(excursion.date), 'dd.MM.yyyy')}
+            </p>
+            <p>
+              <strong>Price:</strong> ₴{excursion.price}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
