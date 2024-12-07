@@ -68,8 +68,8 @@ export const EXCURSIONS = [
   {
     id: 7,
     image: '/backgrounds/image 8.jpg',
-    title: '',
-    description: 'Pidhirtsi Castle Tour',
+    title: 'Pidhirtsi Castle Tour',
+    description: 'Visit the historic castle of Pidhirtsi.',
     location: 'Pidhirtsi, Ukraine',
     date: '2024-12-12',
     price: 90,

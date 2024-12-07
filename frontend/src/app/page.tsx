@@ -1,65 +1,22 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
 import { Slider, Box, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { WideExcursionCard } from '@/components/excursionCards';
 import { EXCURSIONS } from '@/store/excursions';
+import { useFilters } from '@/context/filtersContext';
+import { ExcursionType } from '@/types/excursion';
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState({
-    location: '',
-    priceRange: [0, 500],
-    date: '',
-  });
+  const {
+    filters,
+    searchQuery,
+    handleSearchChange,
+    handleSliderChange,
+    handleFilterChange,
+    filterExcursions,
+  } = useFilters();
 
-  const router = useRouter();
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
-  const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      priceRange: newValue as [number, number],
-    }));
-  };
-
-  const handleFilterChange = (
-    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-  ) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
-  };
-
-  const handleSeeMore = () => {
-    const queryParams = new URLSearchParams({
-      searchQuery,
-      location: filters.location,
-      date: filters.date,
-      priceRange: filters.priceRange.join(','),
-    });
-    router.push(`/excursions?${queryParams.toString()}`);
-  };
-
-  const filteredExcursions = EXCURSIONS.filter((excursion) => {
-    const matchesSearch =
-      excursion.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      excursion.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesLocation = excursion.location
-      .toLowerCase()
-      .includes(filters.location.toLowerCase());
-    const matchesPrice =
-      excursion.price >= filters.priceRange[0] &&
-      excursion.price <= filters.priceRange[1];
-    const matchesDate = filters.date
-      ? excursion.date.includes(filters.date)
-      : true;
-
-    return matchesSearch && matchesLocation && matchesPrice && matchesDate;
-  });
+  const filteredExcursions = filterExcursions(EXCURSIONS);
 
   return (
     <div className="min-h-screen bg-black font-poppins pb-10">
@@ -147,19 +104,18 @@ export default function Home() {
 
       <section className="w-full bg-blue-100 py-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col gap-8">
-          {filteredExcursions.slice(0, 5).map((excursion) => (
+          {filteredExcursions.slice(0, 5).map((excursion: ExcursionType) => (
             <WideExcursionCard key={excursion.id} excursion={excursion} />
           ))}
         </div>
       </section>
 
       <div className="text-center my-6">
-        <button
-          onClick={handleSeeMore}
-          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-        >
-          See More
-        </button>
+        <Link href="/excursions">
+          <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+            See More
+          </button>
+        </Link>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
 import Sidebar from '@/components/sidebar';
+import { FiltersProvider } from '@/context/filtersContext';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -23,7 +24,9 @@ export default function RootLayout({
       <body className={`${poppins.className} antialiased`}>
         <main className="flex">
           <Sidebar />
-          <div className="flex-1">{children}</div>
+          <div className="flex-1">
+            <FiltersProvider>{children}</FiltersProvider>
+          </div>
         </main>
       </body>
     </html>
