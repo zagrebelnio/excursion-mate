@@ -2,31 +2,8 @@
 import { useState } from 'react';
 import { Slider, Box, Typography } from '@mui/material';
 import ExcursionCard from '@/components/excursionCard';
-
-const excursions = [
-  {
-    id: 1,
-    image: '/backgrounds/image 2.jpg',
-    title: 'City Tour in Kyiv',
-    description: 'Explore the heart of Kyiv with a local guide.',
-    location: 'Kyiv, Ukraine',
-    date: '2024-12-10',
-    price: 50,
-    likes: 200,
-    dislikes: 5,
-  },
-  {
-    id: 2,
-    image: '/backgrounds/image 3.jpg',
-    title: 'Lviv Old Town Tour',
-    description: 'Discover the charming streets of Lviv.',
-    location: 'Lviv, Ukraine',
-    date: '2024-12-15',
-    price: 45,
-    likes: 150,
-    dislikes: 3,
-  },
-];
+import { EXCURSIONS } from '@/store/excursions';
+import { ExcursionType } from '@/types/excursion';
 
 export default function ExcursionsPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,7 +31,7 @@ export default function ExcursionsPage() {
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
-  const filteredExcursions = excursions.filter((excursion) => {
+  const filteredExcursions = EXCURSIONS.filter((excursion: ExcursionType) => {
     const matchesSearch =
       excursion.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       excursion.description.toLowerCase().includes(searchQuery.toLowerCase());
