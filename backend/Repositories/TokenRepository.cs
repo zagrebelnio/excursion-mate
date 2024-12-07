@@ -36,7 +36,7 @@ namespace backend.Repositories
                 configuration["JWT_ISSUER"],
                 configuration["JWT_AUDIENCE"],
                 claims,
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
