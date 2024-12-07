@@ -30,7 +30,6 @@
             <summary>
             Updates the profile information of the currently authenticated user (must be authenticated using a Bearer token)
             </summary>
-            <param name="updateDTO">The updated user profile data, including fields like name, email, and photo (all optionally)</param>
         </member>
         <member name="T:backend.Migrations.Initialcommit">
             <inheritdoc />
@@ -42,6 +41,30 @@
             <inheritdoc />
         </member>
         <member name="M:backend.Migrations.Initialcommit.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:backend.Migrations.Changepricetypetoint">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.Changepricetypetoint.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.Changepricetypetoint.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.Changepricetypetoint.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:backend.Migrations.UserIdcanbenull">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.UserIdcanbenull.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.UserIdcanbenull.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.UserIdcanbenull.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>
