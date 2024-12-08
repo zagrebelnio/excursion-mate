@@ -31,7 +31,7 @@ namespace backend.Models.DTO
         public DateTime Date { get; set; }
 
         [Required]
-        [Range(0, 5000, ErrorMessage = "Price must be between 0 and 1000.")]
+        [Range(0, 5000, ErrorMessage = "Price must be between 0 and 5000.")]
         public int Price { get; set; }
 
         [Required]
