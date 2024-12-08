@@ -16,9 +16,24 @@
             </summary>
             <param name="loginRequestDTO">The credentials needed to log in, including the username (email) and password.</param>
         </member>
-        <member name="M:backend.Controllers.ExcursionsController.GetAll">
+        <member name="M:backend.Controllers.ExcursionsController.GetAll(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.DateTime},System.Int32,System.Int32)">
             <summary>
-            Retrieves a list of all available excursions (now requires authentication and role "User")
+            Retrieves a list of all available excursions with optional filters (title, city, price, date)
+            </summary>
+        </member>
+        <member name="M:backend.Controllers.ExcursionsController.Details(System.Int32)">
+            <summary>
+            Retrieves details of a specific excursion by ID
+            </summary>
+        </member>
+        <member name="M:backend.Controllers.ExcursionsController.Create(backend.Models.DTO.AddExcursionDTO)">
+            <summary>
+            Creates a new excursion. Requires authentication.
+            </summary>
+        </member>
+        <member name="M:backend.Controllers.ExcursionsController.Delete(System.Int32)">
+            <summary>
+            Delete an excursion by ID. Requires authentication.
             </summary>
         </member>
         <member name="M:backend.Controllers.UsersController.GetProfile">
@@ -30,7 +45,6 @@
             <summary>
             Updates the profile information of the currently authenticated user (must be authenticated using a Bearer token)
             </summary>
-            <param name="updateDTO">The updated user profile data, including fields like name, email, and photo (all optionally)</param>
         </member>
         <member name="T:backend.Migrations.Initialcommit">
             <inheritdoc />
@@ -42,6 +56,30 @@
             <inheritdoc />
         </member>
         <member name="M:backend.Migrations.Initialcommit.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:backend.Migrations.Changepricetypetoint">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.Changepricetypetoint.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.Changepricetypetoint.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.Changepricetypetoint.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:backend.Migrations.UserIdcanbenull">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.UserIdcanbenull.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.UserIdcanbenull.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend.Migrations.UserIdcanbenull.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>

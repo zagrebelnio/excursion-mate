@@ -19,7 +19,7 @@ namespace backend.Data
 
             builder.Entity<Excursion>()
                 .Property(e => e.Price)
-                .HasColumnType("decimal(6,2)");
+                .HasColumnType("int");
 
             builder.Entity<Excursion>()
                 .HasOne(e => e.User)

@@ -47,7 +47,7 @@ namespace backend.Controllers
 
             if (user.Photo != null)
             {
-                userProfile.PhotoUrl = Convert.ToBase64String(user.Photo); // Конвертируем в base64
+                userProfile.Photo = Convert.ToBase64String(user.Photo); 
             }
 
             return Ok(userProfile);
@@ -64,14 +64,20 @@ namespace backend.Controllers
             var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
 
             var userId = tokenService.GetUserIdFromToken(token);
-            Console.WriteLine($"User ID from token: {userId}");
 
             var user = await userRepository.GetUserByIdAsync(userId);
             if (user == null) return NotFound("User not found");
-            
 
-            await userRepository.UpdateUserProfileAsync(user, updateDTO);
-            return NoContent();
+            try
+            {
+                await userRepository.UpdateUserProfileAsync(user, updateDTO);
+                return NoContent();
+            }
+
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }
