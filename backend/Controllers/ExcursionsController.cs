@@ -32,9 +32,9 @@ namespace backend.Controllers
         /// </summary>
         [HttpGet]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? title, [FromQuery] string? city, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] DateTime? date, [FromQuery] int page = 1, [FromQuery] int pageSize = 9)
         {
-            var excursions = await excursionRepository.GetAllAsync();
+            var excursions = await excursionRepository.GetAllAsync(title, city, minPrice, maxPrice, date, page, pageSize);
             return Ok(mapper.Map<List<ExcursionDTO>>(excursions));
 
         }

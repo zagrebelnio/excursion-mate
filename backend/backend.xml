@@ -16,7 +16,7 @@
             </summary>
             <param name="loginRequestDTO">The credentials needed to log in, including the username (email) and password.</param>
         </member>
-        <member name="M:backend.Controllers.ExcursionsController.GetAll">
+        <member name="M:backend.Controllers.ExcursionsController.GetAll(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.DateTime},System.Int32,System.Int32)">
             <summary>
             Retrieves a list of all available excursions (now requires authentication and role "User")
             </summary>
