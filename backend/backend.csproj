@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>0789d819-7a82-4d82-a286-06c321f42ac8</UserSecretsId>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>C:\Users\antin\source\repos\excursion-mate\backend\backend.xml</DocumentationFile>
+	<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\backend.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
