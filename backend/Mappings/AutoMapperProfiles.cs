@@ -11,11 +11,13 @@ namespace backend.Mappings
             CreateMap<Excursion, ExcursionDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Photo != null ? Convert.ToBase64String(src.Photo) : null))
                 .ReverseMap();
+
             CreateMap<User, UserProfileDTO>().ReverseMap();
             CreateMap<UpdateUserProfileDTO, User>().ReverseMap();
+
             CreateMap<AddExcursionDTO, Excursion>()
-    .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Photo != null ? ConvertFileToByteArray(src.Photo) : null))
-    .ReverseMap();
+                .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Photo != null ? ConvertFileToByteArray(src.Photo) : null))
+                .ReverseMap();
 
             CreateMap<Excursion, ExcursionDetailsDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Photo != null ? Convert.ToBase64String(src.Photo) : null));

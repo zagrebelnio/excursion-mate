@@ -4,6 +4,7 @@ using backend.Models.Domain;
 using backend.Models.DTO;
 using backend.Repositories;
 using backend.Services;
+using backend.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -64,6 +65,7 @@ namespace backend.Controllers
         /// Creates a new excursion. Requires authentication.
         /// </summary>
         [HttpPost]
+        [ValidateModel]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Create([FromForm] AddExcursionDTO addExcursionDTO)
         {
@@ -78,6 +80,17 @@ namespace backend.Controllers
 
             if (addExcursionDTO.Photo != null)
             {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(addExcursionDTO.Photo.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(extension))
+                {
+                    return BadRequest(($"File extension is not allowed. Allowed extensions: {string.Join(", ", allowedExtensions)}"));
+                }
+
+                if (addExcursionDTO.Photo.Length > 5 * 1024 * 1024)
+                {
+                    return BadRequest("File size exceeds 5 MB.");
+                }
                 using (var memoryStream = new MemoryStream())
                 {
                     await addExcursionDTO.Photo.CopyToAsync(memoryStream);

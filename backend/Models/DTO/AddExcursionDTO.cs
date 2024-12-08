@@ -1,4 +1,5 @@
 ﻿using backend.Models.Domain;
+using backend.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -38,6 +39,8 @@ namespace backend.Models.DTO
         public int MaxParticipants { get; set; }
 
         [Required]
+        [MaxFileSize(5 * 1024 * 1024)] // 5 MB
+        [AllowedExtensions(new[] { ".ipg", ".jpeg", ".png"})]
         public IFormFile Photo { get; set; }
     }
 }

@@ -67,10 +67,17 @@ namespace backend.Controllers
 
             var user = await userRepository.GetUserByIdAsync(userId);
             if (user == null) return NotFound("User not found");
-            
 
-            await userRepository.UpdateUserProfileAsync(user, updateDTO);
-            return NoContent();
+            try
+            {
+                await userRepository.UpdateUserProfileAsync(user, updateDTO);
+                return NoContent();
+            }
+
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }
