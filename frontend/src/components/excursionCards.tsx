@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { ThumbUp, ThumbDown } from '@mui/icons-material';
 import { ExcursionType } from '@/types/excursion';
 
-const ExcursionCard: React.FC<{ excursion: ExcursionType }> = ({
+export const ExcursionCard: React.FC<{ excursion: ExcursionType }> = ({
   excursion,
 }: {
   excursion: ExcursionType;
@@ -48,4 +48,46 @@ const ExcursionCard: React.FC<{ excursion: ExcursionType }> = ({
   );
 };
 
-export default ExcursionCard;
+export const WideExcursionCard: React.FC<{ excursion: ExcursionType }> = ({
+  excursion,
+}: {
+  excursion: ExcursionType;
+}) => {
+  return (
+    <Link href={`/excursions/${excursion.id}`}>
+      <div className="flex bg-white rounded-lg shadow-md overflow-hidden cursor-pointer">
+        <div className="w-1/3">
+          <Image
+            src={excursion.image}
+            alt={excursion.title}
+            width={1000}
+            height={600}
+            className="h-full w-full object-cover"
+          />
+        </div>
+
+        <div className="p-6 flex flex-col justify-between w-2/3">
+          <h3 className="text-2xl font-bold text-gray-800 hover:underline">
+            {excursion.title}
+          </h3>
+
+          <p className="text-gray-600 mt-4 text-justify">
+            {excursion.description}
+          </p>
+          <div className="mt-6 text-sm text-gray-500">
+            <p>
+              <strong>Location:</strong> {excursion.location}
+            </p>
+            <p>
+              <strong>Date:</strong>{' '}
+              {format(new Date(excursion.date), 'dd.MM.yyyy')}
+            </p>
+            <p>
+              <strong>Price:</strong> ₴{excursion.price}
+            </p>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+};
