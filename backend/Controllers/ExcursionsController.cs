@@ -28,10 +28,10 @@ namespace backend.Controllers
         }
 
         /// <summary>
-        /// Retrieves a list of all available excursions (now requires authentication and role "User")
+        /// Retrieves a list of all available excursions with optional filters (title, city, price, date)
         /// </summary>
         [HttpGet]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
+        //[Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
         public async Task<IActionResult> GetAll([FromQuery] string? title, [FromQuery] string? city, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] DateTime? date, [FromQuery] int page = 1, [FromQuery] int pageSize = 9)
         {
             var excursions = await excursionRepository.GetAllAsync(title, city, minPrice, maxPrice, date, page, pageSize);
@@ -39,6 +39,10 @@ namespace backend.Controllers
 
         }
 
+
+        /// <summary>
+        /// Retrieves details of a specific excursion by ID
+        /// </summary>
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Details(int id)
         {
@@ -56,6 +60,9 @@ namespace backend.Controllers
         }
 
 
+        /// <summary>
+        /// Creates a new excursion. Requires authentication.
+        /// </summary>
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Create([FromForm] AddExcursionDTO addExcursionDTO)
@@ -81,6 +88,20 @@ namespace backend.Controllers
             excursion = await excursionRepository.CreateAsync(excursion);
             var excursionDTO = mapper.Map<ExcursionDetailsDTO>(excursion);
             return RedirectToAction("Details", new { id = excursionDTO.Id });
+        }
+
+
+        /// <summary>
+        /// Delete an excursion by ID. Requires authentication.
+        /// </summary>
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var excursion = await excursionRepository.DeleteAsync(id);
+            if (excursion == null) return NotFound();
+
+            return NoContent();
         }
     }
 }

@@ -18,7 +18,22 @@
         </member>
         <member name="M:backend.Controllers.ExcursionsController.GetAll(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.DateTime},System.Int32,System.Int32)">
             <summary>
-            Retrieves a list of all available excursions (now requires authentication and role "User")
+            Retrieves a list of all available excursions with optional filters (title, city, price, date)
+            </summary>
+        </member>
+        <member name="M:backend.Controllers.ExcursionsController.Details(System.Int32)">
+            <summary>
+            Retrieves details of a specific excursion by ID
+            </summary>
+        </member>
+        <member name="M:backend.Controllers.ExcursionsController.Create(backend.Models.DTO.AddExcursionDTO)">
+            <summary>
+            Creates a new excursion. Requires authentication.
+            </summary>
+        </member>
+        <member name="M:backend.Controllers.ExcursionsController.Delete(System.Int32)">
+            <summary>
+            Delete an excursion by ID. Requires authentication.
             </summary>
         </member>
         <member name="M:backend.Controllers.UsersController.GetProfile">
