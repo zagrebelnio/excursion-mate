@@ -17,7 +17,6 @@ export async function editUserPorfile(accessToken: string, data: FormData) {
     const response = await axiosInstance.patch('/api/Users/edit', data, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    console.log(response);
     return response.data;
   } catch (error) {
     console.error('Error editing user profile:', error);
