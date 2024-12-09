@@ -8,7 +8,7 @@ namespace backend.Models.DTO
         public string? LastName { get; set; }
 
         [MaxFileSize(5 * 1024 * 1024)] // 5 MB
-        [AllowedExtensions(new[] { ".ipg", ".jpeg", ".png" })]
+        [AllowedExtensions(new[] { ".jpg", ".jpeg", ".png" })]
         public IFormFile? Photo { get; set; }
     }
 }
