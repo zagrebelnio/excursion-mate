@@ -11,6 +11,10 @@ import { useUser } from '@/context/userContext';
 export default function Home() {
   const { user, loading, error } = useUser();
 
+  console.log(user);
+  console.log(loading);
+  console.log(error);
+
   const {
     filters,
     searchQuery,
@@ -32,13 +36,7 @@ export default function Home() {
 
         <div className="absolute top-8 right-8 text-lg flex space-x-4 items-center z-10 gap-4">
           {loading ? (
-            <Image
-              width={100}
-              height={100}
-              src="/placeholders/profile-avatar.svg"
-              alt="placeholder"
-              className="w-10 h-10 rounded-full border-2 border-white cursor-pointer hover:opacity-90"
-            />
+            <></>
           ) : user ? (
             <Link href="/profile">
               <Image

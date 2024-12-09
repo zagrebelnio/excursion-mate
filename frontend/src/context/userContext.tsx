@@ -46,6 +46,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       fetchUserData();
     } else {
       setUser(null);
+      setLoading(false);
     }
   }, [session]);
 

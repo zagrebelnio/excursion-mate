@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -63,12 +64,12 @@ export default function Sidebar() {
               </Link>
             </li>
             <li>
-              <Link
-                href="/logout"
-                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/logout' ? 'bg-gray-100' : ''}`}
+              <button
+                onClick={() => signOut({ callbackUrl: '/' })}
+                className="block text-left w-full px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md"
               >
                 Вийти
-              </Link>
+              </button>
             </li>
           </ul>
         </nav>
