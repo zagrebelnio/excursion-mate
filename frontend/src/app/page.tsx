@@ -5,8 +5,15 @@ import { WideExcursionCard } from '@/components/excursionCards';
 import { EXCURSIONS } from '@/store/excursions';
 import { useFilters } from '@/context/filtersContext';
 import { ExcursionType } from '@/types/excursion';
+import { useUser } from '@/context/userContext';
 
 export default function Home() {
+  const { user, loading, error } = useUser();
+
+  console.log(user);
+  console.log(loading);
+  console.log(error);
+
   const {
     filters,
     searchQuery,

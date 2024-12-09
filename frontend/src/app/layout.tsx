@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
 import Sidebar from '@/components/sidebar';
-import { FiltersProvider } from '@/context/filtersContext';
+import { Providers } from './providers';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -25,7 +25,7 @@ export default function RootLayout({
         <main className="flex">
           <Sidebar />
           <div className="flex-1">
-            <FiltersProvider>{children}</FiltersProvider>
+            <Providers>{children}</Providers>
           </div>
         </main>
       </body>
