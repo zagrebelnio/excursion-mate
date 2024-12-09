@@ -17,7 +17,7 @@ namespace backend.Validation
             if (value is IFormFile file)
             {
                 var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-                if (extensions.Contains(extension))
+                if (!extensions.Contains(extension))
                 {
                     return new ValidationResult($"File extension is not allowed. Allowed extensions: {string.Join(", ", extensions)}");
                 }
