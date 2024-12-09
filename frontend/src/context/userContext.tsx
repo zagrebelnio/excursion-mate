@@ -22,7 +22,7 @@ const UserContext = createContext<UserContextValue | null>(null);
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const { data: session } = useSession();
   const [user, setUser] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchUserData = async () => {
