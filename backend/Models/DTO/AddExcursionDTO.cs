@@ -40,7 +40,7 @@ namespace backend.Models.DTO
 
         [Required]
         [MaxFileSize(5 * 1024 * 1024)] // 5 MB
-        [AllowedExtensions(new[] { ".ipg", ".jpeg", ".png"})]
+        [AllowedExtensions(new[] { ".jpg", ".jpeg", ".png"})]
         public IFormFile Photo { get; set; }
     }
 }
