@@ -69,25 +69,11 @@ namespace backend.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Create([FromForm] AddExcursionDTO addExcursionDTO)
         {
-            var excursion = mapper.Map<Excursion>(addExcursionDTO);
-
             var authHeader = Request.Headers["Authorization"].ToString();
             var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
             var userId = tokenService.GetUserIdFromToken(token);
 
-            excursion.UserId = userId;
-            excursion.Status = "Active";
-
-            if (addExcursionDTO.Photo != null)
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await addExcursionDTO.Photo.CopyToAsync(memoryStream);
-                    excursion.Photo = memoryStream.ToArray();
-                }
-            }
-
-            excursion = await excursionRepository.CreateAsync(excursion);
+            var excursion = await excursionRepository.CreateAsync(addExcursionDTO, userId);
             var excursionDTO = mapper.Map<ExcursionDetailsDTO>(excursion);
             return RedirectToAction("Details", new { id = excursionDTO.Id });
         }
@@ -112,9 +98,6 @@ namespace backend.Controllers
         /// <summary>
         /// Update an existing excursion. Requires authentication.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="editExcursionDTO"></param>
-        /// <returns></returns>
         [HttpPatch]
         [Route("{id:int}")]
         [Authorize(AuthenticationSchemes = "Bearer")]

@@ -1,6 +1,8 @@
-﻿using backend.Data;
+﻿using AutoMapper;
+using backend.Data;
 using backend.Models.Domain;
 using backend.Models.DTO;
+using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -10,14 +12,32 @@ namespace backend.Repositories
     {
 
         private readonly ExcursionDbContext excursionDbContext;
+        private readonly ITokenService tokenService;
+        private readonly IMapper mapper;
 
-        public SQLExcursionRepository(ExcursionDbContext excursionDbContext)
+        public SQLExcursionRepository(ExcursionDbContext excursionDbContext, ITokenService tokenService, IMapper mapper)
         {
             this.excursionDbContext = excursionDbContext;
+            this.tokenService = tokenService;
+            this.mapper = mapper;
         }
 
-        public async Task<Excursion> CreateAsync(Excursion excursion)
+        public async Task<Excursion> CreateAsync(AddExcursionDTO addExcursionDTO, string userId)
         {
+            var excursion = mapper.Map<Excursion>(addExcursionDTO);
+
+            excursion.UserId = userId;
+            excursion.Status = "Active";
+
+            if (addExcursionDTO.Photo != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await addExcursionDTO.Photo.CopyToAsync(memoryStream);
+                    excursion.Photo = memoryStream.ToArray();
+                }
+            }
+
             await excursionDbContext.Excursions.AddAsync(excursion);
             await excursionDbContext.SaveChangesAsync();
             return excursion;
