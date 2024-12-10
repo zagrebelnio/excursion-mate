@@ -20,7 +20,7 @@ interface UserContextValue {
 const UserContext = createContext<UserContextValue | null>(null);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,19 +36,25 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(profile);
     } catch (err: any) {
       setError(err.message || 'Failed to fetch user data');
+      setUser(null);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (status === 'loading') {
+      setLoading(true);
+      return;
+    }
+
     if (session?.accessToken) {
       fetchUserData();
     } else {
       setUser(null);
       setLoading(false);
     }
-  }, [session]);
+  }, [session, status]);
 
   return (
     <UserContext.Provider
