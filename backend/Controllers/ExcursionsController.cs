@@ -80,17 +80,6 @@ namespace backend.Controllers
 
             if (addExcursionDTO.Photo != null)
             {
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-                var extension = Path.GetExtension(addExcursionDTO.Photo.FileName).ToLowerInvariant();
-                if (!allowedExtensions.Contains(extension))
-                {
-                    return BadRequest(($"File extension is not allowed. Allowed extensions: {string.Join(", ", allowedExtensions)}"));
-                }
-
-                if (addExcursionDTO.Photo.Length > 5 * 1024 * 1024)
-                {
-                    return BadRequest("File size exceeds 5 MB.");
-                }
                 using (var memoryStream = new MemoryStream())
                 {
                     await addExcursionDTO.Photo.CopyToAsync(memoryStream);
@@ -109,6 +98,7 @@ namespace backend.Controllers
         /// </summary>
         [HttpDelete]
         [Route("{id:int}")]
+        [ExcursionOwnerAuthorization]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
@@ -118,9 +108,17 @@ namespace backend.Controllers
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Update an existing excursion. Requires authentication.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="editExcursionDTO"></param>
+        /// <returns></returns>
         [HttpPatch]
         [Route("{id:int}")]
         [Authorize(AuthenticationSchemes = "Bearer")]
+        [ExcursionOwnerAuthorization]
         [ValidateModel]
         public async Task<IActionResult> Edit([FromRoute] int id, [FromForm] EditExcursionDTO editExcursionDTO)
         {

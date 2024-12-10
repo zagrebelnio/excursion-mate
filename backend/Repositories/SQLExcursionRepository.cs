@@ -73,9 +73,15 @@ namespace backend.Repositories
             return await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        public async Task<bool> IsUserOwnerAsync(int excursionId, string userId)
+        {
+            var excursion = await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == excursionId);
+            return excursion?.UserId == userId;
+        }
+
         public async Task<Excursion?> UpdateAsync(int id, EditExcursionDTO editExcursionDTO)
         {
-            var excursion = await excursionDbContext.Excursions.FindAsync(id);
+            var excursion = await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == id);
             if (excursion == null) return null;
 
             if (!string.IsNullOrEmpty(editExcursionDTO.Title))
