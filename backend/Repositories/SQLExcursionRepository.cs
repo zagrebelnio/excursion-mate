@@ -1,6 +1,8 @@
 ﻿using backend.Data;
 using backend.Models.Domain;
+using backend.Models.DTO;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace backend.Repositories
 {
@@ -69,6 +71,54 @@ namespace backend.Repositories
         public async Task<Excursion?> GetByIdAsync(int id)
         {
             return await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == id);
+        }
+
+        public async Task<Excursion?> UpdateAsync(int id, EditExcursionDTO editExcursionDTO)
+        {
+            var excursion = await excursionDbContext.Excursions.FindAsync(id);
+            if (excursion == null) return null;
+
+            if (!string.IsNullOrEmpty(editExcursionDTO.Title))
+            {
+                excursion.Title = editExcursionDTO.Title;
+            }
+            if (!string.IsNullOrEmpty(editExcursionDTO.Description))
+            {
+                excursion.Description = editExcursionDTO.Description;
+            }
+            if (!string.IsNullOrEmpty(editExcursionDTO.City))
+            {
+                excursion.City = editExcursionDTO.City;
+            }
+            if (!string.IsNullOrEmpty(editExcursionDTO.Location))
+            {
+                excursion.Location = editExcursionDTO.Location;
+            }
+            if (editExcursionDTO.Date.HasValue)
+            {
+                excursion.Date = editExcursionDTO.Date.Value;
+            }
+            if (editExcursionDTO.Price.HasValue && editExcursionDTO.Price.Value >= 0)
+            {
+                excursion.Price = editExcursionDTO.Price.Value;
+            }
+            if (editExcursionDTO.MaxParticipants.HasValue && editExcursionDTO.MaxParticipants.Value >= 2)
+            {
+                excursion.MaxParticipants = editExcursionDTO.MaxParticipants.Value;
+            }
+            if (editExcursionDTO.Photo != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await editExcursionDTO.Photo.CopyToAsync(memoryStream);
+                    excursion.Photo = memoryStream.ToArray();
+                }
+            }
+
+            excursion.UpdatedAt = DateTime.Now;
+            excursionDbContext.Excursions.Update(excursion);
+            await excursionDbContext.SaveChangesAsync();
+            return excursion;
         }
     }
 }

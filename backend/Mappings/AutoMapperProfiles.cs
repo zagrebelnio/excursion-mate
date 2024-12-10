@@ -21,6 +21,9 @@ namespace backend.Mappings
 
             CreateMap<Excursion, ExcursionDetailsDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Photo != null ? Convert.ToBase64String(src.Photo) : null));
+
+            CreateMap<Excursion, EditExcursionDTO>()
+            .ForMember(dest => dest.Photo, opt => opt.Ignore());
         }
 
         private byte[] ConvertFileToByteArray(IFormFile file)

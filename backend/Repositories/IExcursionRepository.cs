@@ -1,4 +1,5 @@
 ﻿using backend.Models.Domain;
+using backend.Models.DTO;
 
 namespace backend.Repositories
 {
@@ -8,5 +9,6 @@ namespace backend.Repositories
         Task<Excursion> CreateAsync(Excursion excursion);
         Task<Excursion?> GetByIdAsync(int id);
         Task<Excursion?> DeleteAsync(int id);
+        Task<Excursion?> UpdateAsync(int id, EditExcursionDTO editExcursionDTO);
     }
 }

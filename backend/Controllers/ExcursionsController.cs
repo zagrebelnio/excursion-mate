@@ -109,12 +109,24 @@ namespace backend.Controllers
         /// </summary>
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var excursion = await excursionRepository.DeleteAsync(id);
             if (excursion == null) return NotFound();
 
             return NoContent();
+        }
+
+        [HttpPatch]
+        [Route("{id:int}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [ValidateModel]
+        public async Task<IActionResult> Edit([FromRoute] int id, [FromForm] EditExcursionDTO editExcursionDTO)
+        {
+            var editedExcursion = await excursionRepository.UpdateAsync(id, editExcursionDTO);
+            if (editedExcursion == null) return NotFound();
+            return Ok(mapper.Map<EditExcursionDTO>(editedExcursion));
         }
     }
 }
