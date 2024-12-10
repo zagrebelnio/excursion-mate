@@ -16,9 +16,10 @@ function LoginForm() {
     e.preventDefault();
     setError('');
     const res = await signIn('credentials', {
-      redirect: false,
+      redirect: true,
       username: userData.username,
       password: userData.password,
+      callbackUrl: '/',
     });
 
     if (res?.error) {

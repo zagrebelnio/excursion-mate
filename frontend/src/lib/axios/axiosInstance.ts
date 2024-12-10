@@ -3,10 +3,16 @@ import https from 'https';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
   httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+});
+
+axiosInstance.interceptors.request.use((config) => {
+  if (config.data instanceof FormData) {
+    delete config.headers['Content-Type'];
+  } else {
+    config.headers['Content-Type'] = 'application/json';
+  }
+  return config;
 });
 
 export default axiosInstance;

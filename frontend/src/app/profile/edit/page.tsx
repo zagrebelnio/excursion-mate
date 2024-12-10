@@ -1,16 +1,58 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useUser } from '@/context/userContext';
+import { editUserPorfile } from '@/services/userService';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function Edit() {
+  const { data: session } = useSession();
+  const { user, loading, error, refetchUser } = useUser();
+  const router = useRouter();
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [photo, setPhoto] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (user && !loading && !error) {
+      setFirstName(user.firstName || '');
+      setLastName(user.lastName || '');
+      if (user.photo) {
+        setPhoto(`data:image/jpeg;base64,${user.photo}`);
+      }
+    }
+  }, [user, loading, error]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFile(file);
+      setPhoto(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('First Name:', firstName);
-    console.log('Last Name:', lastName);
+
+    const formData = new FormData();
+    formData.append('FirstName', firstName);
+    formData.append('LastName', lastName);
+
+    if (file) {
+      formData.append('Photo', file);
+    }
+
+    try {
+      await editUserPorfile(session?.accessToken as string, formData);
+      refetchUser();
+      router.push('/profile');
+    } catch (error) {
+      console.error('Error editing user profile:', error);
+    }
   };
 
   return (
@@ -21,15 +63,10 @@ export default function Edit() {
             type="file"
             accept="image/*"
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                console.log('Selected file:', file);
-              }
-            }}
+            onChange={handleFileChange}
           />
           <Image
-            src="/placeholders/profile-avatar.svg"
+            src={photo ?? '/placeholders/profile-avatar.svg'}
             alt="Profile"
             className="w-full h-full object-cover"
             width={160}

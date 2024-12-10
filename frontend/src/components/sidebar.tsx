@@ -2,9 +2,19 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
+import HomeIcon from '@mui/icons-material/Home';
+import MapIcon from '@mui/icons-material/Map';
+import PersonIcon from '@mui/icons-material/Person';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import LoginIcon from '@mui/icons-material/Login';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import { useUser } from '@/context/userContext';
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { user, loading, error } = useUser();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
 
@@ -41,35 +51,58 @@ export default function Sidebar() {
             <li>
               <Link
                 href="/"
-                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/' ? 'bg-gray-100' : ''}`}
+                className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/' ? 'bg-gray-100' : ''}`}
               >
-                Головна
+                <HomeIcon /> Головна
               </Link>
             </li>
             <li>
               <Link
                 href="/excursions"
-                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/excursions' ? 'bg-gray-100' : ''}`}
+                className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/excursions' ? 'bg-gray-100' : ''}`}
               >
-                Екскурсії
+                <MapIcon /> Екскурсії
               </Link>
             </li>
-            <li>
-              <Link
-                href="/profile"
-                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
-              >
-                Профіль
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/logout"
-                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/logout' ? 'bg-gray-100' : ''}`}
-              >
-                Вийти
-              </Link>
-            </li>
+            {user ? (
+              <>
+                <li>
+                  <Link
+                    href="/profile"
+                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
+                  >
+                    <PersonIcon /> Профіль
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                    className="flex items-center gap-4 text-left w-full px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md"
+                  >
+                    <ExitToAppIcon /> Вийти
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link
+                    href="/auth?mode=login"
+                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
+                  >
+                    <LoginIcon /> Вхід
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/auth?mode=register"
+                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
+                  >
+                    <HowToRegIcon /> Реєстрація
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </div>

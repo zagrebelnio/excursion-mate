@@ -1,12 +1,16 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Slider, Box, Typography } from '@mui/material';
 import { WideExcursionCard } from '@/components/excursionCards';
 import { EXCURSIONS } from '@/store/excursions';
 import { useFilters } from '@/context/filtersContext';
 import { ExcursionType } from '@/types/excursion';
+import { useUser } from '@/context/userContext';
 
 export default function Home() {
+  const { user, loading, error } = useUser();
+
   const {
     filters,
     searchQuery,
@@ -27,18 +31,38 @@ export default function Home() {
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
 
         <div className="absolute top-8 right-8 text-lg flex space-x-4 items-center z-10 gap-4">
-          <Link
-            href="/auth?mode=login"
-            className="px-4 py-1 text-white rounded-full font-semibold hover:bg-white hover:text-black transition duration-300 ease-in-out"
-          >
-            Увійти
-          </Link>
-          <Link
-            href="/auth?mode=register"
-            className="px-4 py-1 bg-white rounded-full font-semibold shadow hover:bg-black hover:text-white transition duration-300 ease-in-out"
-          >
-            Зареєструватись
-          </Link>
+          {loading ? (
+            <></>
+          ) : user ? (
+            <Link href="/profile">
+              <Image
+                width={100}
+                height={100}
+                src={
+                  user.photo === null
+                    ? '/placeholders/profile-avatar.svg'
+                    : `data:image/png;base64,${user.photo}`
+                }
+                alt={user.firstName}
+                className="w-10 h-10 rounded-full border-2 border-white cursor-pointer hover:opacity-90"
+              />
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/auth?mode=login"
+                className="px-4 py-1 text-white rounded-full font-semibold hover:bg-white hover:text-black transition duration-300 ease-in-out"
+              >
+                Увійти
+              </Link>
+              <Link
+                href="/auth?mode=register"
+                className="px-4 py-1 bg-white rounded-full font-semibold shadow hover:bg-black hover:text-white transition duration-300 ease-in-out"
+              >
+                Зареєструватись
+              </Link>
+            </>
+          )}
         </div>
 
         <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white text-shadow z-10">
