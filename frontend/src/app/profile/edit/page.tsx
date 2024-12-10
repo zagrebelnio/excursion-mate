@@ -47,11 +47,7 @@ export default function Edit() {
     }
 
     try {
-      const response = await editUserPorfile(
-        session?.accessToken as string,
-        formData
-      );
-      console.log(response);
+      await editUserPorfile(session?.accessToken as string, formData);
       refetchUser();
       router.push('/profile');
     } catch (error) {
