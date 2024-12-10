@@ -7,9 +7,14 @@ import HomeIcon from '@mui/icons-material/Home';
 import MapIcon from '@mui/icons-material/Map';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import LoginIcon from '@mui/icons-material/Login';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import { useUser } from '@/context/userContext';
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { user, loading, error } = useUser();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
 
@@ -59,22 +64,45 @@ export default function Sidebar() {
                 <MapIcon /> Екскурсії
               </Link>
             </li>
-            <li>
-              <Link
-                href="/profile"
-                className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
-              >
-                <PersonIcon /> Профіль
-              </Link>
-            </li>
-            <li>
-              <button
-                onClick={() => signOut({ callbackUrl: '/' })}
-                className="flex items-center gap-4 text-left w-full px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md"
-              >
-                <ExitToAppIcon /> Вийти
-              </button>
-            </li>
+            {user ? (
+              <>
+                <li>
+                  <Link
+                    href="/profile"
+                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
+                  >
+                    <PersonIcon /> Профіль
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                    className="flex items-center gap-4 text-left w-full px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md"
+                  >
+                    <ExitToAppIcon /> Вийти
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link
+                    href="/auth?mode=login"
+                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
+                  >
+                    <LoginIcon /> Вхід
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/auth?mode=register"
+                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
+                  >
+                    <HowToRegIcon /> Реєстрація
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </div>
