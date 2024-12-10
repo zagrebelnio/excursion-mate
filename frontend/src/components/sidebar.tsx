@@ -3,6 +3,10 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
+import HomeIcon from '@mui/icons-material/Home';
+import MapIcon from '@mui/icons-material/Map';
+import PersonIcon from '@mui/icons-material/Person';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -42,33 +46,33 @@ export default function Sidebar() {
             <li>
               <Link
                 href="/"
-                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/' ? 'bg-gray-100' : ''}`}
+                className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/' ? 'bg-gray-100' : ''}`}
               >
-                Головна
+                <HomeIcon /> Головна
               </Link>
             </li>
             <li>
               <Link
                 href="/excursions"
-                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/excursions' ? 'bg-gray-100' : ''}`}
+                className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/excursions' ? 'bg-gray-100' : ''}`}
               >
-                Екскурсії
+                <MapIcon /> Екскурсії
               </Link>
             </li>
             <li>
               <Link
                 href="/profile"
-                className={`block px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
+                className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
               >
-                Профіль
+                <PersonIcon /> Профіль
               </Link>
             </li>
             <li>
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
-                className="block text-left w-full px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md"
+                className="flex items-center gap-4 text-left w-full px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md"
               >
-                Вийти
+                <ExitToAppIcon /> Вийти
               </button>
             </li>
           </ul>
