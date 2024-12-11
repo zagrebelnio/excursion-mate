@@ -3,13 +3,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Slider, Box, Typography } from '@mui/material';
 import { WideExcursionCard } from '@/components/excursionCards';
-import { EXCURSIONS } from '@/store/excursions';
 import { useFilters } from '@/context/filtersContext';
 import { ExcursionType } from '@/types/excursion';
 import { useUser } from '@/context/userContext';
+import { useEffect, useState } from 'react';
+import { getExcursions } from '@/services/excursionService';
 
 export default function Home() {
   const { user, loading, error } = useUser();
+  const [excursions, setExcursions] = useState<ExcursionType[]>([]);
 
   const {
     filters,
@@ -17,10 +19,27 @@ export default function Home() {
     handleSearchChange,
     handleSliderChange,
     handleFilterChange,
-    filterExcursions,
   } = useFilters();
 
-  const filteredExcursions = filterExcursions(EXCURSIONS);
+  useEffect(() => {
+    const fetchExcursions = async () => {
+      try {
+        const excursionsList = await getExcursions(
+          searchQuery,
+          filters.location,
+          filters.priceRange[0],
+          filters.priceRange[1],
+          filters.date,
+          1,
+          5
+        );
+        setExcursions(excursionsList || []);
+      } catch (error) {
+        console.error('Error fetching excursions:', error);
+      }
+    };
+    fetchExcursions();
+  }, [filters, searchQuery]);
 
   return (
     <div className="min-h-screen bg-black font-poppins pb-10">
@@ -108,7 +127,7 @@ export default function Home() {
                 onChange={handleSliderChange}
                 valueLabelDisplay="auto"
                 min={0}
-                max={500}
+                max={5000}
                 sx={{
                   '& .MuiSlider-thumb': {
                     bgcolor: 'primary.main',
@@ -128,8 +147,8 @@ export default function Home() {
 
       <section className="w-full bg-blue-100 py-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col gap-8">
-          {filteredExcursions.slice(0, 5).map((excursion: ExcursionType) => (
-            <WideExcursionCard key={excursion.id} excursion={excursion} />
+          {excursions.map((excursion: ExcursionType, index) => (
+            <WideExcursionCard key={index} excursion={excursion} />
           ))}
         </div>
       </section>

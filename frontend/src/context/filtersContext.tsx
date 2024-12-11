@@ -8,7 +8,7 @@ export const FiltersProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     location: '',
-    priceRange: [0, 500],
+    priceRange: [0, 5000],
     date: '',
   });
 
