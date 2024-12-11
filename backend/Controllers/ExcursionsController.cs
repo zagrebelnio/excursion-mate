@@ -68,7 +68,7 @@ namespace backend.Controllers
 
 
         /// <summary>
-        /// Creates a new excursion. Requires authentication.
+        /// Creates a new excursion. Requires authentication
         /// </summary>
         [HttpPost]
         [ValidateModel]
@@ -86,7 +86,7 @@ namespace backend.Controllers
 
 
         /// <summary>
-        /// Delete an excursion by ID. Requires authentication.
+        /// Delete an excursion by ID. Requires authentication
         /// </summary>
         [HttpDelete]
         [Route("{id:int}")]
@@ -102,7 +102,7 @@ namespace backend.Controllers
 
 
         /// <summary>
-        /// Update an existing excursion. Requires authentication.
+        /// Update an existing excursion. Requires authentication
         /// </summary>
         [HttpPatch]
         [Route("{id:int}")]
@@ -122,8 +122,13 @@ namespace backend.Controllers
             return Ok(excursionDTO);
         }
 
+
+        /// <summary>
+        /// Retrieves a list of excursions for the currently authenticated user
+        /// </summary>
         [HttpGet]
         [Route("user-excursions")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetUserExcursions()
         {
             var authHeader = Request.Headers["Authorization"].ToString();
