@@ -1,6 +1,9 @@
 'use client';
 import { Slider, Box, Typography, Pagination } from '@mui/material';
-import { ExcursionCard, ExcursionCardSkeleton } from '@/components/excursionCards';
+import {
+  ExcursionCard,
+  ExcursionCardSkeleton,
+} from '@/components/excursionCards';
 import { useExcursions } from '@/hooks/useExcursions';
 import React, { useEffect } from 'react';
 
@@ -29,6 +32,7 @@ export default function ExcursionsPage() {
     page: number
   ) => {
     updateQueryParams({ page });
+    fetchExcursions({ page });
   };
 
   return (

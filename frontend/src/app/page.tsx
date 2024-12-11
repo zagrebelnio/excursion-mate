@@ -3,37 +3,31 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Slider, Box, Typography } from '@mui/material';
 import { WideExcursionCard } from '@/components/excursionCards';
-import { useFilters } from '@/context/filtersContext';
 import { ExcursionType } from '@/types/excursion';
 import { useUser } from '@/context/userContext';
 import { useExcursions } from '@/hooks/useExcursions';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 export default function Home() {
-  const { user, loading: userLoading, error: userError } = useUser();
-  const {
-    excursions,
-    loading: excursionLoading,
-    error: excursionError,
-    fetchExcursions,
-  } = useExcursions();
-
+  const { user, loading: userLoading } = useUser();
   const {
     filters,
-    searchQuery,
-    handleSearchChange,
-    handleSliderChange,
-    handleFilterChange,
-    setPageData,
-  } = useFilters();
+    excursions,
+    loading: excursionLoading,
+    fetchExcursions,
+    updateQueryParams,
+  } = useExcursions();
 
   useEffect(() => {
-    setPageData(1, 5);
-    fetchExcursions();
+    if (filters.pageSize !== 5) {
+      updateQueryParams({ pageSize: 5 });
+    }
+    fetchExcursions({ pageSize: 5 });
   }, []);
 
   const handleSearchClick = () => {
-    fetchExcursions();
+    updateQueryParams({ pageSize: 5 });
+    fetchExcursions({ pageSize: 5 });
   };
 
   return (
@@ -90,8 +84,8 @@ export default function Home() {
             type="text"
             className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none mb-4"
             placeholder="Search excursions..."
-            value={searchQuery}
-            onChange={handleSearchChange}
+            value={filters.title}
+            onChange={(e) => updateQueryParams({ title: e.target.value })}
           />
 
           <div className="flex justify-between gap-4 mb-4">
@@ -100,26 +94,31 @@ export default function Home() {
               name="city"
               placeholder="City"
               value={filters.city}
-              onChange={handleFilterChange}
+              onChange={(e) => updateQueryParams({ city: e.target.value })}
               className="p-3 border rounded-lg w-1/2 focus:ring-2 focus:ring-blue-500 outline-none"
             />
             <input
               type="date"
               name="date"
               value={filters.date}
-              onChange={handleFilterChange}
+              onChange={(e) => updateQueryParams({ date: e.target.value })}
               className="p-3 border rounded-lg w-1/2 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
 
           <div className="flex flex-col gap-4">
             <Typography className="font-bold text-gray-700">
-              Price Range: ₴{filters.priceRange[0]} - ₴{filters.priceRange[1]}
+              Price Range: ₴{filters.minPrice} - ₴{filters.maxPrice}
             </Typography>
             <Box sx={{ width: '100%' }}>
               <Slider
-                value={filters.priceRange}
-                onChange={handleSliderChange}
+                value={[filters.minPrice, filters.maxPrice]}
+                onChange={(e, value) =>
+                  updateQueryParams({
+                    minPrice: value[0],
+                    maxPrice: value[1],
+                  })
+                }
                 valueLabelDisplay="auto"
                 min={0}
                 max={5000}
@@ -155,7 +154,13 @@ export default function Home() {
       </section>
 
       <div className="text-center my-6">
-        <Link href="/excursions">
+        <Link
+          href={`/excursions?${new URLSearchParams(
+            Object.fromEntries(
+              Object.entries(filters).filter(([key]) => key !== 'pageSize')
+            )
+          ).toString()}`}
+        >
           <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
             See More
           </button>

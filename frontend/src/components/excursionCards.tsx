@@ -117,15 +117,31 @@ export const ExcursionCardSkeleton: React.FC = () => {
       <Box sx={{ p: 2 }}>
         <Skeleton variant="text" width="60%" height={32} animation="wave" />
         <Skeleton variant="text" width="80%" height={20} animation="wave" />
-        <Skeleton variant="text" width="40%" height={20} animation="wave" sx={{ mb: 2 }} />
+        <Skeleton
+          variant="text"
+          width="40%"
+          height={20}
+          animation="wave"
+          sx={{ mb: 2 }}
+        />
 
         <Skeleton variant="text" width="50%" height={20} animation="wave" />
         <Skeleton variant="text" width="50%" height={20} animation="wave" />
         <Skeleton variant="text" width="50%" height={20} animation="wave" />
 
         <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
-          <Skeleton variant="rectangular" width={40} height={20} animation="wave" />
-          <Skeleton variant="rectangular" width={40} height={20} animation="wave" />
+          <Skeleton
+            variant="rectangular"
+            width={40}
+            height={20}
+            animation="wave"
+          />
+          <Skeleton
+            variant="rectangular"
+            width={40}
+            height={20}
+            animation="wave"
+          />
         </Box>
       </Box>
     </Box>

@@ -5,15 +5,16 @@ import { getExcursions } from '@/services/excursionService';
 export function useExcursions() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = Object.fromEntries(searchParams.entries());
 
   const [filters, setFilters] = useState({
-    title: '',
-    city: '',
-    minPrice: 0,
-    maxPrice: 5000,
-    date: '',
-    page: 1,
-    pageSize: 1,
+    title: params.title || '',
+    city: params.city || '',
+    minPrice: Number(params.minPrice) || 0,
+    maxPrice: Number(params.maxPrice) || 5000,
+    date: params.date || '',
+    page: Number(params.page) || 1,
+    pageSize: Number(params.pageSize) || 9,
   });
 
   const [excursions, setExcursions] = useState([]);
@@ -23,15 +24,16 @@ export function useExcursions() {
 
   useEffect(() => {
     const params = Object.fromEntries(searchParams.entries());
-    setFilters({
+    setFilters((prevFilters) => ({
+      ...prevFilters,
       title: params.title || '',
       city: params.city || '',
       minPrice: Number(params.minPrice) || 0,
       maxPrice: Number(params.maxPrice) || 5000,
       date: params.date || '',
       page: Number(params.page) || 1,
-      pageSize: Number(params.pageSize) || 1,
-    });
+      pageSize: Number(params.pageSize) || 9,
+    }));
   }, [searchParams]);
 
   const fetchExcursions = async (overrideFilters?: Partial<typeof filters>) => {
@@ -59,8 +61,9 @@ export function useExcursions() {
       if (value) params.set(key, value.toString());
     });
 
-    router.push(`/excursions?${params.toString()}`);
-    fetchExcursions(newFilters);
+    router.push(`${window.location.pathname}?${params.toString()}`, {
+      scroll: false,
+    });
   };
 
   return {
