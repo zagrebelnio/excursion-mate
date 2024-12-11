@@ -7,7 +7,7 @@ const FiltersContext = createContext(null);
 export const FiltersProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
-    location: '',
+    city: '',
     priceRange: [0, 5000],
     date: '',
   });
@@ -33,9 +33,9 @@ export const FiltersProvider = ({ children }) => {
       const matchesSearch =
         excursion.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         excursion.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesLocation = excursion.location
+      const matchesLocation = excursion.city
         .toLowerCase()
-        .includes(filters.location.toLowerCase());
+        .includes(filters.city.toLowerCase());
       const matchesPrice =
         excursion.price >= filters.priceRange[0] &&
         excursion.price <= filters.priceRange[1];

@@ -6,12 +6,17 @@ import { WideExcursionCard } from '@/components/excursionCards';
 import { useFilters } from '@/context/filtersContext';
 import { ExcursionType } from '@/types/excursion';
 import { useUser } from '@/context/userContext';
-import { useEffect, useState } from 'react';
-import { getExcursions } from '@/services/excursionService';
+import { useExcursions } from '@/hooks/useExcursions';
+import { useEffect } from 'react';
 
 export default function Home() {
-  const { user, loading, error } = useUser();
-  const [excursions, setExcursions] = useState<ExcursionType[]>([]);
+  const { user, loading: userLoading, error: userError } = useUser();
+  const {
+    excursions,
+    loading: excursionLoading,
+    error: excursionError,
+    fetchExcursions,
+  } = useExcursions();
 
   const {
     filters,
@@ -22,24 +27,12 @@ export default function Home() {
   } = useFilters();
 
   useEffect(() => {
-    const fetchExcursions = async () => {
-      try {
-        const excursionsList = await getExcursions(
-          searchQuery,
-          filters.location,
-          filters.priceRange[0],
-          filters.priceRange[1],
-          filters.date,
-          1,
-          5
-        );
-        setExcursions(excursionsList || []);
-      } catch (error) {
-        console.error('Error fetching excursions:', error);
-      }
-    };
     fetchExcursions();
-  }, [filters, searchQuery]);
+  }, []);
+
+  const handleSearchClick = () => {
+    fetchExcursions();
+  };
 
   return (
     <div className="min-h-screen bg-black font-poppins pb-10">
@@ -50,7 +43,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
 
         <div className="absolute top-8 right-8 text-lg flex space-x-4 items-center z-10 gap-4">
-          {loading ? (
+          {userLoading ? (
             <></>
           ) : user ? (
             <Link href="/profile">
@@ -102,9 +95,9 @@ export default function Home() {
           <div className="flex justify-between gap-4 mb-4">
             <input
               type="text"
-              name="location"
-              placeholder="Location"
-              value={filters.location}
+              name="city"
+              placeholder="City"
+              value={filters.city}
               onChange={handleFilterChange}
               className="p-3 border rounded-lg w-1/2 focus:ring-2 focus:ring-blue-500 outline-none"
             />
@@ -142,6 +135,12 @@ export default function Home() {
               />
             </Box>
           </div>
+          <button
+            className="w-full bg-blue-500 text-white py-2 mt-4 rounded-lg hover:bg-blue-600 transition"
+            onClick={handleSearchClick}
+          >
+            Search
+          </button>
         </div>
       </div>
 
