@@ -23,7 +23,14 @@ namespace backend.Mappings
                 .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Photo != null ? Convert.ToBase64String(src.Photo) : null));
 
             CreateMap<Excursion, EditExcursionDTO>()
-            .ForMember(dest => dest.Photo, opt => opt.Ignore());
+                .ForMember(dest => dest.Photo, opt => opt.Ignore());
+
+            CreateMap<(List<Excursion> Items, int TotalCount), PagedResponse<ExcursionDTO>>()
+               .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items))
+               .ForMember(dest => dest.TotalItems, opt => opt.MapFrom(src => src.TotalCount))
+               .ForMember(dest => dest.TotalPages, opt => opt.Ignore()) 
+               .ForMember(dest => dest.CurrentPage, opt => opt.Ignore()) 
+               .ForMember(dest => dest.PageSize, opt => opt.Ignore());
         }
 
         private byte[] ConvertFileToByteArray(IFormFile file)

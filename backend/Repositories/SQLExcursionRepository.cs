@@ -53,7 +53,7 @@ namespace backend.Repositories
             return excursion;
         }
 
-        public async Task<List<Excursion>> GetAllAsync(string? title, string? city, int? minPrice, int? maxPrice, DateTime? date, int page = 1, int pageSize = 9)
+        public async Task<(List<Excursion> Items, int TotalCount)> GetAllAsync(string? title, string? city, int? minPrice, int? maxPrice, DateTime? date, int page = 1, int pageSize = 9)
         {
             var query = excursionDbContext.Excursions.AsQueryable();
 
@@ -82,10 +82,11 @@ namespace backend.Repositories
                 query = query.Where(e => e.Date.Date == date.Value.Date);
             }
 
+            var totalCount = await query.CountAsync();
             var skipResults = (page - 1) * pageSize;
+            var items = await query.Skip(skipResults).Take(pageSize).ToListAsync();
 
-
-            return await query.Skip(skipResults).Take(pageSize).ToListAsync();
+            return (Items: items, TotalCount: totalCount);
         }
 
         public async Task<Excursion?> GetByIdAsync(int id)
