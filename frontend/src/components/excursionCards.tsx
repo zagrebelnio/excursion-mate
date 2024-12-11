@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { format } from 'date-fns';
 import { ThumbUp, ThumbDown } from '@mui/icons-material';
 import { ExcursionType } from '@/types/excursion';
+import { Skeleton, Box } from '@mui/material';
 
 export const ExcursionCard: React.FC<{ excursion: ExcursionType }> = ({
   excursion,
@@ -97,5 +98,36 @@ export const WideExcursionCard: React.FC<{ excursion: ExcursionType }> = ({
         </div>
       </div>
     </Link>
+  );
+};
+
+export const ExcursionCardSkeleton: React.FC = () => {
+  return (
+    <Box
+      className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+      sx={{ display: 'flex', flexDirection: 'column' }}
+    >
+      <Skeleton
+        variant="rectangular"
+        width="100%"
+        height={240}
+        animation="wave"
+      />
+
+      <Box sx={{ p: 2 }}>
+        <Skeleton variant="text" width="60%" height={32} animation="wave" />
+        <Skeleton variant="text" width="80%" height={20} animation="wave" />
+        <Skeleton variant="text" width="40%" height={20} animation="wave" sx={{ mb: 2 }} />
+
+        <Skeleton variant="text" width="50%" height={20} animation="wave" />
+        <Skeleton variant="text" width="50%" height={20} animation="wave" />
+        <Skeleton variant="text" width="50%" height={20} animation="wave" />
+
+        <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+          <Skeleton variant="rectangular" width={40} height={20} animation="wave" />
+          <Skeleton variant="rectangular" width={40} height={20} animation="wave" />
+        </Box>
+      </Box>
+    </Box>
   );
 };
