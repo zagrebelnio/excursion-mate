@@ -5,6 +5,7 @@ import { useFilters } from '@/context/filtersContext';
 
 export function useExcursions() {
   const [excursions, setExcursions] = useState<ExcursionType[]>([]);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,6 +25,7 @@ export function useExcursions() {
         filters.pageSize
       );
       setExcursions(data.items || []);
+      setTotalPages(data.totalPages || 1);
     } catch (err) {
       setError('Failed to fetch excursions. Please try again later.');
       console.error(err);
@@ -32,5 +34,5 @@ export function useExcursions() {
     }
   };
 
-  return { excursions, loading, error, fetchExcursions };
+  return { excursions, loading, error, fetchExcursions, totalPages };
 }

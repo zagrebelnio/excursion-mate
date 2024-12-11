@@ -1,10 +1,10 @@
 'use client';
-import { Slider, Box, Typography } from '@mui/material';
+import { Slider, Box, Typography, Pagination } from '@mui/material';
 import { ExcursionCard } from '@/components/excursionCards';
 import { useFilters } from '@/context/filtersContext';
 import { ExcursionType } from '@/types/excursion';
 import { useExcursions } from '@/hooks/useExcursions';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 export default function ExcursionsPage() {
   const {
@@ -13,16 +13,25 @@ export default function ExcursionsPage() {
     handleSearchChange,
     handleSliderChange,
     handleFilterChange,
+    setPageData,
   } = useFilters();
 
-  const { excursions, loading, error, fetchExcursions } = useExcursions();
+  const { excursions, loading, error, fetchExcursions, totalPages } =
+    useExcursions();
 
   useEffect(() => {
     fetchExcursions();
-  }, []);
+  }, [filters.page]);
 
   const handleSearchClick = () => {
     fetchExcursions();
+  };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setPageData(page, filters.pageSize);
   };
 
   return (
@@ -92,6 +101,18 @@ export default function ExcursionsPage() {
         {excursions.map((excursion: ExcursionType) => (
           <ExcursionCard key={excursion.id} excursion={excursion} />
         ))}
+      </div>
+
+      <div className="flex justify-center mt-8">
+        <Pagination
+          count={totalPages || 1}
+          page={filters.page}
+          onChange={handlePageChange}
+          color="primary"
+          variant="outlined"
+          shape="rounded"
+          size="large"
+        />
       </div>
     </div>
   );

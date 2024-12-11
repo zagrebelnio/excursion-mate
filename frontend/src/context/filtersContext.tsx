@@ -11,7 +11,7 @@ export const FiltersProvider = ({ children }) => {
     priceRange: [0, 5000],
     date: '',
     page: 1,
-    pageSize: 9,
+    pageSize: 1,
   });
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
