@@ -10,6 +10,8 @@ export const FiltersProvider = ({ children }) => {
     city: '',
     priceRange: [0, 5000],
     date: '',
+    page: 1,
+    pageSize: 9,
   });
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,6 +21,14 @@ export const FiltersProvider = ({ children }) => {
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+  const setPageData = (page: number, pageSize: number) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      page,
+      pageSize,
+    }));
   };
 
   const handleSliderChange = (event: Event, newValue: number[]) => {
@@ -55,6 +65,7 @@ export const FiltersProvider = ({ children }) => {
         handleFilterChange,
         handleSliderChange,
         filterExcursions,
+        setPageData,
       }}
     >
       {children}

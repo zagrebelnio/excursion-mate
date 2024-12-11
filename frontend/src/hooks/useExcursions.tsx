@@ -20,10 +20,10 @@ export function useExcursions() {
         filters.priceRange[0],
         filters.priceRange[1],
         filters.date,
-        1,
-        10
+        filters.page,
+        filters.pageSize
       );
-      setExcursions(data || []);
+      setExcursions(data.items || []);
     } catch (err) {
       setError('Failed to fetch excursions. Please try again later.');
       console.error(err);

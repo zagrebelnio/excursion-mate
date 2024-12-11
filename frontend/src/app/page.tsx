@@ -24,9 +24,11 @@ export default function Home() {
     handleSearchChange,
     handleSliderChange,
     handleFilterChange,
+    setPageData,
   } = useFilters();
 
   useEffect(() => {
+    setPageData(1, 5);
     fetchExcursions();
   }, []);
 
