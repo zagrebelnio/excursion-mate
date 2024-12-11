@@ -12,7 +12,6 @@
         public int MaxParticipants { get; set; }
         public int CurrentParticipants { get; set; }
         public byte[]? Photo { get; set; }
-        public string? Status { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         public int? Likes { get; set; }

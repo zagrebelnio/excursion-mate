@@ -27,7 +27,6 @@ namespace backend.Repositories
             var excursion = mapper.Map<Excursion>(addExcursionDTO);
 
             excursion.UserId = userId;
-            excursion.Status = "Active";
 
             if (addExcursionDTO.Photo != null)
             {

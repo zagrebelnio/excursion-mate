@@ -12,6 +12,7 @@ namespace backend.Models.DTO
         public DateTime Date { get; set; }
         public int Price { get; set; }
         public int MaxParticipants { get; set; }
+        public int CurrentParticipants { get; set; }
         public string? Photo { get; set; }
     }
 }
