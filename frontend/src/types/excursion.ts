@@ -1,4 +1,5 @@
 export interface ExcursionType {
+  id: number;
   title: string;
   description: string;
   city: string;

@@ -148,8 +148,8 @@ export default function Home() {
 
       <section className="w-full bg-blue-100 py-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col gap-8">
-          {excursions.map((excursion: ExcursionType, index) => (
-            <WideExcursionCard key={index} excursion={excursion} />
+          {excursions.map((excursion: ExcursionType) => (
+            <WideExcursionCard key={excursion.id} excursion={excursion} />
           ))}
         </div>
       </section>

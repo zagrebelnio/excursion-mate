@@ -1,9 +1,10 @@
 'use client';
 import { Slider, Box, Typography } from '@mui/material';
 import { ExcursionCard } from '@/components/excursionCards';
-import { EXCURSIONS } from '@/store/excursions';
 import { useFilters } from '@/context/filtersContext';
 import { ExcursionType } from '@/types/excursion';
+import { useExcursions } from '@/hooks/useExcursions';
+import { useEffect } from 'react';
 
 export default function ExcursionsPage() {
   const {
@@ -12,10 +13,17 @@ export default function ExcursionsPage() {
     handleSearchChange,
     handleSliderChange,
     handleFilterChange,
-    filterExcursions,
   } = useFilters();
 
-  const filteredExcursions = filterExcursions(EXCURSIONS);
+  const { excursions, loading, error, fetchExcursions } = useExcursions();
+
+  useEffect(() => {
+    fetchExcursions();
+  }, []);
+
+  const handleSearchClick = () => {
+    fetchExcursions();
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -27,15 +35,21 @@ export default function ExcursionsPage() {
           value={searchQuery}
           onChange={handleSearchChange}
         />
+        <button
+          className="w-32 bg-blue-500 text-white py-2 mt-4 ml-8 rounded-lg hover:bg-blue-600 transition"
+          onClick={handleSearchClick}
+        >
+          Search
+        </button>
       </div>
 
       <div className="flex justify-between pb-4 px-20 bg-white shadow-md">
         <div className="flex gap-4">
           <input
             type="text"
-            name="location"
-            placeholder="Location"
-            value={filters.location}
+            name="city"
+            placeholder="City"
+            value={filters.city}
             onChange={handleFilterChange}
             className="p-3 border rounded-lg h-12 focus:ring-2 focus:ring-blue-500 outline-none"
           />
@@ -57,7 +71,7 @@ export default function ExcursionsPage() {
               onChange={handleSliderChange}
               valueLabelDisplay="auto"
               min={0}
-              max={500}
+              max={5000}
               sx={{
                 '& .MuiSlider-thumb': {
                   bgcolor: 'primary.main',
@@ -75,7 +89,7 @@ export default function ExcursionsPage() {
       </div>
 
       <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-        {filteredExcursions.map((excursion: ExcursionType) => (
+        {excursions.map((excursion: ExcursionType) => (
           <ExcursionCard key={excursion.id} excursion={excursion} />
         ))}
       </div>
