@@ -7,7 +7,9 @@ using backend.Services;
 using backend.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Sprache;
 
 namespace backend.Controllers
 {
@@ -32,12 +34,16 @@ namespace backend.Controllers
         /// Retrieves a list of all available excursions with optional filters (title, city, price, date)
         /// </summary>
         [HttpGet]
-        //[Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
         public async Task<IActionResult> GetAll([FromQuery] string? title, [FromQuery] string? city, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] DateTime? date, [FromQuery] int page = 1, [FromQuery] int pageSize = 9)
         {
             var excursions = await excursionRepository.GetAllAsync(title, city, minPrice, maxPrice, date, page, pageSize);
-            return Ok(mapper.Map<List<ExcursionDTO>>(excursions));
+            var totalPages = (int)Math.Ceiling((double)excursions.TotalCount / pageSize);
 
+            var response = mapper.Map<PagedResponse<ExcursionDTO>>(excursions);
+            response.TotalPages = totalPages;
+            response.CurrentPage = page;
+            response.PageSize = pageSize;
+            return Ok(response);
         }
 
 
