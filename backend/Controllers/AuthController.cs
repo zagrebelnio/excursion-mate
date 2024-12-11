@@ -78,10 +78,12 @@ namespace backend.Controllers
                     if (roles != null && roles.Any())
                     {
                         var iwtToken = tokenRepository.CreateJWTToken(user, roles.ToList());
+                        var role = roles.FirstOrDefault();
 
                         var response = new LoginResponseDTO
                         {
                             JwtToken = iwtToken,
+                            Role = role
                         };
 
                         return Ok(response);
