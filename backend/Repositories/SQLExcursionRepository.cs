@@ -94,6 +94,11 @@ namespace backend.Repositories
             return await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        public async Task<List<Excursion>> GetByUserIdAsync(string userId)
+        {
+            return await excursionDbContext.Excursions.Where(e => e.UserId == userId).ToListAsync();
+        }
+
         public async Task<bool> IsUserOwnerAsync(int excursionId, string userId)
         {
             var excursion = await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == excursionId);

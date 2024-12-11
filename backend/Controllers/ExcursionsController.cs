@@ -121,5 +121,22 @@ namespace backend.Controllers
             }
             return Ok(excursionDTO);
         }
+
+        [HttpGet]
+        [Route("user-excursions")]
+        public async Task<IActionResult> GetUserExcursions()
+        {
+            var authHeader = Request.Headers["Authorization"].ToString();
+            var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
+            var userId = tokenService.GetUserIdFromToken(token);
+
+            if (userId == null)
+            {
+                return Unauthorized("Invalid token.");
+            }
+
+            var excursions = await excursionRepository.GetByUserIdAsync(userId);
+            return Ok(mapper.Map<List<ExcursionDTO>>(excursions));
+        }
     }
 }
