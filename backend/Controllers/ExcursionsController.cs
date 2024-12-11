@@ -107,7 +107,13 @@ namespace backend.Controllers
         {
             var editedExcursion = await excursionRepository.UpdateAsync(id, editExcursionDTO);
             if (editedExcursion == null) return NotFound();
-            return Ok(mapper.Map<EditExcursionDTO>(editedExcursion));
+            var excursionDTO = mapper.Map<ExcursionDetailsDTO>(editedExcursion);
+
+            if (editedExcursion.Photo != null)
+            {
+                excursionDTO.Photo = Convert.ToBase64String(editedExcursion.Photo);
+            }
+            return Ok(excursionDTO);
         }
     }
 }
