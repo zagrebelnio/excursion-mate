@@ -20,5 +20,8 @@
 
         public string? UserId { get; set; } 
         public User User { get; set; }
+
+        public ICollection<ExcursionUser> ExcursionUsers { get; set; }
+        public ICollection<FavoriteExcursion> FavoriteExcursions { get; set; }
     }
 }

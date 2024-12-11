@@ -36,15 +36,12 @@ namespace backend.Controllers
             var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
 
             if (string.IsNullOrEmpty(token)) return Unauthorized("Token is missing.");
-
             var userId = tokenService.GetUserIdFromToken(token);
-
             var user = await userRepository.GetUserByIdAsync((userId));
 
             if (user == null) return NotFound("User not found.");
             
             var userProfile = mapper.Map<UserProfileDTO>(user);
-
             if (user.Photo != null)
             {
                 userProfile.Photo = Convert.ToBase64String(user.Photo); 

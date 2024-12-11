@@ -69,36 +69,11 @@ namespace backend.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Create([FromForm] AddExcursionDTO addExcursionDTO)
         {
-            var excursion = mapper.Map<Excursion>(addExcursionDTO);
-
             var authHeader = Request.Headers["Authorization"].ToString();
             var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
             var userId = tokenService.GetUserIdFromToken(token);
 
-            excursion.UserId = userId;
-            excursion.Status = "Active";
-
-            if (addExcursionDTO.Photo != null)
-            {
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-                var extension = Path.GetExtension(addExcursionDTO.Photo.FileName).ToLowerInvariant();
-                if (!allowedExtensions.Contains(extension))
-                {
-                    return BadRequest(($"File extension is not allowed. Allowed extensions: {string.Join(", ", allowedExtensions)}"));
-                }
-
-                if (addExcursionDTO.Photo.Length > 5 * 1024 * 1024)
-                {
-                    return BadRequest("File size exceeds 5 MB.");
-                }
-                using (var memoryStream = new MemoryStream())
-                {
-                    await addExcursionDTO.Photo.CopyToAsync(memoryStream);
-                    excursion.Photo = memoryStream.ToArray();
-                }
-            }
-
-            excursion = await excursionRepository.CreateAsync(excursion);
+            var excursion = await excursionRepository.CreateAsync(addExcursionDTO, userId);
             var excursionDTO = mapper.Map<ExcursionDetailsDTO>(excursion);
             return RedirectToAction("Details", new { id = excursionDTO.Id });
         }
@@ -109,12 +84,30 @@ namespace backend.Controllers
         /// </summary>
         [HttpDelete]
         [Route("{id:int}")]
+        [ExcursionOwnerAuthorization]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var excursion = await excursionRepository.DeleteAsync(id);
             if (excursion == null) return NotFound();
 
             return NoContent();
+        }
+
+
+        /// <summary>
+        /// Update an existing excursion. Requires authentication.
+        /// </summary>
+        [HttpPatch]
+        [Route("{id:int}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [ExcursionOwnerAuthorization]
+        [ValidateModel]
+        public async Task<IActionResult> Edit([FromRoute] int id, [FromForm] EditExcursionDTO editExcursionDTO)
+        {
+            var editedExcursion = await excursionRepository.UpdateAsync(id, editExcursionDTO);
+            if (editedExcursion == null) return NotFound();
+            return Ok(mapper.Map<EditExcursionDTO>(editedExcursion));
         }
     }
 }

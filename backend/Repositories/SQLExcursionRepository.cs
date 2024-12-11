@@ -1,6 +1,10 @@
-﻿using backend.Data;
+﻿using AutoMapper;
+using backend.Data;
 using backend.Models.Domain;
+using backend.Models.DTO;
+using backend.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace backend.Repositories
 {
@@ -8,14 +12,32 @@ namespace backend.Repositories
     {
 
         private readonly ExcursionDbContext excursionDbContext;
+        private readonly ITokenService tokenService;
+        private readonly IMapper mapper;
 
-        public SQLExcursionRepository(ExcursionDbContext excursionDbContext)
+        public SQLExcursionRepository(ExcursionDbContext excursionDbContext, ITokenService tokenService, IMapper mapper)
         {
             this.excursionDbContext = excursionDbContext;
+            this.tokenService = tokenService;
+            this.mapper = mapper;
         }
 
-        public async Task<Excursion> CreateAsync(Excursion excursion)
+        public async Task<Excursion> CreateAsync(AddExcursionDTO addExcursionDTO, string userId)
         {
+            var excursion = mapper.Map<Excursion>(addExcursionDTO);
+
+            excursion.UserId = userId;
+            excursion.Status = "Active";
+
+            if (addExcursionDTO.Photo != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await addExcursionDTO.Photo.CopyToAsync(memoryStream);
+                    excursion.Photo = memoryStream.ToArray();
+                }
+            }
+
             await excursionDbContext.Excursions.AddAsync(excursion);
             await excursionDbContext.SaveChangesAsync();
             return excursion;
@@ -69,6 +91,60 @@ namespace backend.Repositories
         public async Task<Excursion?> GetByIdAsync(int id)
         {
             return await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == id);
+        }
+
+        public async Task<bool> IsUserOwnerAsync(int excursionId, string userId)
+        {
+            var excursion = await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == excursionId);
+            return excursion?.UserId == userId;
+        }
+
+        public async Task<Excursion?> UpdateAsync(int id, EditExcursionDTO editExcursionDTO)
+        {
+            var excursion = await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == id);
+            if (excursion == null) return null;
+
+            if (!string.IsNullOrEmpty(editExcursionDTO.Title))
+            {
+                excursion.Title = editExcursionDTO.Title;
+            }
+            if (!string.IsNullOrEmpty(editExcursionDTO.Description))
+            {
+                excursion.Description = editExcursionDTO.Description;
+            }
+            if (!string.IsNullOrEmpty(editExcursionDTO.City))
+            {
+                excursion.City = editExcursionDTO.City;
+            }
+            if (!string.IsNullOrEmpty(editExcursionDTO.Location))
+            {
+                excursion.Location = editExcursionDTO.Location;
+            }
+            if (editExcursionDTO.Date.HasValue)
+            {
+                excursion.Date = editExcursionDTO.Date.Value;
+            }
+            if (editExcursionDTO.Price.HasValue && editExcursionDTO.Price.Value >= 0)
+            {
+                excursion.Price = editExcursionDTO.Price.Value;
+            }
+            if (editExcursionDTO.MaxParticipants.HasValue && editExcursionDTO.MaxParticipants.Value >= 2)
+            {
+                excursion.MaxParticipants = editExcursionDTO.MaxParticipants.Value;
+            }
+            if (editExcursionDTO.Photo != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await editExcursionDTO.Photo.CopyToAsync(memoryStream);
+                    excursion.Photo = memoryStream.ToArray();
+                }
+            }
+
+            excursion.UpdatedAt = DateTime.Now;
+            excursionDbContext.Excursions.Update(excursion);
+            await excursionDbContext.SaveChangesAsync();
+            return excursion;
         }
     }
 }
