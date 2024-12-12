@@ -2,11 +2,14 @@
 import Link from 'next/link';
 import { useExcursions } from '@/hooks/useExcursions';
 import { useEffect } from 'react';
-import { WideExcursionCard } from '@/components/excursionCards';
+import {
+  WideExcursionCard,
+  WideExcursionCardSkeleton,
+} from '@/components/excursionCards';
 import { ExcursionType } from '@/types/excursion';
 
 export default function MyExcursionsPage() {
-  const { excursions, fetchUserExcursions } = useExcursions();
+  const { excursions, loading, error, fetchUserExcursions } = useExcursions();
 
   useEffect(() => {
     fetchUserExcursions();
@@ -26,8 +29,16 @@ export default function MyExcursionsPage() {
           </Link>
         </div>
 
-        {excursions.length > 0 ? (
-          <div>
+        {loading ? (
+          <div className="flex flex-col gap-6">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <WideExcursionCardSkeleton key={index} />
+            ))}
+          </div>
+        ) : error ? (
+          <div className="text-red-500 text-center">{error}</div>
+        ) : excursions.length > 0 ? (
+          <div className="flex flex-col gap-6">
             {excursions.map((excursion: ExcursionType) => (
               <WideExcursionCard key={excursion.id} excursion={excursion} />
             ))}

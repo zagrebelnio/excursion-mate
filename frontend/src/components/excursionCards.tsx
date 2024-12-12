@@ -147,3 +147,41 @@ export const ExcursionCardSkeleton: React.FC = () => {
     </Box>
   );
 };
+
+export const WideExcursionCardSkeleton: React.FC = () => {
+  return (
+    <Box
+      className="flex bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+      sx={{ display: 'flex', flexDirection: 'row', height: 200 }}
+    >
+      <Skeleton
+        variant="rectangular"
+        width="33%"
+        height="100%"
+        animation="wave"
+        sx={{ flex: '1 0 auto' }}
+      />
+
+      <Box
+        sx={{
+          flex: '2 0 auto',
+          p: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Skeleton variant="text" width="70%" height={28} animation="wave" />
+        <Skeleton variant="text" width="90%" height={20} animation="wave" />
+        <Skeleton variant="text" width="95%" height={20} animation="wave" />
+        <Skeleton variant="text" width="60%" height={20} animation="wave" />
+
+        <Box sx={{ mt: 2 }}>
+          <Skeleton variant="text" width="50%" height={16} animation="wave" />
+          <Skeleton variant="text" width="50%" height={16} animation="wave" />
+          <Skeleton variant="text" width="50%" height={16} animation="wave" />
+        </Box>
+      </Box>
+    </Box>
+  );
+};
