@@ -36,7 +36,7 @@ export default function ExcursionsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 pb-6">
       <div className="bg-white py-4 shadow-md px-20">
         <input
           type="text"
