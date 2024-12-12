@@ -48,3 +48,24 @@ export async function createExcursion(accessToken: string, data: FormData) {
     throw error;
   }
 }
+
+export async function deleteExcursion(
+  accessToken: string,
+  excursionId: number
+) {
+  try {
+    const response = await axiosInstance.delete(
+      `/api/Excursions/${excursionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: { id: excursionId },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting excursion:', error);
+    throw error;
+  }
+}

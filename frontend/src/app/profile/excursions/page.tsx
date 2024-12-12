@@ -9,13 +9,28 @@ import {
 import { ExcursionType } from '@/types/excursion';
 import { Edit, Delete } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
+import { deleteExcursion } from '@/services/excursionService';
+import { useSession } from 'next-auth/react';
 
 export default function MyExcursionsPage() {
+  const { data: session } = useSession();
   const { excursions, loading, error, fetchUserExcursions } = useExcursions();
 
   useEffect(() => {
     fetchUserExcursions();
   }, []);
+
+  const handleDelete = async (excursionId: string) => {
+    try {
+      await deleteExcursion(
+        session?.accessToken as string,
+        Number(excursionId) as number
+      );
+      fetchUserExcursions();
+    } catch (error) {
+      console.error('Error deleting excursion:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -63,7 +78,10 @@ export default function MyExcursionsPage() {
                       <Edit />
                     </IconButton>
                   </Link>
-                  <IconButton color="error">
+                  <IconButton
+                    color="error"
+                    onClick={() => handleDelete(excursion.id)}
+                  >
                     <Delete />
                   </IconButton>
                 </div>
