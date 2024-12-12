@@ -20,9 +20,10 @@ namespace backend.Repositories
         {
             var claims = new List<Claim>();
 
-            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            claims.Add(new Claim("email", user.Email));
             claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id)); 
-            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())); 
+            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+            claims.Add(new Claim("role", roles.FirstOrDefault() ?? "User"));
 
             foreach (var role in roles)
             {

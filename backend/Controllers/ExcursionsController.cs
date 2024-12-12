@@ -68,7 +68,7 @@ namespace backend.Controllers
 
 
         /// <summary>
-        /// Creates a new excursion. Requires authentication.
+        /// Creates a new excursion. Requires authentication
         /// </summary>
         [HttpPost]
         [ValidateModel]
@@ -86,7 +86,7 @@ namespace backend.Controllers
 
 
         /// <summary>
-        /// Delete an excursion by ID. Requires authentication.
+        /// Delete an excursion by ID. Requires authentication
         /// </summary>
         [HttpDelete]
         [Route("{id:int}")]
@@ -94,15 +94,13 @@ namespace backend.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var excursion = await excursionRepository.DeleteAsync(id);
-            if (excursion == null) return NotFound();
-
+            await excursionRepository.DeleteAsync(id);
             return NoContent();
         }
 
 
         /// <summary>
-        /// Update an existing excursion. Requires authentication.
+        /// Update an existing excursion. Requires authentication
         /// </summary>
         [HttpPatch]
         [Route("{id:int}")]
@@ -120,6 +118,28 @@ namespace backend.Controllers
                 excursionDTO.Photo = Convert.ToBase64String(editedExcursion.Photo);
             }
             return Ok(excursionDTO);
+        }
+
+
+        /// <summary>
+        /// Retrieves a list of excursions for the currently authenticated user
+        /// </summary>
+        [HttpGet]
+        [Route("user-excursions")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> GetUserExcursions()
+        {
+            var authHeader = Request.Headers["Authorization"].ToString();
+            var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
+            var userId = tokenService.GetUserIdFromToken(token);
+
+            if (userId == null)
+            {
+                return Unauthorized("Invalid token.");
+            }
+
+            var excursions = await excursionRepository.GetByUserIdAsync(userId);
+            return Ok(mapper.Map<List<ExcursionDTO>>(excursions));
         }
     }
 }
