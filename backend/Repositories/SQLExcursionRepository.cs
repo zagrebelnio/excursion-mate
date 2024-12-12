@@ -27,7 +27,6 @@ namespace backend.Repositories
             var excursion = mapper.Map<Excursion>(addExcursionDTO);
 
             excursion.UserId = userId;
-            excursion.Status = "Active";
 
             if (addExcursionDTO.Photo != null)
             {
@@ -93,6 +92,11 @@ namespace backend.Repositories
         public async Task<Excursion?> GetByIdAsync(int id)
         {
             return await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == id);
+        }
+
+        public async Task<List<Excursion>> GetByUserIdAsync(string userId)
+        {
+            return await excursionDbContext.Excursions.Where(e => e.UserId == userId).ToListAsync();
         }
 
         public async Task<bool> IsUserOwnerAsync(int excursionId, string userId)

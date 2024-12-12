@@ -11,5 +11,6 @@ namespace backend.Repositories
         Task<Excursion?> DeleteAsync(int id);
         Task<Excursion?> UpdateAsync(int id, EditExcursionDTO editExcursionDTO);
         Task<bool> IsUserOwnerAsync(int excursionId, string userId);
+        Task<List<Excursion>> GetByUserIdAsync(string userId);
     }
 }
