@@ -1,9 +1,9 @@
 'use client';
-import { useEffect, useState } from "react";
-import { getExcursion } from "@/services/excursionService";
-import { useSession } from "next-auth/react";
-import { ExcursionType } from "@/types/excursion";
-import { useParams } from "next/navigation";
+import { useEffect, useState } from 'react';
+import { getExcursion } from '@/services/excursionService';
+import { useSession } from 'next-auth/react';
+import { ExcursionType } from '@/types/excursion';
+import { useParams } from 'next/navigation';
 
 export default function ExcursionPage() {
   const { data: session } = useSession();
@@ -16,11 +16,14 @@ export default function ExcursionPage() {
   useEffect(() => {
     async function fetchExcursion() {
       try {
-        const excursionData = await getExcursion(session?.accessToken, Number(params.id));
+        const excursionData = await getExcursion(
+          session?.accessToken,
+          Number(params.id)
+        );
         setExcursion(excursionData);
       } catch (err) {
-        console.error("Error fetching excursion:", err);
-        setError("Failed to fetch excursion details.");
+        console.error('Error fetching excursion:', err);
+        setError('Failed to fetch excursion details.');
       } finally {
         setLoading(false);
       }
@@ -37,7 +40,11 @@ export default function ExcursionPage() {
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <img
-          src={excursion.photo ? `data:image/jpeg;base64,${excursion.photo}` : '/placeholders/excursion.png'}
+          src={
+            excursion.photo
+              ? `data:image/jpeg;base64,${excursion.photo}`
+              : '/placeholders/excursion.png'
+          }
           alt={excursion.title}
           className="w-full h-64 object-cover rounded-lg mb-6"
         />

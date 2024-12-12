@@ -83,3 +83,25 @@ export async function getExcursion(accessToken: string, excursionId: number) {
     throw error;
   }
 }
+
+export async function editExcursion(
+  accessToken: string,
+  excursionId: number,
+  data: FormData
+) {
+  try {
+    const response = await axiosInstance.patch(
+      `/api/Excursions/${excursionId}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error editing excursion:', error);
+    throw error;
+  }
+}

@@ -27,7 +27,10 @@ export default function NewExcursionPage() {
           </Link>
         </div>
 
-        <CreateExcursionForm onSubmit={handleSubmit} onCancel={() => router.back()} />
+        <CreateExcursionForm
+          onSubmit={handleSubmit}
+          onCancel={() => router.back()}
+        />
       </div>
     </div>
   );

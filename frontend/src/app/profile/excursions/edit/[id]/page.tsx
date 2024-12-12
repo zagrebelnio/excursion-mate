@@ -1,19 +1,23 @@
 'use client';
-import { useEffect } from 'react';
 import { EditExcursionForm } from '@/components/excursionForms';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getExcursion } from '@/services/excursionService';
+import { editExcursion } from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
+import { useParams } from 'next/navigation';
 
 export default function NewExcursionPage() {
   const router = useRouter();
+  const params = useParams();
   const { data: session } = useSession();
 
   const handleSubmit = async (formData: FormData) => {
-    console.log('Form data:', Object.fromEntries(formData.entries()));
-    // await createExcursion(session?.accessToken as string, formData as FormData);
-    // router.push('/profile/excursions');
+    await editExcursion(
+      session?.accessToken as string,
+      Number(params.id) as number,
+      formData as FormData
+    );
+    router.push('/profile/excursions');
   };
 
   return (
@@ -29,7 +33,10 @@ export default function NewExcursionPage() {
           </Link>
         </div>
 
-        <EditExcursionForm onSubmit={handleSubmit} onCancel={() => router.back()} />
+        <EditExcursionForm
+          onSubmit={handleSubmit}
+          onCancel={() => router.back()}
+        />
       </div>
     </div>
   );
