@@ -34,3 +34,17 @@ export async function getUserExcursions(accessToken: string) {
     throw error;
   }
 }
+
+export async function createExcursion(accessToken: string, data: FormData) {
+  try {
+    const response = await axiosInstance.post('/api/Excursions', data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error creating excursion:', error);
+    throw error;
+  }
+}

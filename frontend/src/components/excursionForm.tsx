@@ -20,7 +20,7 @@ export default function ExcursionForm({ onSubmit, onCancel }) {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
+    const file = e.target.files?.[0];
     setForm((prev) => ({ ...prev, photo: file }));
   };
 
@@ -28,7 +28,16 @@ export default function ExcursionForm({ onSubmit, onCancel }) {
     <form
       onSubmit={(e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(form);
+        const formData = new FormData();
+        formData.append('Title', form.title);
+        formData.append('Description', form.description);
+        formData.append('City', form.city);
+        formData.append('Location', form.location);
+        formData.append('Date', form.date);
+        formData.append('Price', form.price);
+        formData.append('MaxParticipants', form.maxParticipants);
+        formData.append('Photo', form.photo || '');
+        onSubmit(formData);
       }}
       className="space-y-4"
     >
