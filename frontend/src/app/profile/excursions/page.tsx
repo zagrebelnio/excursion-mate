@@ -7,6 +7,8 @@ import {
   WideExcursionCardSkeleton,
 } from '@/components/excursionCards';
 import { ExcursionType } from '@/types/excursion';
+import { Edit, Delete } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 
 export default function MyExcursionsPage() {
   const { excursions, loading, error, fetchUserExcursions } = useExcursions();
@@ -48,7 +50,24 @@ export default function MyExcursionsPage() {
         ) : excursions.length > 0 ? (
           <div className="flex flex-col gap-6">
             {excursions.map((excursion: ExcursionType) => (
-              <WideExcursionCard key={excursion.id} excursion={excursion} />
+              <div
+                key={excursion.id}
+                className="relative flex bg-white rounded-lg shadow-md overflow-hidden"
+              >
+                <div className="flex-1">
+                  <WideExcursionCard excursion={excursion} />
+                </div>
+                <div className="flex flex-col justify-center items-center gap-2 p-4">
+                  <Link href={`/profile/excursions/edit/${excursion.id}`}>
+                    <IconButton color="primary">
+                      <Edit />
+                    </IconButton>
+                  </Link>
+                  <IconButton color="error">
+                    <Delete />
+                  </IconButton>
+                </div>
+              </div>
             ))}
           </div>
         ) : (
