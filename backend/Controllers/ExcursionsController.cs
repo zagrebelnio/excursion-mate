@@ -94,9 +94,7 @@ namespace backend.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var excursion = await excursionRepository.DeleteAsync(id);
-            if (excursion == null) return NotFound();
-
+            await excursionRepository.DeleteAsync(id);
             return NoContent();
         }
 

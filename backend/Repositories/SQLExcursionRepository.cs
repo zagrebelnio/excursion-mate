@@ -46,11 +46,12 @@ namespace backend.Repositories
         public async Task<Excursion?> DeleteAsync(int id)
         {
             var excursion = await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == id);
-            if (excursion == null) return null;
-
-            excursionDbContext.Excursions.Remove(excursion);
-            await excursionDbContext.SaveChangesAsync();
-            return excursion;
+            if (excursion != null)
+            {
+                excursionDbContext.Excursions.Remove(excursion);
+                await excursionDbContext.SaveChangesAsync();
+            }
+            return null;
         }
 
         public async Task<(List<Excursion> Items, int TotalCount)> GetAllAsync(string? title, string? city, int? minPrice, int? maxPrice, DateTime? date, int page = 1, int pageSize = 9)
