@@ -81,7 +81,7 @@ namespace backend.Controllers
 
             var excursion = await excursionRepository.CreateAsync(addExcursionDTO, userId);
             var excursionDTO = mapper.Map<ExcursionDetailsDTO>(excursion);
-            return RedirectToAction("Details", new { id = excursionDTO.Id });
+            return Ok(excursionDTO);
         }
 
 

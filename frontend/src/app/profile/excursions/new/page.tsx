@@ -10,7 +10,6 @@ export default function NewExcursionPage() {
   const { data: session } = useSession();
 
   const handleSubmit = async (formData: FormData) => {
-    console.log('Form data:', formData);
     await createExcursion(session?.accessToken as string, formData as FormData);
     router.push('/profile/excursions');
   };

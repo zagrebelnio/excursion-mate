@@ -7,7 +7,7 @@ namespace backend.Validation
     {
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            if (context.ModelState.IsValid == false)
+            if (!context.ModelState.IsValid)
             {
                 context.Result = new BadRequestResult();
             } 
