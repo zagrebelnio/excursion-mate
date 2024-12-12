@@ -67,7 +67,7 @@ export default function MyExcursionsPage() {
             {excursions.map((excursion: ExcursionType) => (
               <div
                 key={excursion.id}
-                className="relative flex bg-white rounded-lg shadow-md overflow-hidden"
+                className="relative flex bg-blue-50 rounded-lg shadow-md overflow-hidden"
               >
                 <div className="flex-1">
                   <WideExcursionCard excursion={excursion} />
