@@ -1,7 +1,17 @@
 'use client';
 import Link from 'next/link';
+import { useExcursions } from '@/hooks/useExcursions';
+import { useEffect } from 'react';
+import { WideExcursionCard } from '@/components/excursionCards';
+import { ExcursionType } from '@/types/excursion';
 
 export default function MyExcursionsPage() {
+  const { excursions, fetchUserExcursions } = useExcursions();
+
+  useEffect(() => {
+    fetchUserExcursions();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
@@ -16,9 +26,17 @@ export default function MyExcursionsPage() {
           </Link>
         </div>
 
-        <div className="text-gray-500 text-center">
-          No excursions found. Start by creating a new one!
-        </div>
+        {excursions.length > 0 ? (
+          <div>
+            {excursions.map((excursion: ExcursionType) => (
+              <WideExcursionCard key={excursion.id} excursion={excursion} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-gray-500 text-center">
+            No excursions found. Start by creating a new one!
+          </div>
+        )}
       </div>
     </div>
   );

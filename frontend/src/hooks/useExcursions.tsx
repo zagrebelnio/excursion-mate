@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getExcursions } from '@/services/excursionService';
+import { getExcursions, getUserExcursions } from '@/services/excursionService';
+import { useSession } from 'next-auth/react';
 
 export function useExcursions() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = Object.fromEntries(searchParams.entries());
+  const { data: session } = useSession();
 
   const [filters, setFilters] = useState({
     title: params.title || '',
@@ -66,6 +68,23 @@ export function useExcursions() {
     });
   };
 
+  const fetchUserExcursions = async () => {
+    if (!session?.accessToken) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await getUserExcursions(session?.accessToken as string);
+      setExcursions(data || []);
+    } catch (error) {
+      console.error('Error fetching user excursions:', error);
+      setError('Failed to fetch user excursions. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     filters,
     excursions,
@@ -74,5 +93,6 @@ export function useExcursions() {
     totalPages,
     fetchExcursions,
     updateQueryParams,
+    fetchUserExcursions,
   };
 }

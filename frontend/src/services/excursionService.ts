@@ -19,3 +19,18 @@ export async function getExcursions(filters: {
     throw error;
   }
 }
+
+export async function getUserExcursions(accessToken: string) {
+  try {
+    const response = await axiosInstance.get(
+      '/api/Excursions/user-excursions',
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user excursions:', error);
+    throw error;
+  }
+}
