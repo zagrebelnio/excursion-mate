@@ -22,14 +22,12 @@ namespace backend.Controllers
             this.mapper = mapper;
             this.tokenService = tokenService;
         }
+        private string? GetUserId() => HttpContext.Items["UserId"]?.ToString();
 
         [HttpPost]
         public async Task<IActionResult> Add([FromRoute] int excursionId)
         {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
-            var userId = tokenService.GetUserIdFromToken(token);
-
+            var userId = GetUserId();
             await favoriteExcursion.AddAsync(userId, excursionId);
             return Ok(new { Message = "Excursion added to favorites" });
         }
@@ -38,10 +36,7 @@ namespace backend.Controllers
         [Route("{excursionId:int}")]
         public async Task<IActionResult> Remove([FromRoute]int excursionId)
         {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
-            var userId = tokenService.GetUserIdFromToken(token);
-
+            var userId = GetUserId();
             await favoriteExcursion.RemoveAsync(userId, excursionId);
             return NoContent();
         }
@@ -49,16 +44,10 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
-            var userId = tokenService.GetUserIdFromToken(token);
-
+            var userId = GetUserId();
             var favorites = await favoriteExcursion.GetAllAsync(userId);
             var favoritesDto = mapper.Map<List<FavoriteExcursionDTO>>(favorites);
-
             return Ok(favoritesDto);
         }
-        
-
     }
 }
