@@ -25,6 +25,8 @@ namespace backend.Controllers
             this.tokenService = tokenService;
         }
 
+        private string? GetUserId() => HttpContext.Items["UserId"]?.ToString();
+
         /// <summary>
         /// Retrieves the profile information of the currently authenticated user (must be authenticated using a Bearer token)
         /// </summary>
@@ -32,13 +34,8 @@ namespace backend.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetProfile()
         {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
-
-            if (string.IsNullOrEmpty(token)) return Unauthorized("Token is missing.");
-            var userId = tokenService.GetUserIdFromToken(token);
-            var user = await userRepository.GetUserByIdAsync((userId));
-
+            var userId = GetUserId();
+            var user = await userRepository.GetUserByIdAsync(userId);
             if (user == null) return NotFound("User not found.");
             
             var userProfile = mapper.Map<UserProfileDTO>(user);
@@ -57,11 +54,7 @@ namespace backend.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> UpdateProfile([FromForm] UpdateUserProfileDTO updateDTO)
         {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
-
-            var userId = tokenService.GetUserIdFromToken(token);
-
+            var userId = GetUserId();
             var user = await userRepository.GetUserByIdAsync(userId);
             if (user == null) return NotFound("User not found");
 
