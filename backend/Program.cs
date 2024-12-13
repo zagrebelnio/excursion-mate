@@ -68,6 +68,7 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IExcursionRepository, SQLExcursionRepository>();
 builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IFavoriteExcursionRepository, SQLFavoriteExcursionRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 

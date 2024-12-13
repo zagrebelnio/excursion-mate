@@ -31,6 +31,12 @@ namespace backend.Mappings
                .ForMember(dest => dest.TotalPages, opt => opt.Ignore()) 
                .ForMember(dest => dest.CurrentPage, opt => opt.Ignore()) 
                .ForMember(dest => dest.PageSize, opt => opt.Ignore());
+
+            CreateMap<FavoriteExcursion, FavoriteExcursionDTO>()
+            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Excursion.Title))
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Excursion.Description))
+            .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Excursion.City))
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Excursion.Price));
         }
 
         private byte[] ConvertFileToByteArray(IFormFile file)
