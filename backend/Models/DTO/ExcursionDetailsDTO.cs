@@ -14,5 +14,7 @@ namespace backend.Models.DTO
         public int MaxParticipants { get; set; }
         public int CurrentParticipants { get; set; }
         public string? Photo { get; set; }
+        public int? Likes { get; set; }
+        public int? Dislikes { get; set; }
     }
 }
