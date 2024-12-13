@@ -38,7 +38,7 @@ export default function ProfilePage() {
               Edit profile
             </Link>
             <Link
-              href="/my-excursions"
+              href="/profile/excursions"
               className="px-4 py-2 border border-black text-black text-center rounded-lg hover:bg-gray-100 transition"
             >
               My excursions
