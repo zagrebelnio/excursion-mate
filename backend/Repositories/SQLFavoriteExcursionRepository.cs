@@ -14,26 +14,17 @@ namespace backend.Repositories
             this.excursionDbContext = excursionDbContext;
         }
 
-        public async Task<FavoriteExcursion?> AddAsync(string userId, int excursionId)
-        {
-            var favorite = new FavoriteExcursion
-            {
-                UserId = userId,
-                ExcursionId = excursionId,
-                AddedDate = DateTime.Now,
-            };
-
-            excursionDbContext.FavoriteExcursions.Add(favorite);
-            await excursionDbContext.SaveChangesAsync();
-            return favorite;
-        }
-
         public async Task<List<FavoriteExcursion>> GetAllAsync(string userId)
         {
             return await excursionDbContext.FavoriteExcursions
                 .Where(f => f.UserId == userId)
-                .Include(f => f.ExcursionId)
+                .Include(f => f.Excursion)
                 .ToListAsync();
+        }
+
+        public async Task<bool> IsFavoriteAsync(string userId, int excursionId)
+        {
+            return await excursionDbContext.FavoriteExcursions.AnyAsync(fe => fe.UserId == userId && fe.ExcursionId == excursionId);
         }
 
         public async Task<FavoriteExcursion?> RemoveAsync(string userId, int excursionId)
@@ -47,5 +38,25 @@ namespace backend.Repositories
             }
             return null;
         }
+
+        public async Task AddAsync(string userId, int excursionId)
+        {
+            var excursion = await excursionDbContext.Excursions.FindAsync(excursionId);
+
+            if (excursion == null)
+            {
+                throw new Exception("Excursion not found.");
+            }
+
+            var favoriteExcursion = new FavoriteExcursion
+            {
+                UserId = userId,
+                ExcursionId = excursionId
+            };
+
+            excursionDbContext.FavoriteExcursions.Add(favoriteExcursion);
+            await excursionDbContext.SaveChangesAsync();
+        }
+
     }
 }

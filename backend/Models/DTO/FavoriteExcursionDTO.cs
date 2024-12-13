@@ -11,5 +11,7 @@
         public string? Photo { get; set; }
         public int? Likes { get; set; }
         public int? Dislikes { get; set; }
+        public int MaxParticipants { get; set; }
+        public int CurrentParticipants { get; set; }
     }
 }
