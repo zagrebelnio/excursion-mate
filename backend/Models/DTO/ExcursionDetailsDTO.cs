@@ -16,5 +16,6 @@ namespace backend.Models.DTO
         public string? Photo { get; set; }
         public int? Likes { get; set; }
         public int? Dislikes { get; set; }
+        public bool IsFavorite { get; set; }
     }
 }

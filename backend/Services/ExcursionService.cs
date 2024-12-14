@@ -39,5 +39,25 @@ namespace backend.Services
                 PageSize = pageSize
             };
         }
+
+        public async Task<ExcursionDetailsDTO?> GetExcursionDetailsAsync(int id, string? userId)
+        {
+            var excursion = await excursionRepository.GetByIdAsync(id);
+            if (excursion == null) return null;
+
+            var excursionDTO = mapper.Map<ExcursionDetailsDTO>(excursion);
+
+            if (excursion.Photo != null)
+            {
+                excursionDTO.Photo = Convert.ToBase64String(excursion.Photo);
+            }
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                excursionDTO.IsFavorite = await favoriteExcursionRepository.IsFavoriteAsync(userId, id);
+            }
+
+            return excursionDTO;
+        }
     }
 }

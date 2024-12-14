@@ -13,5 +13,7 @@ namespace backend.Services
         DateTime? date,
         int page,
         int pageSize);
+
+        Task<ExcursionDetailsDTO?> GetExcursionDetailsAsync(int id, string? userId);
     }
 }

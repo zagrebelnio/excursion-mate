@@ -35,17 +35,8 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? title, [FromQuery] string? city, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] DateTime? date, [FromQuery] int page = 1, [FromQuery] int pageSize = 9)
         {
-            //var excursions = await excursionRepository.GetAllAsync(title, city, minPrice, maxPrice, date, page, pageSize);
-            //var totalPages = (int)Math.Ceiling((double)excursions.TotalCount / pageSize);
-
-            //var response = mapper.Map<PagedResponse<ExcursionDTO>>(excursions);
-            //response.TotalPages = totalPages;
-            //response.CurrentPage = page;
-            //response.PageSize = pageSize;
-            //return Ok(response);
             var userId = GetUserId();
-            var response = await excursionService.GetPagedExcursionsAsync(
-            userId, title, city, minPrice, maxPrice, date, page, pageSize);
+            var response = await excursionService.GetPagedExcursionsAsync(userId, title, city, minPrice, maxPrice, date, page, pageSize);
             return Ok(response);
         }
 
@@ -56,19 +47,12 @@ namespace backend.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Details(int id)
         {
-            var excursion = await excursionRepository.GetByIdAsync(id);
-            if (excursion == null) return NotFound();
-
-            var excursionDTO = mapper.Map<ExcursionDetailsDTO>(excursion);
-
-            if (excursion.Photo != null)
-            {
-                excursionDTO.Photo = Convert.ToBase64String(excursion.Photo);
-            }
-
+            var userId = GetUserId();
+            var excursionDTO = await excursionService.GetExcursionDetailsAsync(id, userId);
+            if (excursionDTO == null) return NotFound();
             return Ok(excursionDTO);
-        }
 
+        }
 
         /// <summary>
         /// Creates a new excursion. Requires authentication
@@ -83,7 +67,6 @@ namespace backend.Controllers
             var excursionDTO = mapper.Map<ExcursionDetailsDTO>(excursion);
             return RedirectToAction("Details", new { id = excursionDTO.Id });
         }
-
 
         /// <summary>
         /// Delete an excursion by ID. Requires authentication
