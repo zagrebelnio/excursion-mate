@@ -19,11 +19,13 @@ namespace backend.Controllers
     {
         private readonly IExcursionRepository excursionRepository;
         private readonly IMapper mapper;
+        private readonly IExcursionService excursionService;
 
-        public ExcursionsController(IExcursionRepository excursionRepository, IMapper mapper)
+        public ExcursionsController(IExcursionRepository excursionRepository, IMapper mapper, IExcursionService excursionService)
         {
             this.excursionRepository = excursionRepository;
             this.mapper = mapper;
+            this.excursionService = excursionService;
         }
         private string? GetUserId() => HttpContext.Items["UserId"]?.ToString();
 
@@ -33,13 +35,17 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? title, [FromQuery] string? city, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] DateTime? date, [FromQuery] int page = 1, [FromQuery] int pageSize = 9)
         {
-            var excursions = await excursionRepository.GetAllAsync(title, city, minPrice, maxPrice, date, page, pageSize);
-            var totalPages = (int)Math.Ceiling((double)excursions.TotalCount / pageSize);
+            //var excursions = await excursionRepository.GetAllAsync(title, city, minPrice, maxPrice, date, page, pageSize);
+            //var totalPages = (int)Math.Ceiling((double)excursions.TotalCount / pageSize);
 
-            var response = mapper.Map<PagedResponse<ExcursionDTO>>(excursions);
-            response.TotalPages = totalPages;
-            response.CurrentPage = page;
-            response.PageSize = pageSize;
+            //var response = mapper.Map<PagedResponse<ExcursionDTO>>(excursions);
+            //response.TotalPages = totalPages;
+            //response.CurrentPage = page;
+            //response.PageSize = pageSize;
+            //return Ok(response);
+            var userId = GetUserId();
+            var response = await excursionService.GetPagedExcursionsAsync(
+            userId, title, city, minPrice, maxPrice, date, page, pageSize);
             return Ok(response);
         }
 
