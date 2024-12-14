@@ -17,6 +17,9 @@ namespace backend.Controllers
             this.adminService = adminService;
         }
 
+        /// <summary>
+        /// Retrieves a list of non-admin users with optional filters for name, surname, and role. 
+        /// </summary>
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
         [HttpGet("users")]
         public async Task<IActionResult> GetUserWithRole([FromQuery] string? name, [FromQuery] string? surname, [FromQuery] string? role, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
@@ -24,6 +27,10 @@ namespace backend.Controllers
             return Ok(await adminService.GetAllNonAdminUsersAsync(name, surname, role, page, pageSize));
         }
 
+        /// <summary>
+        /// Bans a user by updating their role to the specified new role.
+        /// </summary>
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
         [HttpPost("ban/{userId}")]
         public async Task<IActionResult> BanUser(string userId, [FromBody] string newRole)
         {
