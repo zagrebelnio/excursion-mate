@@ -15,12 +15,30 @@ namespace backend.Services
             this.mapper = mapper;
         }
 
-        public async Task<List<UserWithRoleDTO>> GetAllNonAdminUsersAsync()
+        public async Task<List<UserWithRoleDTO>> GetAllNonAdminUsersAsync(string? name, string? surname, string? role, int page, int pageSize)
         {
             var usersWithRoles = await userRepository.GetAllNonAdminUsersAsync();
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                usersWithRoles = usersWithRoles.Where(u => u.user.FirstName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(surname))
+            {
+                usersWithRoles = usersWithRoles.Where(u => u.user.LastName.Contains(surname, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(role))
+            {
+                usersWithRoles = usersWithRoles.Where(u => u.role.Equals(role, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            var pagedUsers = usersWithRoles.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
             var result = new List<UserWithRoleDTO>();
 
-            foreach (var (user, role) in usersWithRoles)
+            foreach (var (user, userRole) in pagedUsers)
             {
                 var userDto = mapper.Map<UserWithRoleDTO>(user);
                 userDto.Role = role ?? "NoRole";

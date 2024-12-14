@@ -19,9 +19,9 @@ namespace backend.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
         [HttpGet("users")]
-        public async Task<IActionResult> GetUserWithRole()
+        public async Task<IActionResult> GetUserWithRole([FromQuery] string? name, [FromQuery] string? surname, [FromQuery] string? role, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
-            return Ok(await adminService.GetAllNonAdminUsersAsync());
+            return Ok(await adminService.GetAllNonAdminUsersAsync(name, surname, role, page, pageSize));
         }
 
         [HttpPost("ban/{userId}")]
