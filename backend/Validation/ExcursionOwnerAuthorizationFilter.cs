@@ -40,6 +40,10 @@ namespace backend.Validation
             }
 
             var userId = tokenService.GetUserIdFromToken(token);
+            var userRole = tokenService.GetUserRoleFromToken(token);
+
+            if (userRole == "Admin") return;
+
             var isOwner = await excursionRepository.IsUserOwnerAsync(excursionId, userId);
 
             if (!isOwner)
