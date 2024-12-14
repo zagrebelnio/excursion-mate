@@ -102,7 +102,7 @@ export default function ExcursionsPage() {
               }
               valueLabelDisplay="auto"
               min={0}
-              max={5000}
+              max={1000}
               sx={{
                 '& .MuiSlider-thumb': {
                   bgcolor: 'primary.main',
