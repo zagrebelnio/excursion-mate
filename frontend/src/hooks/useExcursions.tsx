@@ -4,6 +4,8 @@ import {
   getExcursions,
   getUserExcursions,
   getSavedExcursions,
+  saveExcursion,
+  unsaveExcursion,
 } from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
 
@@ -11,7 +13,7 @@ export function useExcursions() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = Object.fromEntries(searchParams.entries());
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const [filters, setFilters] = useState({
     title: params.title || '',
@@ -44,11 +46,20 @@ export function useExcursions() {
 
   const fetchExcursions = async (overrideFilters?: Partial<typeof filters>) => {
     const queryFilters = { ...filters, ...overrideFilters };
+
+    if (status === 'loading') {
+      setLoading(true);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      const data = await getExcursions(queryFilters);
+      const data = await getExcursions(
+        session?.accessToken as string,
+        queryFilters
+      );
       setExcursions(data.items || []);
       setTotalPages(data.totalPages || 1);
     } catch (err) {
@@ -106,6 +117,28 @@ export function useExcursions() {
     }
   };
 
+  const addToSaved = async (accessToken: string, excursionId: number) => {
+    if (!session?.accessToken) return;
+
+    try {
+      await saveExcursion(accessToken, excursionId);
+      await fetchExcursions();
+    } catch (error) {
+      console.error('Error saving excursion:', error);
+    }
+  };
+
+  const removeFromSaved = async (accessToken: string, excursionId: number) => {
+    if (!session?.accessToken) return;
+
+    try {
+      await unsaveExcursion(accessToken, excursionId);
+      await fetchExcursions();
+    } catch (error) {
+      console.error('Error un-saving excursion:', error);
+    }
+  };
+
   return {
     filters,
     excursions,
@@ -116,5 +149,7 @@ export function useExcursions() {
     updateQueryParams,
     fetchUserExcursions,
     fetchSavedExcursions,
+    addToSaved,
+    removeFromSaved,
   };
 }

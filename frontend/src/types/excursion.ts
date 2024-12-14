@@ -8,4 +8,5 @@ export interface ExcursionType {
   photo: string | null;
   likes: number | null;
   dislikes: number | null;
+  isFavorite: boolean;
 }
