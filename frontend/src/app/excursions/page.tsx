@@ -51,6 +51,7 @@ export default function ExcursionsPage() {
     } else {
       addToSaved(session?.accessToken, excursion.id);
     }
+    fetchExcursions();
   };
 
   return (

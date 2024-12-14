@@ -7,11 +7,19 @@ import {
   WideExcursionCardSkeleton,
 } from '@/components/excursionCards';
 import { ExcursionType } from '@/types/excursion';
-import { Edit, Delete } from '@mui/icons-material';
+import { Delete } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
+import { useSession } from 'next-auth/react';
 
 export default function SavedExcursionsPage() {
-  const { excursions, loading, error, fetchSavedExcursions } = useExcursions();
+  const { data: session } = useSession();
+  const { excursions, loading, error, fetchSavedExcursions, removeFromSaved } =
+    useExcursions();
+
+  const handleRemoveFromSaved = async (excursionId: number) => {
+    removeFromSaved(session?.accessToken as string, excursionId);
+    fetchSavedExcursions();
+  };
 
   useEffect(() => {
     fetchSavedExcursions();
@@ -49,7 +57,10 @@ export default function SavedExcursionsPage() {
                   <WideExcursionCard excursion={excursion} />
                 </div>
                 <div className="flex flex-col justify-center items-center gap-2 p-4">
-                  <IconButton color="error">
+                  <IconButton
+                    onClick={() => handleRemoveFromSaved(excursion.id)}
+                    color="error"
+                  >
                     <Delete />
                   </IconButton>
                 </div>

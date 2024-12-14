@@ -122,7 +122,6 @@ export function useExcursions() {
 
     try {
       await saveExcursion(accessToken, excursionId);
-      await fetchExcursions();
     } catch (error) {
       console.error('Error saving excursion:', error);
     }
@@ -133,7 +132,6 @@ export function useExcursions() {
 
     try {
       await unsaveExcursion(accessToken, excursionId);
-      await fetchExcursions();
     } catch (error) {
       console.error('Error un-saving excursion:', error);
     }

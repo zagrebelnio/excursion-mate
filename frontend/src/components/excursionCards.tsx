@@ -10,7 +10,6 @@ export const ExcursionCard: React.FC<{
   excursion: ExcursionType;
   onSave: () => void;
 }> = ({ excursion, onSave }: { excursion: ExcursionType }) => {
-
   return (
     <div
       key={excursion.id}
