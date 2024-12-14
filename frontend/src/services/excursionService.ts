@@ -105,3 +105,17 @@ export async function editExcursion(
     throw error;
   }
 }
+
+export async function getSavedExcursions(accessToken: string) {
+  try {
+    const response = await axiosInstance.get('/api/Favorites', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching saved excursions:', error);
+    throw error;
+  }
+}

@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getExcursions, getUserExcursions } from '@/services/excursionService';
+import {
+  getExcursions,
+  getUserExcursions,
+  getSavedExcursions,
+} from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
 
 export function useExcursions() {
@@ -85,6 +89,23 @@ export function useExcursions() {
     }
   };
 
+  const fetchSavedExcursions = async () => {
+    if (!session?.accessToken) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await getSavedExcursions(session?.accessToken as string);
+      setExcursions(data || []);
+    } catch (error) {
+      console.error('Error fetching saved excursions:', error);
+      setError('Failed to fetch saved excursions. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     filters,
     excursions,
@@ -94,5 +115,6 @@ export function useExcursions() {
     fetchExcursions,
     updateQueryParams,
     fetchUserExcursions,
+    fetchSavedExcursions,
   };
 }
