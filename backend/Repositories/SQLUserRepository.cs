@@ -10,14 +10,33 @@ namespace backend.Repositories
     {
 
         private readonly ExcursionDbContext excursionDbContext;
+        private readonly UserManager<User> userManager;
 
-        public SQLUserRepository(ExcursionDbContext excursionDbContext)
+        public SQLUserRepository(ExcursionDbContext excursionDbContext, UserManager<User> userManager)
         {
             this.excursionDbContext = excursionDbContext;
+            this.userManager = userManager;
         }
         public async Task<User?> GetUserByIdAsync(string userId)
         {
             return await excursionDbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
+        public async Task<List<(User user, string role)>> GetUsersByRoleAsync(string roleName)
+        {
+            var users = await userManager.Users.ToListAsync();
+            var result = new List<(User user, string role)>();
+
+            foreach (var user in users)
+            {
+                var roles = await userManager.GetRolesAsync(user);
+                if (roles.Contains(roleName))
+                {
+                    result.Add((user, roleName));
+                }
+            }
+
+            return result;
         }
 
         public async Task UpdateUserProfileAsync(User user, UpdateUserProfileDTO updateDto)
