@@ -1,5 +1,6 @@
 using backend.Data;
 using backend.Mappings;
+using backend.Middleware.Extensions;
 using backend.Models.Domain;
 using backend.Repositories;
 using backend.Services;
@@ -68,6 +69,9 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IExcursionRepository, SQLExcursionRepository>();
 builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IFavoriteExcursionRepository, SQLFavoriteExcursionRepository>();
+builder.Services.AddScoped<IFavoriteExcursionService, FavoriteExcursionService>();
+builder.Services.AddScoped<IExcursionService, ExcursionService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
@@ -126,6 +130,8 @@ app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseUserId();
 
 app.UseAuthorization();
 

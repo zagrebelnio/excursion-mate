@@ -17,18 +17,17 @@ namespace backend.Controllers
     [ApiController]
     public class ExcursionsController : ControllerBase
     {
-        private readonly ExcursionDbContext excursionDbContext;
         private readonly IExcursionRepository excursionRepository;
         private readonly IMapper mapper;
-        private readonly ITokenService tokenService;
+        private readonly IExcursionService excursionService;
 
-        public ExcursionsController(ExcursionDbContext excursionDbContext, IExcursionRepository excursionRepository, IMapper mapper, ITokenService tokenService)
+        public ExcursionsController(IExcursionRepository excursionRepository, IMapper mapper, IExcursionService excursionService)
         {
-            this.excursionDbContext = excursionDbContext;
             this.excursionRepository = excursionRepository;
             this.mapper = mapper;
-            this.tokenService = tokenService;
+            this.excursionService = excursionService;
         }
+        private string? GetUserId() => HttpContext.Items["UserId"]?.ToString();
 
         /// <summary>
         /// Retrieves a list of all available excursions with optional filters (title, city, price, date)
@@ -36,13 +35,8 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? title, [FromQuery] string? city, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] DateTime? date, [FromQuery] int page = 1, [FromQuery] int pageSize = 9)
         {
-            var excursions = await excursionRepository.GetAllAsync(title, city, minPrice, maxPrice, date, page, pageSize);
-            var totalPages = (int)Math.Ceiling((double)excursions.TotalCount / pageSize);
-
-            var response = mapper.Map<PagedResponse<ExcursionDTO>>(excursions);
-            response.TotalPages = totalPages;
-            response.CurrentPage = page;
-            response.PageSize = pageSize;
+            var userId = GetUserId();
+            var response = await excursionService.GetPagedExcursionsAsync(userId, title, city, minPrice, maxPrice, date, page, pageSize);
             return Ok(response);
         }
 
@@ -53,19 +47,12 @@ namespace backend.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Details(int id)
         {
-            var excursion = await excursionRepository.GetByIdAsync(id);
-            if (excursion == null) return NotFound();
-
-            var excursionDTO = mapper.Map<ExcursionDetailsDTO>(excursion);
-
-            if (excursion.Photo != null)
-            {
-                excursionDTO.Photo = Convert.ToBase64String(excursion.Photo);
-            }
-
+            var userId = GetUserId();
+            var excursionDTO = await excursionService.GetExcursionDetailsAsync(id, userId);
+            if (excursionDTO == null) return NotFound();
             return Ok(excursionDTO);
-        }
 
+        }
 
         /// <summary>
         /// Creates a new excursion. Requires authentication
@@ -75,15 +62,11 @@ namespace backend.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Create([FromForm] AddExcursionDTO addExcursionDTO)
         {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
-            var userId = tokenService.GetUserIdFromToken(token);
-
+            var userId = GetUserId();
             var excursion = await excursionRepository.CreateAsync(addExcursionDTO, userId);
             var excursionDTO = mapper.Map<ExcursionDetailsDTO>(excursion);
             return Ok(excursionDTO);
         }
-
 
         /// <summary>
         /// Delete an excursion by ID. Requires authentication
@@ -129,15 +112,7 @@ namespace backend.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetUserExcursions()
         {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            var token = authHeader.StartsWith("Bearer ") ? authHeader["Bearer ".Length..].Trim() : string.Empty;
-            var userId = tokenService.GetUserIdFromToken(token);
-
-            if (userId == null)
-            {
-                return Unauthorized("Invalid token.");
-            }
-
+            var userId = GetUserId();
             var excursions = await excursionRepository.GetByUserIdAsync(userId);
             return Ok(mapper.Map<List<ExcursionDTO>>(excursions));
         }

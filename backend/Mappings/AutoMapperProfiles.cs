@@ -31,6 +31,23 @@ namespace backend.Mappings
                .ForMember(dest => dest.TotalPages, opt => opt.Ignore()) 
                .ForMember(dest => dest.CurrentPage, opt => opt.Ignore()) 
                .ForMember(dest => dest.PageSize, opt => opt.Ignore());
+
+            CreateMap<FavoriteExcursion, FavoriteExcursionDTO>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Excursion.Title))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Excursion.Description))
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Excursion.City))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Excursion.Date))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Excursion.Price))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Excursion.Id))
+                .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.Excursion.Likes))
+                .ForMember(dest => dest.Dislikes, opt => opt.MapFrom(src => src.Excursion.Dislikes))
+                .ForMember(dest => dest.MaxParticipants, opt => opt.MapFrom(src => src.Excursion.MaxParticipants))
+                .ForMember(dest => dest.CurrentParticipants, opt => opt.MapFrom(src => src.Excursion.CurrentParticipants))
+                .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Excursion.Photo != null ? Convert.ToBase64String(src.Excursion.Photo) : null));
+
+            CreateMap<Excursion, FavoriteExcursionDTO>()
+                .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Photo != null ? Convert.ToBase64String(src.Photo) : null));
+
         }
 
         private byte[] ConvertFileToByteArray(IFormFile file)

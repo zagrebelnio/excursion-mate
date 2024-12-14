@@ -31,11 +31,11 @@ namespace backend.Models.DTO
         public DateTime Date { get; set; }
 
         [Required]
-        [Range(0, 5000, ErrorMessage = "Price must be between 0 and 5000.")]
+        [Range(0, 1000, ErrorMessage = "Price must be between 0 and 1000.")]
         public int Price { get; set; }
 
         [Required]
-        [Range(2, 20, ErrorMessage = "MaxParticipants must be between 2 and 20.")]
+        [Range(5, 30, ErrorMessage = "MaxParticipants must be between 5 and 30.")]
         public int MaxParticipants { get; set; }
 
         [Required]

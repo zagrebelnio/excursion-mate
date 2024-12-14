@@ -22,10 +22,10 @@ namespace backend.Models.DTO
         [DataType(DataType.DateTime)]
         public DateTime? Date { get; set; }
 
-        [Range(0, 5000, ErrorMessage = "Price must be between 0 and 5000.")]
+        [Range(0, 1000, ErrorMessage = "Price must be between 0 and 1000.")]
         public int? Price { get; set; }
 
-        [Range(2, 20, ErrorMessage = "MaxParticipants must be between 2 and 20.")]
+        [Range(5, 30, ErrorMessage = "MaxParticipants must be between 5 and 30.")]
         public int? MaxParticipants { get; set; }
 
         [MaxFileSize(5 * 1024 * 1024)] 

@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace backend.Models.DTO
+﻿namespace backend.Models.DTO
 {
-    public class ExcursionDTO
+    public class FavoriteExcursionDTO
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -13,6 +11,7 @@ namespace backend.Models.DTO
         public string? Photo { get; set; }
         public int? Likes { get; set; }
         public int? Dislikes { get; set; }
-        public bool IsFavorite { get; set; }
+        public int MaxParticipants { get; set; }
+        public int CurrentParticipants { get; set; }
     }
 }
