@@ -119,3 +119,41 @@ export async function getSavedExcursions(accessToken: string) {
     throw error;
   }
 }
+
+export async function saveExcursion(accessToken: string, excursionId: number) {
+  try {
+    const response = await axiosInstance.post(
+      `/api/Favorites/${excursionId}`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error saving excursion:', error);
+    throw error;
+  }
+}
+
+export async function unsaveExcursion(
+  accessToken: string,
+  excursionId: number
+) {
+  try {
+    const response = await axiosInstance.delete(
+      `/api/Favorites/${excursionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error un-saving excursion:', error);
+    throw error;
+  }
+}
