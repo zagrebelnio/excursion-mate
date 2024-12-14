@@ -36,6 +36,7 @@ namespace backend.Mappings
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Excursion.Title))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Excursion.Description))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Excursion.City))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Excursion.Date))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Excursion.Price))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Excursion.Id))
                 .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.Excursion.Likes))

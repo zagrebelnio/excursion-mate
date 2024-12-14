@@ -19,13 +19,11 @@ namespace backend.Controllers
     {
         private readonly IExcursionRepository excursionRepository;
         private readonly IMapper mapper;
-        private readonly ITokenService tokenService;
 
-        public ExcursionsController(IExcursionRepository excursionRepository, IMapper mapper, ITokenService tokenService)
+        public ExcursionsController(IExcursionRepository excursionRepository, IMapper mapper)
         {
             this.excursionRepository = excursionRepository;
             this.mapper = mapper;
-            this.tokenService = tokenService;
         }
         private string? GetUserId() => HttpContext.Items["UserId"]?.ToString();
 
