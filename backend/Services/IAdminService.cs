@@ -4,6 +4,7 @@ namespace backend.Services
 {
     public interface IAdminService
     {
-        Task<List<UserWithRoleDTO>> GetUsersWithRoleAsync(string roleName);
+        Task<List<UserWithRoleDTO>> GetAllNonAdminUsersAsync();
+        Task<string> UpdateUserRoleAsync(string userId, string newRole);
     }
 }

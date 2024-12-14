@@ -15,19 +15,25 @@ namespace backend.Services
             this.mapper = mapper;
         }
 
-        public async Task<List<UserWithRoleDTO>> GetUsersWithRoleAsync(string roleName)
+        public async Task<List<UserWithRoleDTO>> GetAllNonAdminUsersAsync()
         {
-            var usersWithRoles = await userRepository.GetUsersByRoleAsync(roleName);
+            var usersWithRoles = await userRepository.GetAllNonAdminUsersAsync();
             var result = new List<UserWithRoleDTO>();
 
             foreach (var (user, role) in usersWithRoles)
             {
                 var userDto = mapper.Map<UserWithRoleDTO>(user);
-                userDto.Role = role;
+                userDto.Role = role ?? "NoRole";
                 result.Add(userDto);
             }
 
             return result;
+        }
+
+        public async Task<string> UpdateUserRoleAsync(string userId, string newRole)
+        {
+            if (newRole != "User" && newRole != "Banned") throw new ArgumentException("Invalid role");
+            return await userRepository.ChangeUserRoleAsync(userId, newRole);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 
 namespace backend.Controllers
 {
@@ -20,8 +21,13 @@ namespace backend.Controllers
         [HttpGet("users")]
         public async Task<IActionResult> GetUserWithRole()
         {
-            var users = await adminService.GetUsersWithRoleAsync("User");
-            return Ok(users);
+            return Ok(await adminService.GetAllNonAdminUsersAsync());
+        }
+
+        [HttpPost("ban/{userId}")]
+        public async Task<IActionResult> BanUser(string userId, [FromBody] string newRole)
+        {
+            return Ok(await adminService.UpdateUserRoleAsync(userId, newRole));
         }
     }
 }
