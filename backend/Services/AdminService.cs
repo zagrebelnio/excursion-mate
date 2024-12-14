@@ -41,7 +41,7 @@ namespace backend.Services
             foreach (var (user, userRole) in pagedUsers)
             {
                 var userDto = mapper.Map<UserWithRoleDTO>(user);
-                userDto.Role = role ?? "NoRole";
+                userDto.Role = userRole ?? "NoRole";
                 result.Add(userDto);
             }
 
