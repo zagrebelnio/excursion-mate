@@ -48,6 +48,8 @@ namespace backend.Mappings
             CreateMap<Excursion, FavoriteExcursionDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Photo != null ? Convert.ToBase64String(src.Photo) : null));
 
+            CreateMap<User, UserWithRoleDTO>().ForMember(dest => dest.Role, opt => opt.Ignore());
+
         }
 
         private byte[] ConvertFileToByteArray(IFormFile file)
