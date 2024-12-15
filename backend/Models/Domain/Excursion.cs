@@ -22,5 +22,6 @@
 
         public ICollection<ExcursionUser> ExcursionUsers { get; set; }
         public ICollection<FavoriteExcursion> FavoriteExcursions { get; set; }
+        public ICollection<ExcursionReaction> ExcursionReactions { get; set; }
     }
 }

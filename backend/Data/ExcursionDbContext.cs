@@ -14,6 +14,7 @@ namespace backend.Data
         public DbSet<Excursion> Excursions { get; set; }
         public DbSet<ExcursionUser> ExcursionUsers { get; set; }
         public DbSet<FavoriteExcursion> FavoriteExcursions { get; set; }
+        public DbSet<ExcursionReaction> ExcursionReactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -58,6 +59,26 @@ namespace backend.Data
                 .WithMany(e => e.FavoriteExcursions)
                 .HasForeignKey(fe => fe.ExcursionId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<ExcursionReaction>().
+                HasKey(er => new { er.UserId, er.ExcursionId });
+
+            builder.Entity<ExcursionReaction>()
+                .HasOne(er => er.User)
+                .WithMany(u => u.ExcursionReactions) 
+                .HasForeignKey(er => er.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<ExcursionReaction>()
+                .HasOne(er => er.Excursion)
+                .WithMany(e => e.ExcursionReactions) 
+                .HasForeignKey(er => er.ExcursionId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<ExcursionReaction>()
+                .Property(er => er.ReactionType)
+                .HasConversion<int>(); 
+
 
             builder.Entity<IdentityRole>().HasData(RoleSeedData.GetRoles());
         }
