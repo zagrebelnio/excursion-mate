@@ -15,7 +15,7 @@ namespace backend.Services
             this.mapper = mapper;
         }
 
-        public async Task<List<UserWithRoleDTO>> GetAllNonAdminUsersAsync(string? name, string? surname, string? role, int page, int pageSize)
+        public async Task<PagedResponse<UserWithRoleDTO>> GetAllNonAdminUsersAsync(string? name, string? surname, string? role, int page, int pageSize)
         {
             var usersWithRoles = await userRepository.GetAllNonAdminUsersAsync();
 
@@ -34,6 +34,7 @@ namespace backend.Services
                 usersWithRoles = usersWithRoles.Where(u => u.role.Equals(role, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
+            var totalItems = usersWithRoles.Count();
             var pagedUsers = usersWithRoles.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             var result = new List<UserWithRoleDTO>();
@@ -45,7 +46,14 @@ namespace backend.Services
                 result.Add(userDto);
             }
 
-            return result;
+            return new PagedResponse<UserWithRoleDTO>
+            {
+                Items = result,
+                TotalItems = totalItems,
+                TotalPages = (int)Math.Ceiling((double)totalItems / pageSize),
+                CurrentPage = page,
+                PageSize = pageSize
+            };
         }
 
         public async Task<string> UpdateUserRoleAsync(string userId, string newRole)
