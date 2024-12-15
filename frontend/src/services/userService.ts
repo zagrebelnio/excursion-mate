@@ -32,6 +32,7 @@ export async function getUsers(
     const response = await axiosInstance.get(`/api/Admin/users?${params}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching users:', error);
