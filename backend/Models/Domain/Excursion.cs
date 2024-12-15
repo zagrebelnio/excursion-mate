@@ -14,8 +14,8 @@
         public byte[]? Photo { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
-        public int? Likes { get; set; }
-        public int? Dislikes {  get; set; }
+        public int Likes { get; set; } = 0;
+        public int Dislikes { get; set; } = 0;
 
         public string? UserId { get; set; } 
         public User User { get; set; }

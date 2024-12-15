@@ -77,8 +77,15 @@ namespace backend.Data
 
             builder.Entity<ExcursionReaction>()
                 .Property(er => er.ReactionType)
-                .HasConversion<int>(); 
+                .HasConversion<int>();
 
+            builder.Entity<Excursion>()
+                .Property(e => e.Likes)
+                .HasDefaultValue(0);
+
+            builder.Entity<Excursion>()
+                .Property(e => e.Dislikes)
+                .HasDefaultValue(0);
 
             builder.Entity<IdentityRole>().HasData(RoleSeedData.GetRoles());
         }

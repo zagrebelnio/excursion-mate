@@ -11,8 +11,8 @@ namespace backend.Models.DTO
         public DateTime Date { get; set; }
         public int Price { get; set; }
         public string? Photo { get; set; }
-        public int? Likes { get; set; }
-        public int? Dislikes { get; set; }
+        public int Likes { get; set; }
+        public int Dislikes { get; set; }
         public bool IsFavorite { get; set; }
         public string? Reaction { get; set; }
     }
