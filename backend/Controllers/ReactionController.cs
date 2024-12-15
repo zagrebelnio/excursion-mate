@@ -20,6 +20,9 @@ namespace backend.Controllers
 
         private string? GetUserId() => HttpContext.Items["UserId"]?.ToString();
 
+        /// <summary>
+        /// Allows a user to react to an excursion (like or dislike).
+        /// </summary>
         [HttpPost("react")]
         public async Task<IActionResult> ReactToExcursion([FromBody] ExcursionReactionDTO reactionDTO)
         {
