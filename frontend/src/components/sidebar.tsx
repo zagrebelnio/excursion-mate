@@ -1,18 +1,23 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import HomeIcon from '@mui/icons-material/Home';
 import MapIcon from '@mui/icons-material/Map';
 import PersonIcon from '@mui/icons-material/Person';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import LoginIcon from '@mui/icons-material/Login';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { useUser } from '@/context/userContext';
+import { useSession } from 'next-auth/react';
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { data: session, status } = useSession();
+  const role = session?.user?.role;
   const { user, loading, error } = useUser();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +31,10 @@ export default function Sidebar() {
       setIsButtonVisible(false);
     }
   };
+
+  if (role === 'Banned') {
+    return null;
+  }
 
   return (
     <>
@@ -74,6 +83,16 @@ export default function Sidebar() {
                     <PersonIcon /> Профіль
                   </Link>
                 </li>
+                {role === 'Admin' && (
+                  <li>
+                    <Link
+                      href="/admin"
+                      className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/admin' ? 'bg-gray-100' : ''}`}
+                    >
+                      <AdminPanelSettingsIcon /> Адмін Панель
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <button
                     onClick={() => signOut({ callbackUrl: '/' })}
@@ -88,7 +107,7 @@ export default function Sidebar() {
                 <li>
                   <Link
                     href="/auth?mode=login"
-                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
+                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/auth' && searchParams.get('mode') === 'login' ? 'bg-gray-100' : ''}`}
                   >
                     <LoginIcon /> Вхід
                   </Link>
@@ -96,7 +115,7 @@ export default function Sidebar() {
                 <li>
                   <Link
                     href="/auth?mode=register"
-                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/profile' ? 'bg-gray-100' : ''}`}
+                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/auth' && searchParams.get('mode') === 'register' ? 'bg-gray-100' : ''}`}
                   >
                     <HowToRegIcon /> Реєстрація
                   </Link>

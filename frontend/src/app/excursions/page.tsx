@@ -10,7 +10,7 @@ import { useSession } from 'next-auth/react';
 import { ExcursionType } from '@/types/excursion';
 
 export default function ExcursionsPage() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const {
     filters,
     excursions,
@@ -25,7 +25,7 @@ export default function ExcursionsPage() {
 
   useEffect(() => {
     fetchExcursions();
-  }, [status]);
+  }, []);
 
   const handleSearchClick = () => {
     updateQueryParams({ page: 1 });

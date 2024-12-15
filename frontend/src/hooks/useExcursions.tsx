@@ -13,7 +13,7 @@ export function useExcursions() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = Object.fromEntries(searchParams.entries());
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const [filters, setFilters] = useState({
     title: params.title || '',
@@ -29,6 +29,7 @@ export function useExcursions() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
     const params = Object.fromEntries(searchParams.entries());
@@ -47,21 +48,14 @@ export function useExcursions() {
   const fetchExcursions = async (overrideFilters?: Partial<typeof filters>) => {
     const queryFilters = { ...filters, ...overrideFilters };
 
-    if (status === 'loading') {
-      setLoading(true);
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
     try {
-      const data = await getExcursions(
-        session?.accessToken as string,
-        queryFilters
-      );
+      const data = await getExcursions(queryFilters);
       setExcursions(data.items || []);
       setTotalPages(data.totalPages || 1);
+      setTotalItems(data.totalItems || 0);
     } catch (err) {
       setError('Failed to fetch excursions. Please try again later.');
     } finally {
@@ -143,6 +137,7 @@ export function useExcursions() {
     loading,
     error,
     totalPages,
+    totalItems,
     fetchExcursions,
     updateQueryParams,
     fetchUserExcursions,

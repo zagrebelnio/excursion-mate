@@ -3,6 +3,7 @@ import { Poppins } from 'next/font/google';
 import './globals.css';
 import Sidebar from '@/components/sidebar';
 import { Providers } from './providers';
+import RedirectBanned from '@/components/redirectBanned';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} antialiased`}>
         <Providers>
+          <RedirectBanned />
           <main className="flex">
             <Sidebar />
             <div className="flex-1">{children}</div>
