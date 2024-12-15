@@ -14,6 +14,6 @@ namespace backend.Models.DTO
         public int? Likes { get; set; }
         public int? Dislikes { get; set; }
         public bool IsFavorite { get; set; }
-        public string Reaction { get; set; } = "None";
+        public string? Reaction { get; set; }
     }
 }

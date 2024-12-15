@@ -56,6 +56,7 @@ namespace backend.Services
             if (!string.IsNullOrEmpty(userId))
             {
                 excursionDTO.IsFavorite = await favoriteExcursionRepository.IsFavoriteAsync(userId, id);
+                excursionDTO.Reaction = await excursionRepository.GetReactionAsync(userId, id);
             }
 
             return excursionDTO;

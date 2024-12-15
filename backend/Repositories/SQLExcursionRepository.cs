@@ -99,7 +99,7 @@ namespace backend.Repositories
             return await excursionDbContext.Excursions.Where(e => e.UserId == userId).ToListAsync();
         }
 
-        public async Task<string> GetReactionAsync(string userId, int excursionId)
+        public async Task<string?> GetReactionAsync(string userId, int excursionId)
         {
             var reaction = await excursionDbContext.ExcursionReactions.
                 Where(er => er.UserId == userId && er.ExcursionId == excursionId).
@@ -110,7 +110,7 @@ namespace backend.Repositories
             {
                 ReactionType.Like => "Like",
                 ReactionType.Dislike => "Dislike",
-                _ => "None"
+                _ => null
             };
         }
 
