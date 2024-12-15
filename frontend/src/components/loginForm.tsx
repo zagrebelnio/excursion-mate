@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { signIn, getSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { UserData } from '@/types/auth';
 
 function LoginForm() {
@@ -25,10 +25,6 @@ function LoginForm() {
     if (res?.error) {
       console.log(res.error);
       setError(res.error);
-    } else {
-      console.log(res);
-      const session = await getSession();
-      console.log('Access Token:', session?.accessToken);
     }
   }
 

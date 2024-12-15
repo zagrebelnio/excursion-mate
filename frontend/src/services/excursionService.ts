@@ -1,16 +1,14 @@
 import axiosInstance from '@/lib/axios/axiosInstance';
 
-export async function getExcursions(
-  filters: {
-    title?: string;
-    city?: string;
-    minPrice?: number;
-    maxPrice?: number;
-    date?: string;
-    page?: number;
-    pageSize?: number;
-  }
-) {
+export async function getExcursions(filters: {
+  title?: string;
+  city?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  date?: string;
+  page?: number;
+  pageSize?: number;
+}) {
   try {
     const response = await axiosInstance.get('/api/Excursions', {
       params: filters,

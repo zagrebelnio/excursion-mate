@@ -25,7 +25,10 @@ const authOptions = {
             throw new Error('No token returned from server');
           }
 
-          return { token: user.jwtToken };
+          return {
+            token: user.jwtToken,
+            role: user.role,
+          };
         } catch (error) {
           throw new Error(error.response?.data || 'Invalid credentials');
         }
@@ -36,11 +39,13 @@ const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.accessToken = user.token;
+        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken;
+      session.user.role = token.role;
       return session;
     },
   },

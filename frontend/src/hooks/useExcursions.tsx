@@ -51,9 +51,7 @@ export function useExcursions() {
     setError(null);
 
     try {
-      const data = await getExcursions(
-        queryFilters
-      );
+      const data = await getExcursions(queryFilters);
       setExcursions(data.items || []);
       setTotalPages(data.totalPages || 1);
     } catch (err) {
