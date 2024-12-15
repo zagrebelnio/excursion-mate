@@ -73,6 +73,8 @@ builder.Services.AddScoped<IFavoriteExcursionRepository, SQLFavoriteExcursionRep
 builder.Services.AddScoped<IFavoriteExcursionService, FavoriteExcursionService>();
 builder.Services.AddScoped<IExcursionService, ExcursionService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
+builder.Services.AddScoped<IReactionService, ReactionService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
