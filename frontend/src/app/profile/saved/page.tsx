@@ -17,8 +17,8 @@ export default function SavedExcursionsPage() {
     useExcursions();
 
   const handleRemoveFromSaved = async (excursionId: number) => {
-    removeFromSaved(session?.accessToken as string, excursionId);
-    fetchSavedExcursions();
+    await removeFromSaved(session?.accessToken as string, excursionId);
+    await fetchSavedExcursions();
   };
 
   useEffect(() => {
