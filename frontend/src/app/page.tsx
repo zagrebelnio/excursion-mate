@@ -7,8 +7,10 @@ import { ExcursionType } from '@/types/excursion';
 import { useUser } from '@/context/userContext';
 import { useExcursions } from '@/hooks/useExcursions';
 import React, { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
 export default function Home() {
+  const { status } = useSession();
   const { user, loading: userLoading } = useUser();
   const {
     filters,
@@ -23,7 +25,7 @@ export default function Home() {
       updateQueryParams({ pageSize: 5 });
     }
     fetchExcursions({ pageSize: 5 });
-  }, []);
+  }, [status]);
 
   const handleSearchClick = () => {
     updateQueryParams({ pageSize: 5 });
