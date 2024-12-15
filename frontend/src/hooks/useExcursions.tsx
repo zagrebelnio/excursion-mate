@@ -47,17 +47,17 @@ export function useExcursions() {
   const fetchExcursions = async (overrideFilters?: Partial<typeof filters>) => {
     const queryFilters = { ...filters, ...overrideFilters };
 
-    if (status === 'loading') {
-      setLoading(true);
-      return;
-    }
+    // if (status === 'loading') {
+    //   setLoading(true);
+    //   return;
+    // }
 
     setLoading(true);
     setError(null);
 
     try {
       const data = await getExcursions(
-        session?.accessToken as string,
+        // session?.accessToken as string,
         queryFilters
       );
       setExcursions(data.items || []);
