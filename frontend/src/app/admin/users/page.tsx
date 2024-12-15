@@ -43,6 +43,7 @@ export default function AdminUsersPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState(initialFilters);
+  const [totalItems, setTotalItems] = useState(0);
 
   const updateQueryParams = (newFilters: Partial<typeof filters>) => {
     const updatedFilters = { ...filters, ...newFilters };
@@ -68,7 +69,8 @@ export default function AdminUsersPage() {
         pageSize: filters.pageSize,
       };
       const data = await getUsers(session?.accessToken as string, params);
-      setUsers(data || []);
+      setUsers(data.items || []);
+      setTotalItems(data.totalItems || 0);
     } catch (err) {
       setError('Failed to fetch users');
     } finally {
@@ -191,7 +193,7 @@ export default function AdminUsersPage() {
 
       <TablePagination
         component="div"
-        count={100} // Replace with actual count from API
+        count={totalItems} // Replace with actual count from API
         page={filters.page}
         onPageChange={handlePageChange}
         rowsPerPage={filters.pageSize}

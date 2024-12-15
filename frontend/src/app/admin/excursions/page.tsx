@@ -27,7 +27,7 @@ export default function AdminExcursionsPage() {
     filters,
     loading,
     error,
-    totalPages,
+    totalItems,
     fetchExcursions,
     updateQueryParams,
   } = useExcursions();
@@ -192,8 +192,8 @@ export default function AdminExcursionsPage() {
 
           <TablePagination
             component="div"
-            count={totalPages * filters.pageSize || 0} // Replace with actual total items if available
-            page={filters.page - 1 || 0} // API is 1-based
+            count={totalItems}
+            page={filters.page - 1 || 0}
             onPageChange={handlePageChange}
             rowsPerPage={filters.pageSize || 5}
             onRowsPerPageChange={handlePageSizeChange}
