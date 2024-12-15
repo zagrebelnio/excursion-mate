@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getUsers, updateUserRole } from '@/services/userService';
 import { useSession } from 'next-auth/react';
 import {
@@ -27,20 +28,33 @@ interface User {
 
 export default function AdminUsersPage() {
   const { data: session } = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const initialFilters = {
+    name: searchParams.get('name') || '',
+    surname: searchParams.get('surname') || '',
+    role: searchParams.get('role') || '',
+    page: Number(searchParams.get('page')) || 0,
+    pageSize: Number(searchParams.get('pageSize')) || 5,
+  };
 
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState(initialFilters);
 
-  const [filters, setFilters] = useState({
-    name: '',
-    surname: '',
-    role: '',
-    page: 0,
-    pageSize: 5,
-  });
+  const updateQueryParams = (newFilters: Partial<typeof filters>) => {
+    const updatedFilters = { ...filters, ...newFilters };
+    setFilters(updatedFilters);
 
-  // const [totalUsers, setTotalUsers] = useState(0);
+    const params = new URLSearchParams();
+    Object.entries(updatedFilters).forEach(([key, value]) => {
+      if (value !== '' && value !== null) params.set(key, value.toString());
+    });
+
+    router.push(`/admin/users?${params.toString()}`, { scroll: false });
+  };
 
   const loadUsers = async () => {
     setLoading(true);
@@ -55,7 +69,6 @@ export default function AdminUsersPage() {
       };
       const data = await getUsers(session?.accessToken as string, params);
       setUsers(data || []);
-      // setTotalUsers(data.total || 0);
     } catch (err) {
       setError('Failed to fetch users');
     } finally {
@@ -76,19 +89,14 @@ export default function AdminUsersPage() {
     }
   };
 
-  // Handle Pagination
-  const handlePageChange = (event: unknown, newPage: number) => {
-    setFilters((prev) => ({ ...prev, page: newPage }));
+  const handlePageChange = (_: unknown, newPage: number) => {
+    updateQueryParams({ page: newPage });
   };
 
   const handlePageSizeChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setFilters((prev) => ({
-      ...prev,
-      pageSize: parseInt(event.target.value, 10),
-      page: 0,
-    }));
+    updateQueryParams({ pageSize: parseInt(event.target.value, 10), page: 0 });
   };
 
   return (
@@ -102,28 +110,29 @@ export default function AdminUsersPage() {
           Back to Admin Panel
         </Link>
       </div>
-      
 
       <div className="mb-4 flex gap-4">
         <TextField
           label="First Name"
           variant="outlined"
           value={filters.name}
-          onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+          onChange={(e) => updateQueryParams({ name: e.target.value, page: 0 })}
           size="small"
         />
         <TextField
           label="Surname"
           variant="outlined"
           value={filters.surname}
-          onChange={(e) => setFilters({ ...filters, surname: e.target.value })}
+          onChange={(e) =>
+            updateQueryParams({ surname: e.target.value, page: 0 })
+          }
           size="small"
         />
         <TextField
           label="Role"
           select
           value={filters.role}
-          onChange={(e) => setFilters({ ...filters, role: e.target.value })}
+          onChange={(e) => updateQueryParams({ role: e.target.value, page: 0 })}
           size="small"
           className="w-40"
           variant="outlined"
@@ -182,7 +191,7 @@ export default function AdminUsersPage() {
 
       <TablePagination
         component="div"
-        // count={totalUsers}
+        count={100} // Replace with actual count from API
         page={filters.page}
         onPageChange={handlePageChange}
         rowsPerPage={filters.pageSize}
