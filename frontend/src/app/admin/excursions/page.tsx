@@ -18,6 +18,8 @@ import {
   Typography,
 } from '@mui/material';
 import { useSearchParams } from 'next/navigation';
+import { deleteExcursion } from '@/services/excursionService';
+import { useSession } from 'next-auth/react';
 
 export default function AdminExcursionsPage() {
   const {
@@ -30,6 +32,7 @@ export default function AdminExcursionsPage() {
     updateQueryParams,
   } = useExcursions();
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (!searchParams.get('pageSize')) {
@@ -50,15 +53,21 @@ export default function AdminExcursionsPage() {
     fetchExcursions({ page: newPage + 1 });
   };
 
-  const handlePageSizeChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateQueryParams({ pageSize: parseInt(event.target.value, 10), page: 1 });
     fetchExcursions({ pageSize: parseInt(event.target.value, 10), page: 1 });
   };
 
-  const handleDelete = (id: number) => {
-    console.log('Deleting excursion with ID:', id);
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteExcursion(
+        session?.accessToken as string,
+        Number(id) as number
+      );
+      fetchExcursions();
+    } catch (error) {
+      console.error('Error deleting excursion:', error);
+    }
   };
 
   const handleEdit = (id: number) => {
@@ -67,13 +76,9 @@ export default function AdminExcursionsPage() {
 
   return (
     <div className="py-6 px-20">
-      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">Excursion Management</h2>
-        <Link
-          href="/admin"
-          className="block text-blue-600 hover:underline"
-        >
+        <Link href="/admin" className="block text-blue-600 hover:underline">
           Back to Admin Panel
         </Link>
       </div>
@@ -83,7 +88,9 @@ export default function AdminExcursionsPage() {
           label="Title"
           variant="outlined"
           value={filters.title || ''}
-          onChange={(e) => updateQueryParams({ title: e.target.value, page: 1 })}
+          onChange={(e) =>
+            updateQueryParams({ title: e.target.value, page: 1 })
+          }
           size="small"
           className="w-1/4"
         />
@@ -160,12 +167,9 @@ export default function AdminExcursionsPage() {
                     </TableCell>
                     <TableCell>₴{excursion.price}</TableCell>
                     <TableCell>
-                      <Button
-                        color="primary"
-                        onClick={() => handleEdit(excursion.id)}
-                      >
-                        Edit
-                      </Button>
+                      <Link href={`/admin/excursions/edit/${excursion.id}`}>
+                        <Button color="primary">Edit</Button>
+                      </Link>
                       <Button
                         color="error"
                         onClick={() => handleDelete(excursion.id)}

@@ -20,12 +20,16 @@ export default function AdminPanel() {
           <Link href="/admin/users" className="group block">
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1">
               <div className="flex flex-col items-center justify-center gap-4">
-                <PeopleIcon className="text-blue-500" style={{ fontSize: 64 }} />
+                <PeopleIcon
+                  className="text-blue-500"
+                  style={{ fontSize: 64 }}
+                />
                 <h2 className="text-2xl font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
                   User Management
                 </h2>
                 <p className="text-gray-500 text-center">
-                  View and manage user roles, including banning and unbanning users.
+                  View and manage user roles, including banning and unbanning
+                  users.
                 </p>
               </div>
             </div>
@@ -40,7 +44,8 @@ export default function AdminPanel() {
                   Excursion Management
                 </h2>
                 <p className="text-gray-500 text-center">
-                  Edit, delete, or manage any excursions available on the platform.
+                  Edit, delete, or manage any excursions available on the
+                  platform.
                 </p>
               </div>
             </div>
