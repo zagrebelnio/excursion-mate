@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useExcursions } from '@/hooks/useExcursions';
 import {
   Table,
@@ -12,34 +12,49 @@ import {
   Paper,
   TablePagination,
   Button,
+  TextField,
+  Box,
+  Slider,
+  Typography,
 } from '@mui/material';
+import { useSearchParams } from 'next/navigation';
 
-export default function AdminExcursrionsPage() {
+export default function AdminExcursionsPage() {
   const {
     excursions,
     filters,
     loading,
     error,
+    totalPages,
     fetchExcursions,
     updateQueryParams,
   } = useExcursions();
-
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    fetchExcursions({ page: page + 1, pageSize });
-  }, [page, pageSize]);
+    if (!searchParams.get('pageSize')) {
+      updateQueryParams({ pageSize: 5 });
+      fetchExcursions({ pageSize: 5 });
+    } else {
+      fetchExcursions();
+    }
+  }, []);
+
+  const handleSearchClick = () => {
+    updateQueryParams({ page: 1 });
+    fetchExcursions();
+  };
 
   const handlePageChange = (_: unknown, newPage: number) => {
-    setPage(newPage);
+    updateQueryParams({ page: newPage + 1 });
+    fetchExcursions({ page: newPage + 1 });
   };
 
   const handlePageSizeChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setPageSize(parseInt(event.target.value, 10));
-    setPage(0);
+    updateQueryParams({ pageSize: parseInt(event.target.value, 10), page: 1 });
+    fetchExcursions({ pageSize: parseInt(event.target.value, 10), page: 1 });
   };
 
   const handleDelete = (id: number) => {
@@ -52,20 +67,76 @@ export default function AdminExcursrionsPage() {
 
   return (
     <div className="py-6 px-20">
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold mb-4">Excursion Management</h2>
+        <h2 className="text-2xl font-bold">Excursion Management</h2>
         <Link
           href="/admin"
-          className="block mt-4 text-center text-blue-600 hover:underline"
+          className="block text-blue-600 hover:underline"
         >
           Back to Admin Panel
         </Link>
       </div>
 
+      <div className="bg-white p-4 rounded-md shadow mb-6 flex flex-wrap gap-4">
+        <TextField
+          label="Title"
+          variant="outlined"
+          value={filters.title || ''}
+          onChange={(e) => updateQueryParams({ title: e.target.value, page: 1 })}
+          size="small"
+          className="w-1/4"
+        />
+        <TextField
+          label="City"
+          variant="outlined"
+          value={filters.city || ''}
+          onChange={(e) => updateQueryParams({ city: e.target.value, page: 1 })}
+          size="small"
+          className="w-1/4"
+        />
+        <TextField
+          label="Date"
+          type="date"
+          variant="outlined"
+          InputLabelProps={{ shrink: true }}
+          value={filters.date || ''}
+          onChange={(e) => updateQueryParams({ date: e.target.value, page: 1 })}
+          size="small"
+          className="w-1/4"
+        />
+        <Box className="flex flex-col w-1/4">
+          <Typography className="font-bold text-gray-700 mb-2">
+            Price Range: ₴{filters.minPrice || 0} - ₴{filters.maxPrice || 1000}
+          </Typography>
+          <Slider
+            value={[filters.minPrice || 0, filters.maxPrice || 1000]}
+            onChange={(_, value) =>
+              updateQueryParams({
+                minPrice: (value as number[])[0],
+                maxPrice: (value as number[])[1],
+                page: 1,
+              })
+            }
+            valueLabelDisplay="auto"
+            min={0}
+            max={1000}
+          />
+        </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSearchClick}
+          className="h-10 mt-auto"
+        >
+          Search
+        </Button>
+      </div>
+
       {loading ? (
         <p>Loading excursions...</p>
       ) : error ? (
-        <p>{error}</p>
+        <p className="text-red-500">{error}</p>
       ) : (
         <>
           <TableContainer component={Paper}>
@@ -74,6 +145,7 @@ export default function AdminExcursrionsPage() {
                 <TableRow>
                   <TableCell>Title</TableCell>
                   <TableCell>City</TableCell>
+                  <TableCell>Date</TableCell>
                   <TableCell>Price</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
@@ -83,6 +155,9 @@ export default function AdminExcursrionsPage() {
                   <TableRow key={excursion.id}>
                     <TableCell>{excursion.title}</TableCell>
                     <TableCell>{excursion.city}</TableCell>
+                    <TableCell>
+                      {new Date(excursion.date).toLocaleDateString()}
+                    </TableCell>
                     <TableCell>₴{excursion.price}</TableCell>
                     <TableCell>
                       <Button
@@ -100,16 +175,23 @@ export default function AdminExcursrionsPage() {
                     </TableCell>
                   </TableRow>
                 ))}
+                {!excursions.length && (
+                  <TableRow>
+                    <TableCell colSpan={4} align="center">
+                      No excursions found.
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
 
           <TablePagination
             component="div"
-            // count={filters.totalPages * pageSize} // Replace with actual total items if available
-            page={page}
+            count={totalPages * filters.pageSize || 0} // Replace with actual total items if available
+            page={filters.page - 1 || 0} // API is 1-based
             onPageChange={handlePageChange}
-            rowsPerPage={pageSize}
+            rowsPerPage={filters.pageSize || 5}
             onRowsPerPageChange={handlePageSizeChange}
             rowsPerPageOptions={[5, 10, 20]}
           />
