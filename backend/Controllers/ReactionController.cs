@@ -1,6 +1,7 @@
 ﻿using backend.Models.Domain;
 using backend.Models.DTO;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
@@ -23,6 +24,7 @@ namespace backend.Controllers
         /// <summary>
         /// Allows a user to react to an excursion (like or dislike).
         /// </summary>
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("react")]
         public async Task<IActionResult> ReactToExcursion([FromBody] ExcursionReactionDTO reactionDTO)
         {
