@@ -13,7 +13,7 @@ export function useExcursions() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = Object.fromEntries(searchParams.entries());
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const [filters, setFilters] = useState({
     title: params.title || '',
@@ -47,17 +47,11 @@ export function useExcursions() {
   const fetchExcursions = async (overrideFilters?: Partial<typeof filters>) => {
     const queryFilters = { ...filters, ...overrideFilters };
 
-    // if (status === 'loading') {
-    //   setLoading(true);
-    //   return;
-    // }
-
     setLoading(true);
     setError(null);
 
     try {
       const data = await getExcursions(
-        // session?.accessToken as string,
         queryFilters
       );
       setExcursions(data.items || []);

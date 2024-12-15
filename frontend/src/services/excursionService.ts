@@ -1,7 +1,6 @@
 import axiosInstance from '@/lib/axios/axiosInstance';
 
 export async function getExcursions(
-  // accessToken: string,
   filters: {
     title?: string;
     city?: string;
@@ -15,7 +14,6 @@ export async function getExcursions(
   try {
     const response = await axiosInstance.get('/api/Excursions', {
       params: filters,
-      // headers: { Authorization: `Bearer ${accessToken}` },
     });
     return response.data;
   } catch (error) {
