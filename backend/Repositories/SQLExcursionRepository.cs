@@ -99,6 +99,21 @@ namespace backend.Repositories
             return await excursionDbContext.Excursions.Where(e => e.UserId == userId).ToListAsync();
         }
 
+        public async Task<string?> GetReactionAsync(string userId, int excursionId)
+        {
+            var reaction = await excursionDbContext.ExcursionReactions.
+                Where(er => er.UserId == userId && er.ExcursionId == excursionId).
+                Select(er => er.ReactionType).
+                FirstOrDefaultAsync();
+
+            return reaction switch
+            {
+                ReactionType.Like => "Like",
+                ReactionType.Dislike => "Dislike",
+                _ => null
+            };
+        }
+
         public async Task<bool> IsUserOwnerAsync(int excursionId, string userId)
         {
             var excursion = await excursionDbContext.Excursions.FirstOrDefaultAsync(e => e.Id == excursionId);

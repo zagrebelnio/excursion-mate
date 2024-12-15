@@ -27,13 +27,14 @@ namespace backend.Services
                 foreach (var dto in excursionDtos)
                 {
                     dto.IsFavorite = await favoriteExcursionRepository.IsFavoriteAsync(userId, dto.Id);
+                    dto.Reaction = await excursionRepository.GetReactionAsync(userId, dto.Id);
                 }
             }
 
             return new PagedResponse<ExcursionDTO>
             {
                 Items = excursionDtos,
-                TotalItems = excursions.TotalCount,  
+                TotalItems = excursions.TotalCount,
                 TotalPages = (int)Math.Ceiling((double)excursions.TotalCount / pageSize),
                 CurrentPage = page,
                 PageSize = pageSize
@@ -55,6 +56,7 @@ namespace backend.Services
             if (!string.IsNullOrEmpty(userId))
             {
                 excursionDTO.IsFavorite = await favoriteExcursionRepository.IsFavoriteAsync(userId, id);
+                excursionDTO.Reaction = await excursionRepository.GetReactionAsync(userId, id);
             }
 
             return excursionDTO;
