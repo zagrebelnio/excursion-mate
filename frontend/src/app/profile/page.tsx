@@ -44,7 +44,7 @@ export default function ProfilePage() {
               My excursions
             </Link>
             <Link
-              href="/saved"
+              href="/profile/saved"
               className="px-4 py-2 border border-black text-black text-center rounded-lg hover:bg-gray-100 transition"
             >
               Saved

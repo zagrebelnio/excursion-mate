@@ -1,15 +1,15 @@
+'use client';
 import Link from 'next/link';
 import Image from 'next/image';
 import { format } from 'date-fns';
-import { ThumbUp, ThumbDown } from '@mui/icons-material';
+import { ThumbUp, ThumbDown, TurnedIn, TurnedInNot } from '@mui/icons-material';
 import { ExcursionType } from '@/types/excursion';
 import { Skeleton, Box } from '@mui/material';
 
-export const ExcursionCard: React.FC<{ excursion: ExcursionType }> = ({
-  excursion,
-}: {
+export const ExcursionCard: React.FC<{
   excursion: ExcursionType;
-}) => {
+  onSave: () => void;
+}> = ({ excursion, onSave }: { excursion: ExcursionType }) => {
   return (
     <div
       key={excursion.id}
@@ -44,6 +44,16 @@ export const ExcursionCard: React.FC<{ excursion: ExcursionType }> = ({
               <button className="flex items-center gap-1 hover:text-red-500">
                 <ThumbDown fontSize="small" />
                 <span className="text-gray-500">{excursion.dislikes ?? 0}</span>
+              </button>
+              <button
+                onClick={(e) => onSave(e, excursion)}
+                className="flex items-center gap-1 hover:text-green-500"
+              >
+                {excursion.isFavorite ? (
+                  <TurnedIn fontSize="medium" />
+                ) : (
+                  <TurnedInNot fontSize="medium" />
+                )}
               </button>
             </div>
           </div>

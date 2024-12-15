@@ -1,19 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getExcursions, getUserExcursions } from '@/services/excursionService';
+import {
+  getExcursions,
+  getUserExcursions,
+  getSavedExcursions,
+  saveExcursion,
+  unsaveExcursion,
+} from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
 
 export function useExcursions() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = Object.fromEntries(searchParams.entries());
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const [filters, setFilters] = useState({
     title: params.title || '',
     city: params.city || '',
     minPrice: Number(params.minPrice) || 0,
-    maxPrice: Number(params.maxPrice) || 5000,
+    maxPrice: Number(params.maxPrice) || 1000,
     date: params.date || '',
     page: Number(params.page) || 1,
     pageSize: Number(params.pageSize) || 9,
@@ -31,7 +37,7 @@ export function useExcursions() {
       title: params.title || '',
       city: params.city || '',
       minPrice: Number(params.minPrice) || 0,
-      maxPrice: Number(params.maxPrice) || 5000,
+      maxPrice: Number(params.maxPrice) || 1000,
       date: params.date || '',
       page: Number(params.page) || 1,
       pageSize: Number(params.pageSize) || 9,
@@ -40,11 +46,20 @@ export function useExcursions() {
 
   const fetchExcursions = async (overrideFilters?: Partial<typeof filters>) => {
     const queryFilters = { ...filters, ...overrideFilters };
+
+    if (status === 'loading') {
+      setLoading(true);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      const data = await getExcursions(queryFilters);
+      const data = await getExcursions(
+        session?.accessToken as string,
+        queryFilters
+      );
       setExcursions(data.items || []);
       setTotalPages(data.totalPages || 1);
     } catch (err) {
@@ -85,6 +100,43 @@ export function useExcursions() {
     }
   };
 
+  const fetchSavedExcursions = async () => {
+    if (!session?.accessToken) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await getSavedExcursions(session?.accessToken as string);
+      setExcursions(data || []);
+    } catch (error) {
+      console.error('Error fetching saved excursions:', error);
+      setError('Failed to fetch saved excursions. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addToSaved = async (accessToken: string, excursionId: number) => {
+    if (!session?.accessToken) return;
+
+    try {
+      await saveExcursion(accessToken, excursionId);
+    } catch (error) {
+      console.error('Error saving excursion:', error);
+    }
+  };
+
+  const removeFromSaved = async (accessToken: string, excursionId: number) => {
+    if (!session?.accessToken) return;
+
+    try {
+      await unsaveExcursion(accessToken, excursionId);
+    } catch (error) {
+      console.error('Error un-saving excursion:', error);
+    }
+  };
+
   return {
     filters,
     excursions,
@@ -94,5 +146,8 @@ export function useExcursions() {
     fetchExcursions,
     updateQueryParams,
     fetchUserExcursions,
+    fetchSavedExcursions,
+    addToSaved,
+    removeFromSaved,
   };
 }

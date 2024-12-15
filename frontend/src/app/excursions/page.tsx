@@ -6,8 +6,11 @@ import {
 } from '@/components/excursionCards';
 import { useExcursions } from '@/hooks/useExcursions';
 import React, { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { ExcursionType } from '@/types/excursion';
 
 export default function ExcursionsPage() {
+  const { data: session, status } = useSession();
   const {
     filters,
     excursions,
@@ -16,11 +19,13 @@ export default function ExcursionsPage() {
     totalPages,
     fetchExcursions,
     updateQueryParams,
+    addToSaved,
+    removeFromSaved,
   } = useExcursions();
 
   useEffect(() => {
     fetchExcursions();
-  }, []);
+  }, [status]);
 
   const handleSearchClick = () => {
     updateQueryParams({ page: 1 });
@@ -33,6 +38,20 @@ export default function ExcursionsPage() {
   ) => {
     updateQueryParams({ page });
     fetchExcursions({ page });
+  };
+
+  const handleFavoriteClick = (
+    e: React.MouseEvent,
+    excursion: ExcursionType
+  ) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (excursion.isFavorite) {
+      removeFromSaved(session?.accessToken, excursion.id);
+    } else {
+      addToSaved(session?.accessToken, excursion.id);
+    }
+    fetchExcursions();
   };
 
   return (
@@ -83,7 +102,7 @@ export default function ExcursionsPage() {
               }
               valueLabelDisplay="auto"
               min={0}
-              max={5000}
+              max={1000}
               sx={{
                 '& .MuiSlider-thumb': {
                   bgcolor: 'primary.main',
@@ -109,7 +128,11 @@ export default function ExcursionsPage() {
           <p className="text-red-500">{error}</p>
         ) : excursions.length > 0 ? (
           excursions.map((excursion) => (
-            <ExcursionCard key={excursion.id} excursion={excursion} />
+            <ExcursionCard
+              key={excursion.id}
+              excursion={excursion}
+              onSave={handleFavoriteClick}
+            />
           ))
         ) : (
           <p>No excursions found.</p>
