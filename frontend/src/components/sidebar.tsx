@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import HomeIcon from '@mui/icons-material/Home';
 import MapIcon from '@mui/icons-material/Map';
@@ -15,6 +15,7 @@ import { useSession } from 'next-auth/react';
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { data: session, status } = useSession();
   const role = session?.user?.role;
   const { user, loading, error } = useUser();
@@ -30,6 +31,10 @@ export default function Sidebar() {
       setIsButtonVisible(false);
     }
   };
+
+  if (role === 'Banned') {
+    return null;
+  }
 
   return (
     <>
@@ -102,7 +107,7 @@ export default function Sidebar() {
                 <li>
                   <Link
                     href="/auth?mode=login"
-                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/auth' ? 'bg-gray-100' : ''}`}
+                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/auth' && searchParams.get('mode') === 'login' ? 'bg-gray-100' : ''}`}
                   >
                     <LoginIcon /> Вхід
                   </Link>
@@ -110,7 +115,7 @@ export default function Sidebar() {
                 <li>
                   <Link
                     href="/auth?mode=register"
-                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/auth' ? 'bg-gray-100' : ''}`}
+                    className={`flex items-center gap-4 px-6 py-2 text-lg text-black hover:bg-gray-100 rounded-md ${pathname === '/auth' && searchParams.get('mode') === 'register' ? 'bg-gray-100' : ''}`}
                   >
                     <HowToRegIcon /> Реєстрація
                   </Link>
