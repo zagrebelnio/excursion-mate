@@ -44,6 +44,14 @@ namespace backend.Repositories
                 throw new InvalidOperationException("User is already registered for this excursion.");
             }
 
+            var excursion = await excursionDbContext.Excursions.FindAsync(excursionId);
+            if (excursion == null) throw new InvalidOperationException("Excursion not found.");
+
+            if (excursion.CurrentParticipants >= excursion.MaxParticipants)
+            {
+                throw new InvalidOperationException("No available spots for this excursions.");
+            }
+
             var excursionUser = new ExcursionUser
             {
                 ExcursionId = excursionId,
@@ -52,6 +60,8 @@ namespace backend.Repositories
             };
 
             await excursionDbContext.ExcursionUsers.AddAsync(excursionUser);
+            excursion.CurrentParticipants += 1;
+            excursionDbContext.Excursions.Update(excursion);
             await excursionDbContext.SaveChangesAsync();
         }
 
