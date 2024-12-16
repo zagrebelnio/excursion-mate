@@ -62,7 +62,7 @@ export default function ExcursionsPage() {
   const handleReactClick = async (
     e: React.MouseEvent,
     excursionId: number,
-    reaction: 'like' | 'dislike'
+    reaction: 'Like' | 'Dislike'
   ) => {
     e.stopPropagation();
     e.preventDefault();

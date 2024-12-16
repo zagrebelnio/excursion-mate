@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useExcursions } from '@/hooks/useExcursions';
 import {
   Table,
@@ -20,6 +20,7 @@ import {
 import { useSearchParams } from 'next/navigation';
 import { deleteExcursion } from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
+import ConfirmationModal from '@/components/ConfirmationModal';
 
 export default function AdminExcursionsPage() {
   const {
@@ -33,6 +34,9 @@ export default function AdminExcursionsPage() {
   } = useExcursions();
   const searchParams = useSearchParams();
   const { data: session } = useSession();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedExcursionId, setSelectedExcursionId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!searchParams.get('pageSize')) {
@@ -58,20 +62,29 @@ export default function AdminExcursionsPage() {
     fetchExcursions({ pageSize: parseInt(event.target.value, 10), page: 1 });
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async () => {
+    if (!selectedExcursionId) return;
+
     try {
       await deleteExcursion(
         session?.accessToken as string,
-        Number(id) as number
+        Number(selectedExcursionId)
       );
+      setIsModalOpen(false);
       fetchExcursions();
     } catch (error) {
       console.error('Error deleting excursion:', error);
     }
   };
 
-  const handleEdit = (id: number) => {
-    console.log('Editing excursion with ID:', id);
+  const openModal = (id: number) => {
+    setSelectedExcursionId(id);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedExcursionId(null);
   };
 
   return (
@@ -172,7 +185,7 @@ export default function AdminExcursionsPage() {
                       </Link>
                       <Button
                         color="error"
-                        onClick={() => handleDelete(excursion.id)}
+                        onClick={() => openModal(excursion.id)}
                       >
                         Delete
                       </Button>
@@ -201,6 +214,14 @@ export default function AdminExcursionsPage() {
           />
         </>
       )}
+
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onConfirm={handleDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this excursion? This action cannot be undone."
+      />
     </div>
   );
 }

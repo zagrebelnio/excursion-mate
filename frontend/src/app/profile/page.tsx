@@ -20,7 +20,7 @@ export default function ProfilePage() {
             alt="Profile"
             width={160}
             height={160}
-            className="object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
 
