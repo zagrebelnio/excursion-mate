@@ -18,6 +18,15 @@ namespace backend.Repositories
             return await excursionDbContext.Excursions.Include(e => e.ExcursionUsers).FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        public async Task<List<Excursion>> GetUserRegisteredExcursionsAsync(string userId)
+        {
+            return await excursionDbContext.ExcursionUsers
+                .Where(eu  => eu.UserId == userId)
+                .Include(eu => eu.Excursion)
+                .Select(eu => eu.Excursion)
+                .ToListAsync();
+        }
+
         public async Task<int> GetUserRegisteredExcursionsCountAsync(string userId)
         {
             return await excursionDbContext.ExcursionUsers.Where(eu => eu.UserId == userId).CountAsync();

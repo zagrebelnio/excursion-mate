@@ -38,5 +38,22 @@ namespace backend.Controllers
                 return Conflict(ex.Message);
             }
         }
+
+        [HttpGet("user-registrations")]
+        public async Task<IActionResult> GetUserRegisteredExcursions()
+        {
+            var userId = GetUserId();
+
+            try
+            {
+                var excursions = await bookingService.GetUserRegisteredExcursionsAsync(userId);
+                if (excursions == null || excursions.Count == 0) return NotFound("No excursions found.");
+                return Ok(excursions);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
