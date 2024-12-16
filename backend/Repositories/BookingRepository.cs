@@ -54,5 +54,22 @@ namespace backend.Repositories
             await excursionDbContext.ExcursionUsers.AddAsync(excursionUser);
             await excursionDbContext.SaveChangesAsync();
         }
+
+        public async Task<bool> UnregisterUserFromExcursionAsync(int excursionId, string userId)
+        {
+            var excursionUser = await excursionDbContext.ExcursionUsers.FirstOrDefaultAsync(eu => eu.ExcursionId == excursionId && eu.UserId == userId);
+            if (excursionUser == null) return false;
+            excursionDbContext.ExcursionUsers.Remove(excursionUser);
+
+            var excursion = await excursionDbContext.Excursions.FindAsync(excursionId);
+            if (excursion != null)
+            {
+                excursion.CurrentParticipants -= 1;
+                excursionDbContext.Excursions.Update(excursion);
+            }
+
+            await excursionDbContext.SaveChangesAsync();
+            return true;
+        }
     }
 }

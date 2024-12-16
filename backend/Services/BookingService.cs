@@ -47,5 +47,12 @@ namespace backend.Services
 
             return true;
         }
+
+        public async Task<bool> UnregisterUserFromExcursionAsync(int excursionId, string userId)
+        {
+            var success = await bookingRepository.UnregisterUserFromExcursionAsync(excursionId, userId);
+            if (!success) throw new KeyNotFoundException("User is not registered for this excursion or excursion does not exist.");
+            return true;
+        }
     }
 }

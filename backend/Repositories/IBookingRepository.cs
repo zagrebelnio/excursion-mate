@@ -9,5 +9,6 @@ namespace backend.Repositories
         Task RegisterUserForExcursionAsync(int excursionId, string userId);
         Task<int> GetUserRegisteredExcursionsCountAsync(string userId);
         Task<List<Excursion>> GetUserRegisteredExcursionsAsync(string userId);
+        Task<bool> UnregisterUserFromExcursionAsync(int excursionId, string userId);
     }
 }

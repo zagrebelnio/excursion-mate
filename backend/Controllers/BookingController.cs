@@ -55,5 +55,22 @@ namespace backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("unregister/{excursionId:int}")]
+        public async Task<IActionResult> UnregisterFromExcursion(int excursionId)
+        {
+            var userId = GetUserId();
+            
+            try
+            {
+                var result = await bookingService.UnregisterUserFromExcursionAsync(excursionId, userId);
+                if (result) return Ok("Successfully unregistered from the excursion");
+                else return NotFound("User is not registered for this excursion.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
