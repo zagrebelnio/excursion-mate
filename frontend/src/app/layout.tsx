@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
 import Sidebar from '@/components/sidebar';
+import Footer from '@/components/footer';
 import { Providers } from './providers';
 import RedirectBanned from '@/components/redirectBanned';
 
@@ -29,6 +30,7 @@ export default function RootLayout({
             <Sidebar />
             <div className="flex-1">{children}</div>
           </main>
+          <Footer />
         </Providers>
       </body>
     </html>

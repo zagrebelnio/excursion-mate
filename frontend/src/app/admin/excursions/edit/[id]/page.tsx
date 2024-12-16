@@ -98,16 +98,12 @@ export default function NewExcursionPage() {
               <div className="flex items-center gap-2">
                 <Group />
                 <span>
-                  {excursion.currentParticipants}{' '}
-                  Current Participants
+                  {excursion.currentParticipants} Current Participants
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Group />
-                <span>
-                  {excursion.maxParticipants}{' '}
-                  Max Participants
-                </span>
+                <span>{excursion.maxParticipants} Max Participants</span>
               </div>
             </div>
 

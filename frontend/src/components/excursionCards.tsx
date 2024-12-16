@@ -8,8 +8,13 @@ import { Skeleton, Box } from '@mui/material';
 
 export const ExcursionCard: React.FC<{
   excursion: ExcursionType;
-  onSave: () => void;
-}> = ({ excursion, onSave }: { excursion: ExcursionType }) => {
+  onSave: (e: React.MouseEvent, excursion: ExcursionType) => void;
+  onReact: (
+    e: React.MouseEvent,
+    excursionId: number,
+    reaction: 'Like' | 'Dislike'
+  ) => void;
+}> = ({ excursion, onSave, onReact }) => {
   return (
     <div
       key={excursion.id}
@@ -37,11 +42,17 @@ export const ExcursionCard: React.FC<{
             </p>
             <p className="text-gray-500">Price: ₴{excursion.price}</p>
             <div className="flex items-center mt-2 gap-4">
-              <button className="flex items-center gap-1 hover:text-blue-500">
+              <button
+                onClick={(e) => onReact(e, excursion.id, 'Like')}
+                className={`flex items-center gap-1 hover:text-red-500 ${excursion.reaction === 'Like' ? 'text-green-500' : ''}`}
+              >
                 <ThumbUp fontSize="small" />
                 <span className="text-gray-500">{excursion.likes ?? 0}</span>
               </button>
-              <button className="flex items-center gap-1 hover:text-red-500">
+              <button
+                onClick={(e) => onReact(e, excursion.id, 'Dislike')}
+                className={`flex items-center gap-1 hover:text-red-500 ${excursion.reaction === 'Dislike' ? 'text-green-500' : ''}`}
+              >
                 <ThumbDown fontSize="small" />
                 <span className="text-gray-500">{excursion.dislikes ?? 0}</span>
               </button>

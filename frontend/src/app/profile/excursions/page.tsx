@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useExcursions } from '@/hooks/useExcursions';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   WideExcursionCard,
   WideExcursionCardSkeleton,
@@ -11,25 +11,43 @@ import { Edit, Delete } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { deleteExcursion } from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
+import ConfirmationModal from '@/components/confirmationModal';
 
 export default function MyExcursionsPage() {
   const { data: session } = useSession();
   const { excursions, loading, error, fetchUserExcursions } = useExcursions();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedExcursionId, setSelectedExcursionId] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     fetchUserExcursions();
   }, []);
 
-  const handleDelete = async (excursionId: string) => {
+  const handleDelete = async () => {
+    if (!selectedExcursionId) return;
+
     try {
       await deleteExcursion(
         session?.accessToken as string,
-        Number(excursionId) as number
+        selectedExcursionId
       );
+      setIsModalOpen(false);
       fetchUserExcursions();
     } catch (error) {
       console.error('Error deleting excursion:', error);
     }
+  };
+
+  const openModal = (excursionId: number) => {
+    setSelectedExcursionId(excursionId);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedExcursionId(null);
   };
 
   return (
@@ -80,7 +98,7 @@ export default function MyExcursionsPage() {
                   </Link>
                   <IconButton
                     color="error"
-                    onClick={() => handleDelete(excursion.id)}
+                    onClick={() => openModal(excursion.id)}
                   >
                     <Delete />
                   </IconButton>
@@ -94,6 +112,14 @@ export default function MyExcursionsPage() {
           </div>
         )}
       </div>
+
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onConfirm={handleDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this excursion? This action cannot be undone."
+      />
     </div>
   );
 }

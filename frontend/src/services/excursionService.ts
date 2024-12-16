@@ -1,17 +1,23 @@
 import axiosInstance from '@/lib/axios/axiosInstance';
 
-export async function getExcursions(filters: {
-  title?: string;
-  city?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  date?: string;
-  page?: number;
-  pageSize?: number;
-}) {
+export async function getExcursions(
+  accessToken: string | null = null,
+  filters: {
+    title?: string;
+    city?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    date?: string;
+    page?: number;
+    pageSize?: number;
+  }
+) {
   try {
     const response = await axiosInstance.get('/api/Excursions', {
       params: filters,
+      headers: accessToken
+        ? { Authorization: `Bearer ${accessToken}` }
+        : undefined,
     });
     return response.data;
   } catch (error) {
@@ -70,12 +76,15 @@ export async function deleteExcursion(
   }
 }
 
-export async function getExcursion(accessToken: string, excursionId: number) {
+export async function getExcursion(
+  accessToken: string | null,
+  excursionId: number
+) {
   try {
     const response = await axiosInstance.get(`/api/Excursions/${excursionId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: accessToken
+        ? { Authorization: `Bearer ${accessToken}` }
+        : undefined,
     });
     return response.data;
   } catch (error) {
@@ -154,6 +163,31 @@ export async function unsaveExcursion(
     return response.data;
   } catch (error) {
     console.error('Error un-saving excursion:', error);
+    throw error;
+  }
+}
+
+export async function addReaction(
+  accessToken: string,
+  excursionId: number,
+  reaction: 'Like' | 'Dislike'
+) {
+  try {
+    const response = await axiosInstance.post(
+      '/api/Reaction/react',
+      {
+        excursionId,
+        reaction,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error adding reaction:', error);
     throw error;
   }
 }

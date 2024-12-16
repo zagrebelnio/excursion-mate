@@ -6,6 +6,7 @@ import {
   getSavedExcursions,
   saveExcursion,
   unsaveExcursion,
+  addReaction,
 } from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
 
@@ -52,7 +53,10 @@ export function useExcursions() {
     setError(null);
 
     try {
-      const data = await getExcursions(queryFilters);
+      const data = await getExcursions(
+        session?.accessToken || null,
+        queryFilters
+      );
       setExcursions(data.items || []);
       setTotalPages(data.totalPages || 1);
       setTotalItems(data.totalItems || 0);
@@ -131,6 +135,20 @@ export function useExcursions() {
     }
   };
 
+  const reactToExcursion = async (
+    accessToken: string,
+    excursionId: number,
+    reaction: 'Like' | 'Dislike'
+  ) => {
+    if (!session?.accessToken) return;
+
+    try {
+      await addReaction(accessToken, excursionId, reaction);
+    } catch (error) {
+      console.error(`Error reacting to excursion (${reaction}):`, error);
+    }
+  };
+
   return {
     filters,
     excursions,
@@ -144,5 +162,6 @@ export function useExcursions() {
     fetchSavedExcursions,
     addToSaved,
     removeFromSaved,
+    reactToExcursion,
   };
 }

@@ -21,11 +21,12 @@ export default function ExcursionsPage() {
     updateQueryParams,
     addToSaved,
     removeFromSaved,
+    reactToExcursion,
   } = useExcursions();
 
   useEffect(() => {
     fetchExcursions();
-  }, []);
+  }, [session?.accessToken]);
 
   const handleSearchClick = () => {
     updateQueryParams({ page: 1 });
@@ -40,18 +41,38 @@ export default function ExcursionsPage() {
     fetchExcursions({ page });
   };
 
-  const handleFavoriteClick = (
+  const handleFavoriteClick = async (
     e: React.MouseEvent,
     excursion: ExcursionType
   ) => {
     e.stopPropagation();
     e.preventDefault();
-    if (excursion.isFavorite) {
-      removeFromSaved(session?.accessToken, excursion.id);
-    } else {
-      addToSaved(session?.accessToken, excursion.id);
+    try {
+      if (excursion.isFavorite) {
+        removeFromSaved(session?.accessToken, excursion.id);
+      } else {
+        addToSaved(session?.accessToken, excursion.id);
+      }
+      fetchExcursions();
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
     }
-    fetchExcursions();
+  };
+
+  const handleReactClick = async (
+    e: React.MouseEvent,
+    excursionId: number,
+    reaction: 'Like' | 'Dislike'
+  ) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    try {
+      await reactToExcursion(session?.accessToken, excursionId, reaction);
+      await fetchExcursions();
+    } catch (error) {
+      console.error('Error reacting to excursion:', error);
+    }
   };
 
   return (
@@ -132,6 +153,7 @@ export default function ExcursionsPage() {
               key={excursion.id}
               excursion={excursion}
               onSave={handleFavoriteClick}
+              onReact={handleReactClick}
             />
           ))
         ) : (
