@@ -22,13 +22,14 @@ export default function ExcursionPage() {
   const token = session?.accessToken;
   const params = useParams();
 
-  const { addToSaved, removeFromSaved } = useExcursions();
+  const { addToSaved, removeFromSaved, reactToExcursion } = useExcursions();
   const [excursion, setExcursion] = useState<ExcursionType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [likes, setLikes] = useState(0);
-  const [dislikes, setDislikes] = useState(0);
+  const [likes, setLikes] = useState<number>(0);
+  const [dislikes, setDislikes] = useState<number>(0);
+  const [reaction, setReaction] = useState<null | 'Like' | 'Dislike'>(null);
 
   useEffect(() => {
     async function fetchExcursion() {
@@ -46,6 +47,7 @@ export default function ExcursionPage() {
         setIsFavorite(excursionData.isFavorite);
         setLikes(excursionData.likes);
         setDislikes(excursionData.dislikes);
+        setReaction(excursionData.reaction);
       } catch (err) {
         console.error('Error fetching excursion:', err);
         setError('Failed to fetch excursion details.');
@@ -57,13 +59,59 @@ export default function ExcursionPage() {
     fetchExcursion();
   }, [params.id, token]);
 
-  const handleFavoriteToggle = () => {
-    if (isFavorite) {
-      removeFromSaved(token as string, excursion?.id as number);
-    } else {
-      addToSaved(token as string, excursion?.id as number);
+  const handleFavoriteToggle = async () => {
+    try {
+      if (isFavorite) {
+        await removeFromSaved(token as string, excursion?.id as number);
+      } else {
+        await addToSaved(token as string, excursion?.id as number);
+      }
+      setIsFavorite((prev) => !prev);
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
     }
-    setIsFavorite((prev) => !prev);
+  };
+
+  const handleLike = async () => {
+    try {
+      await reactToExcursion(token as string, excursion?.id as number, 'Like');
+      if (reaction === 'Like') {
+        setReaction(null);
+        setLikes((prev) => prev - 1);
+      } else if (reaction === 'Dislike') {
+        setReaction('Like');
+        setLikes((prev) => prev + 1);
+        setDislikes((prev) => prev - 1);
+      } else {
+        setReaction('Like');
+        setLikes((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error('Error liking excursion:', error);
+    }
+  };
+
+  const handleDislike = async () => {
+    try {
+      await reactToExcursion(
+        token as string,
+        excursion?.id as number,
+        'Dislike'
+      );
+      if (reaction === 'Dislike') {
+        setReaction(null);
+        setDislikes((prev) => prev - 1);
+      } else if (reaction === 'Like') {
+        setReaction('Dislike');
+        setDislikes((prev) => prev + 1);
+        setLikes((prev) => prev - 1);
+      } else {
+        setReaction('Dislike');
+        setDislikes((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error('Error disliking excursion:', error);
+    }
   };
 
   if (loading) return <p>Loading...</p>;
@@ -114,12 +162,22 @@ export default function ExcursionPage() {
         <p className="text-gray-700 mb-4">{excursion.description}</p>
 
         <div className="flex items-center gap-4">
-          <button className="flex items-center gap-1 text-gray-700 hover:text-blue-500">
+          <button
+            onClick={handleLike}
+            className={`flex items-center gap-1 ${
+              reaction === 'Like' ? 'text-green-500' : 'text-gray-700'
+            } hover:text-blue-500`}
+          >
             <ThumbUp fontSize="small" />
             <span>{likes ?? 0}</span>
           </button>
 
-          <button className="flex items-center gap-1 text-gray-700 hover:text-red-500">
+          <button
+            onClick={handleDislike}
+            className={`flex items-center gap-1 ${
+              reaction === 'Dislike' ? 'text-green-500' : 'text-gray-700'
+            } hover:text-red-500`}
+          >
             <ThumbDown fontSize="small" />
             <span>{dislikes ?? 0}</span>
           </button>
