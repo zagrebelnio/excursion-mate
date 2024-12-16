@@ -6,6 +6,6 @@ namespace backend.Services
     {
         Task<bool> RegisterUserForExcursionAsync(int excursionId, string userId);
         Task<List<ExcursionDTO>> GetUserRegisteredExcursionsAsync(string userId);
-        Task<bool> UnregisterUserFromExcursionAsync(int excursionId, string userId)
+        Task<bool> UnregisterUserFromExcursionAsync(int excursionId, string userId);
     }
 }
