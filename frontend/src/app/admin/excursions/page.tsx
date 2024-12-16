@@ -20,7 +20,7 @@ import {
 import { useSearchParams } from 'next/navigation';
 import { deleteExcursion } from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
-import ConfirmationModal from '@/components/ConfirmationModal';
+import ConfirmationModal from '@/components/confirmationModal';
 
 export default function AdminExcursionsPage() {
   const {

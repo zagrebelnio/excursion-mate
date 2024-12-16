@@ -19,7 +19,7 @@ import { useExcursions } from '@/hooks/useExcursions';
 
 export default function ExcursionPage() {
   const { data: session } = useSession();
-  const token = session?.accessToken;
+  const token = session?.accessToken ?? null;
   const params = useParams();
 
   const { addToSaved, removeFromSaved, reactToExcursion } = useExcursions();
@@ -33,14 +33,12 @@ export default function ExcursionPage() {
 
   useEffect(() => {
     async function fetchExcursion() {
-      if (!session?.accessToken) return;
-
       setLoading(true);
       setError(null);
 
       try {
         const excursionData = await getExcursion(
-          session?.accessToken,
+          token,
           Number(params.id)
         );
         setExcursion(excursionData);
@@ -74,6 +72,7 @@ export default function ExcursionPage() {
 
   const handleLike = async () => {
     try {
+      console.log(token);
       await reactToExcursion(token as string, excursion?.id as number, 'Like');
       if (reaction === 'Like') {
         setReaction(null);
@@ -163,7 +162,7 @@ export default function ExcursionPage() {
 
         <div className="flex items-center gap-4">
           <button
-            onClick={handleLike}
+            onClick={token ? handleLike : undefined}
             className={`flex items-center gap-1 ${
               reaction === 'Like' ? 'text-green-500' : 'text-gray-700'
             } hover:text-blue-500`}
@@ -173,7 +172,7 @@ export default function ExcursionPage() {
           </button>
 
           <button
-            onClick={handleDislike}
+            onClick={token ? handleDislike : undefined}
             className={`flex items-center gap-1 ${
               reaction === 'Dislike' ? 'text-green-500' : 'text-gray-700'
             } hover:text-red-500`}
@@ -183,7 +182,7 @@ export default function ExcursionPage() {
           </button>
 
           <button
-            onClick={handleFavoriteToggle}
+            onClick={token ? handleFavoriteToggle : undefined}
             className="flex items-center gap-1 text-gray-700 hover:text-green-500"
           >
             {isFavorite ? (
