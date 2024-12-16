@@ -1,4 +1,5 @@
 ﻿using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
@@ -18,7 +19,12 @@ namespace backend.Controllers
 
         private string? GetUserId() => HttpContext.Items["UserId"]?.ToString();
 
+
+        /// <summary>
+        /// Registers the authenticated user for the specified excursion.
+        /// </summary>
         [HttpPost("{id:int}/register")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> RegisterForExcursion(int id)
         {
             var userId = GetUserId();
@@ -39,7 +45,12 @@ namespace backend.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Retrieves all excursions that the authenticated user is registered for.
+        /// </summary>
         [HttpGet("user-registrations")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetUserRegisteredExcursions()
         {
             var userId = GetUserId();
@@ -56,7 +67,12 @@ namespace backend.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Unregisters the authenticated user from a specific excursion.
+        /// </summary>
         [HttpDelete("unregister/{excursionId:int}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> UnregisterFromExcursion(int excursionId)
         {
             var userId = GetUserId();
