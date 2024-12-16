@@ -1,6 +1,7 @@
 ﻿using backend.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 
 namespace backend.Controllers
 {
@@ -21,9 +22,21 @@ namespace backend.Controllers
         public async Task<IActionResult> RegisterForExcursion(int id)
         {
             var userId = GetUserId();
-            var success = await bookingService.RegisterUserForExcursionAsync(id, userId);
-            if (success) return Ok(new { message = "You have been successfully registered for the excursion." });
-            return BadRequest("Unable to register for excursion");
+            try
+            {
+                var success = await bookingService.RegisterUserForExcursionAsync(id, userId);
+                if (success) return Ok(new { message = "You have been successfully registered for the excursion." });
+                return BadRequest("Unable to register for excursion");
+            }
+            catch (KeyNotFoundException)
+            {
+
+                return NotFound("Excursion not found.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
         }
     }
 }
