@@ -102,7 +102,7 @@ export default function AdminUsersPage() {
   };
 
   return (
-    <div className="py-6 px-20">
+    <div className="py-6 px-20 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold mb-4">User Management</h2>
         <Link
@@ -193,7 +193,7 @@ export default function AdminUsersPage() {
 
       <TablePagination
         component="div"
-        count={totalItems} // Replace with actual count from API
+        count={totalItems}
         page={filters.page}
         onPageChange={handlePageChange}
         rowsPerPage={filters.pageSize}

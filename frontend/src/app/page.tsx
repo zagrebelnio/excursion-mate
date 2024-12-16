@@ -31,7 +31,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black font-poppins pb-10">
+    <div className="min-h-screen bg-black font-poppins pb-2">
       <div
         className="h-screen flex items-center justify-center bg-cover bg-center relative"
         style={{ backgroundImage: "url('/backgrounds/image 2.jpg')" }}

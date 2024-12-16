@@ -10,7 +10,8 @@ export default function Footer() {
         <div className="text-center md:text-left mb-6 md:mb-0">
           <h1 className="text-2xl font-bold text-white">ExcursionMate</h1>
           <p className="text-sm mt-2 text-gray-400">
-            Explore amazing places with ExcursionMate, your ultimate travel companion.
+            Explore amazing places with ExcursionMate, your ultimate travel
+            companion.
           </p>
         </div>
 

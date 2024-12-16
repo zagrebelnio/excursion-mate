@@ -90,7 +90,7 @@ export default function AdminExcursionsPage() {
   };
 
   return (
-    <div className="py-6 px-20">
+    <div className="py-6 px-20 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">Excursion Management</h2>
         <Link href="/admin" className="block text-blue-600 hover:underline">
