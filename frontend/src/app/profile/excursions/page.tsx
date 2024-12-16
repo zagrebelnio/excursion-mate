@@ -17,7 +17,9 @@ export default function MyExcursionsPage() {
   const { data: session } = useSession();
   const { excursions, loading, error, fetchUserExcursions } = useExcursions();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedExcursionId, setSelectedExcursionId] = useState<number | null>(null);
+  const [selectedExcursionId, setSelectedExcursionId] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     fetchUserExcursions();
@@ -27,7 +29,10 @@ export default function MyExcursionsPage() {
     if (!selectedExcursionId) return;
 
     try {
-      await deleteExcursion(session?.accessToken as string, selectedExcursionId);
+      await deleteExcursion(
+        session?.accessToken as string,
+        selectedExcursionId
+      );
       setIsModalOpen(false);
       fetchUserExcursions();
     } catch (error) {

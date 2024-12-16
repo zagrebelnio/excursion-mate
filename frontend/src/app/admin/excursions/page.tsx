@@ -36,7 +36,9 @@ export default function AdminExcursionsPage() {
   const { data: session } = useSession();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedExcursionId, setSelectedExcursionId] = useState<number | null>(null);
+  const [selectedExcursionId, setSelectedExcursionId] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     if (!searchParams.get('pageSize')) {

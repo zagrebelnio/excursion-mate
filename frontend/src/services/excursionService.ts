@@ -76,10 +76,15 @@ export async function deleteExcursion(
   }
 }
 
-export async function getExcursion(accessToken: string | null, excursionId: number) {
+export async function getExcursion(
+  accessToken: string | null,
+  excursionId: number
+) {
   try {
     const response = await axiosInstance.get(`/api/Excursions/${excursionId}`, {
-      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
+      headers: accessToken
+        ? { Authorization: `Bearer ${accessToken}` }
+        : undefined,
     });
     return response.data;
   } catch (error) {

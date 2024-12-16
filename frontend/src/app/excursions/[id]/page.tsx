@@ -16,6 +16,7 @@ import {
   TurnedInNot,
 } from '@mui/icons-material';
 import { useExcursions } from '@/hooks/useExcursions';
+import ExcursionPageSkeleton from './skeleton';
 
 export default function ExcursionPage() {
   const { data: session } = useSession();
@@ -37,10 +38,7 @@ export default function ExcursionPage() {
       setError(null);
 
       try {
-        const excursionData = await getExcursion(
-          token,
-          Number(params.id)
-        );
+        const excursionData = await getExcursion(token, Number(params.id));
         setExcursion(excursionData);
         setIsFavorite(excursionData.isFavorite);
         setLikes(excursionData.likes);
@@ -113,7 +111,7 @@ export default function ExcursionPage() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <ExcursionPageSkeleton />;
 
   if (error) return <p>{error}</p>;
 
