@@ -12,13 +12,11 @@ namespace backend.Repositories
     {
 
         private readonly ExcursionDbContext excursionDbContext;
-        private readonly ITokenService tokenService;
         private readonly IMapper mapper;
 
-        public SQLExcursionRepository(ExcursionDbContext excursionDbContext, ITokenService tokenService, IMapper mapper)
+        public SQLExcursionRepository(ExcursionDbContext excursionDbContext, IMapper mapper)
         {
             this.excursionDbContext = excursionDbContext;
-            this.tokenService = tokenService;
             this.mapper = mapper;
         }
 
