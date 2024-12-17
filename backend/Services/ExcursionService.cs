@@ -53,6 +53,8 @@ namespace backend.Services
                 excursionDTO.Photo = Convert.ToBase64String(excursion.Photo);
             }
 
+            excursionDTO.CanRegister = excursion.CurrentParticipants < excursion.MaxParticipants;
+
             if (!string.IsNullOrEmpty(userId))
             {
                 excursionDTO.IsFavorite = await favoriteExcursionRepository.IsFavoriteAsync(userId, id);
