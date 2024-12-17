@@ -19,5 +19,6 @@ namespace backend.Models.DTO
         public bool IsFavorite { get; set; }
         public string? Reaction { get; set; }
         public bool CanRegister { get; set; }
+        public WeatherForecastDTO Weather { get; set; }
     }
 }

@@ -51,6 +51,9 @@ namespace backend.Mappings
             CreateMap<User, UserWithRoleDTO>().ForMember(dest => dest.Role, opt => opt.Ignore());
             CreateMap<ExcursionUser, ExcursionUserDTO>().ReverseMap();
 
+            CreateMap<WeatherForecastDTO, ExcursionDetailsDTO>()
+            .ForMember(dest => dest.Weather, opt => opt.MapFrom(src => src));
+
         }
 
         private byte[] ConvertFileToByteArray(IFormFile file)

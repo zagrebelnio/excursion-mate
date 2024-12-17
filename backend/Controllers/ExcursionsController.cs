@@ -20,12 +20,14 @@ namespace backend.Controllers
         private readonly IExcursionRepository excursionRepository;
         private readonly IMapper mapper;
         private readonly IExcursionService excursionService;
+        private readonly IWeatherService weatherService;
 
-        public ExcursionsController(IExcursionRepository excursionRepository, IMapper mapper, IExcursionService excursionService)
+        public ExcursionsController(IExcursionRepository excursionRepository, IMapper mapper, IExcursionService excursionService, IWeatherService weatherService)
         {
             this.excursionRepository = excursionRepository;
             this.mapper = mapper;
             this.excursionService = excursionService;
+            this.weatherService = weatherService;
         }
         private string? GetUserId() => HttpContext.Items["UserId"]?.ToString();
 
@@ -42,7 +44,7 @@ namespace backend.Controllers
 
 
         /// <summary>
-        /// Retrieves details of a specific excursion by ID
+        /// Retrieves details of a specific excursion with weather forecast by ID
         /// </summary>
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Details(int id)
@@ -50,8 +52,11 @@ namespace backend.Controllers
             var userId = GetUserId();
             var excursionDTO = await excursionService.GetExcursionDetailsAsync(id, userId);
             if (excursionDTO == null) return NotFound();
-            return Ok(excursionDTO);
 
+            var weather = await weatherService.GetWeatherForecastAsync(excursionDTO.City, excursionDTO.Date);
+            if (weather != null) excursionDTO.Weather = weather;
+
+            return Ok(excursionDTO);
         }
 
         /// <summary>
