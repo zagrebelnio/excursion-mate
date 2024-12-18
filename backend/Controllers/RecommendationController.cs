@@ -21,6 +21,9 @@ namespace backend.Controllers
 
         private string? GetUserId() => HttpContext.Items["UserId"]?.ToString();
 
+        /// <summary>
+        /// Retrieves a recommendation for the authenticated user.
+        /// </summary>
         [HttpGet("recommendation")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetRecommendations()

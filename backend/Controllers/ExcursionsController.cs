@@ -124,6 +124,9 @@ namespace backend.Controllers
             return Ok(mapper.Map<List<ExcursionDTO>>(excursions));
         }
 
+        /// <summary>
+        /// Marks an excursion as viewed by the user
+        /// </summary>
         [HttpPost]
         [Route("viewed")]
         [Authorize(AuthenticationSchemes = "Bearer")]
