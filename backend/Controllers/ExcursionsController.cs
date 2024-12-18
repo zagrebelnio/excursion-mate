@@ -21,13 +21,15 @@ namespace backend.Controllers
         private readonly IMapper mapper;
         private readonly IExcursionService excursionService;
         private readonly IWeatherService weatherService;
+        private readonly IViewedExcursionService viewedExcursionService;
 
-        public ExcursionsController(IExcursionRepository excursionRepository, IMapper mapper, IExcursionService excursionService, IWeatherService weatherService)
+        public ExcursionsController(IExcursionRepository excursionRepository, IMapper mapper, IExcursionService excursionService, IWeatherService weatherService, IViewedExcursionService viewedExcursionService)
         {
             this.excursionRepository = excursionRepository;
             this.mapper = mapper;
             this.excursionService = excursionService;
             this.weatherService = weatherService;
+            this.viewedExcursionService = viewedExcursionService;
         }
         private string? GetUserId() => HttpContext.Items["UserId"]?.ToString();
 
@@ -120,6 +122,16 @@ namespace backend.Controllers
             var userId = GetUserId();
             var excursions = await excursionRepository.GetByUserIdAsync(userId);
             return Ok(mapper.Map<List<ExcursionDTO>>(excursions));
+        }
+
+        [HttpPost]
+        [Route("viewed")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> MarkAsViewed([FromBody] AddViewedExcursionDTO addViewedExcursionDTO)
+        {
+            var userId = GetUserId();
+            await viewedExcursionService.MarkAsViewedAsync(userId, addViewedExcursionDTO);
+            return Ok();
         }
     }
 }

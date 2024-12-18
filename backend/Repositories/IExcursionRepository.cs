@@ -13,5 +13,6 @@ namespace backend.Repositories
         Task<bool> IsUserOwnerAsync(int excursionId, string userId);
         Task<List<Excursion>> GetByUserIdAsync(string userId);
         Task<string?> GetReactionAsync(string userId, int excursionId);
+        Task AddViewedExcursionAsync(ViewedExcursion viewedExcursion);
     }
 }

@@ -165,5 +165,11 @@ namespace backend.Repositories
             await excursionDbContext.SaveChangesAsync();
             return excursion;
         }
+
+        public async Task AddViewedExcursionAsync(ViewedExcursion viewedExcursion)
+        {
+            await excursionDbContext.ViewedExcursions.AddAsync(viewedExcursion);
+            await excursionDbContext.SaveChangesAsync();
+        }
     }
 }

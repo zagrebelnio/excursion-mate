@@ -54,6 +54,12 @@ namespace backend.Mappings
             CreateMap<WeatherForecastDTO, ExcursionDetailsDTO>()
             .ForMember(dest => dest.Weather, opt => opt.MapFrom(src => src));
 
+            CreateMap<AddViewedExcursionDTO, ViewedExcursion>()
+                .ForMember(dest => dest.UserId, opt => opt.Ignore()) 
+                .ForMember(dest => dest.ViewedAt, opt => opt.Ignore()) 
+                .ForMember(dest => dest.User, opt => opt.Ignore()) 
+                .ForMember(dest => dest.Excursion, opt => opt.Ignore());
+
         }
 
         private byte[] ConvertFileToByteArray(IFormFile file)
