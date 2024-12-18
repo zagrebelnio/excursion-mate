@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { getExcursion } from '@/services/excursionService';
+import { getExcursion, bookExcursion, cancelBooking } from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
 import { ExcursionType } from '@/types/excursion';
 import { useParams } from 'next/navigation';
@@ -14,6 +14,7 @@ import {
   ThumbDown,
   TurnedIn,
   TurnedInNot,
+  EventNote,
 } from '@mui/icons-material';
 import { useExcursions } from '@/hooks/useExcursions';
 import ExcursionPageSkeleton from './skeleton';
@@ -111,6 +112,24 @@ export default function ExcursionPage() {
     }
   };
 
+  const handleBook = async () => {
+    try {
+      await bookExcursion(token as string, excursion?.id as number);
+      alert('Excursion booked successfully!');
+    } catch (error) {
+      console.error('Error booking excursion:', error);
+    }
+  };
+
+  const handleCancelBooking = async () => {
+    try {
+      await cancelBooking(token as string, excursion?.id as number);
+      alert('Booking canceled successfully!');
+    } catch (error) {
+      console.error('Error canceling booking:', error);
+    }
+  };
+
   if (loading) return <ExcursionPageSkeleton />;
 
   if (error) return <p>{error}</p>;
@@ -190,6 +209,24 @@ export default function ExcursionPage() {
             )}
             <span>{isFavorite ? 'Saved' : 'Save'}</span>
           </button>
+
+          {excursion.canRegister ? (
+            <button
+              onClick={token ? handleBook : undefined}
+              className="flex items-center gap-1 text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-4 py-2"
+            >
+              <EventNote fontSize="small" />
+              <span>Book Excursion</span>
+            </button>
+          ) : (
+            <button
+              onClick={token ? handleCancelBooking : undefined}
+              className="flex items-center gap-1 text-white bg-red-500 hover:bg-red-600 rounded-lg px-4 py-2"
+            >
+              <EventNote fontSize="small" />
+              <span>Cancel Booking</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

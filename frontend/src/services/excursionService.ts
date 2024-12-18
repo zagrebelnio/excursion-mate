@@ -211,3 +211,38 @@ export async function getBookedExcursions(accessToken: string) {
     throw error;
   }
 }
+
+export async function bookExcursion(accessToken: string, excursionId: number) {
+  try {
+    const response = await axiosInstance.post(
+      `/api/Booking/${excursionId}/register`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error booking excursion:', error);
+    throw error;
+  }
+}
+
+export async function cancelBooking(accessToken: string, excursionId: number) {
+  try {
+    const response = await axiosInstance.delete(
+      `/api/Booking/unregister/${excursionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error canceling booking:', error);
+    throw error;
+  }
+}

@@ -10,19 +10,19 @@ import { ExcursionType } from '@/types/excursion';
 import { Delete } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { useSession } from 'next-auth/react';
+import { bookExcursion, cancelBooking } from '@/services/excursionService';
 
 export default function BookingsPage() {
   const { data: session } = useSession();
   const { excursions, loading, error, fetchBookedExcursions } = useExcursions();
 
   const handleCancelBooking = async (excursionId: number) => {
-    // await removeFromSaved(session?.accessToken as string, excursionId);
-    // await fetchSavedExcursions();
+    await cancelBooking(session?.accessToken as string, excursionId);
+    await fetchBookedExcursions();
   };
 
   useEffect(() => {
     fetchBookedExcursions();
-    // fetchSavedExcursions();
   }, []);
 
   return (
@@ -58,7 +58,7 @@ export default function BookingsPage() {
                 </div>
                 <div className="flex flex-col justify-center items-center gap-2 p-4">
                   <IconButton
-                    onClick={() => handleRemoveFromSaved(excursion.id)}
+                    onClick={() => handleCancelBooking(excursion.id)}
                     color="error"
                   >
                     <Delete />
