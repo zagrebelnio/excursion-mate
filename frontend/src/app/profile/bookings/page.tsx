@@ -10,7 +10,7 @@ import { ExcursionType } from '@/types/excursion';
 import { Delete } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { useSession } from 'next-auth/react';
-import { bookExcursion, cancelBooking } from '@/services/excursionService';
+import { cancelBooking } from '@/services/excursionService';
 
 export default function BookingsPage() {
   const { data: session } = useSession();

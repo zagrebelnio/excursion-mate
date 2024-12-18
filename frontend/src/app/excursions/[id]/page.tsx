@@ -1,7 +1,11 @@
 'use client';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { getExcursion, bookExcursion, cancelBooking } from '@/services/excursionService';
+import {
+  getExcursion,
+  bookExcursion,
+  cancelBooking,
+} from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
 import { ExcursionType } from '@/types/excursion';
 import { useParams } from 'next/navigation';
@@ -15,6 +19,10 @@ import {
   TurnedIn,
   TurnedInNot,
   EventNote,
+  WbSunny,
+  Air,
+  Opacity,
+  Thermostat,
 } from '@mui/icons-material';
 import { useExcursions } from '@/hooks/useExcursions';
 import ExcursionPageSkeleton from './skeleton';
@@ -176,6 +184,31 @@ export default function ExcursionPage() {
         </div>
 
         <p className="text-gray-700 mb-4">{excursion.description}</p>
+
+        {excursion.weather && (
+          <div className="bg-blue-50 p-4 rounded-lg mb-4">
+            <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
+              <WbSunny /> Weather Information
+            </h2>
+            <div className="grid grid-cols-2 gap-4 text-gray-700">
+              <div className="flex items-center gap-2">
+                <Thermostat /> Temperature: {excursion.weather.temperature}°C
+              </div>
+              <div className="flex items-center gap-2">
+                <Air /> Wind Speed: {excursion.weather.windSpeed} km/h
+              </div>
+              <div className="flex items-center gap-2">
+                <Thermostat /> Feels Like: {excursion.weather.feelsLike}°C
+              </div>
+              <div className="flex items-center gap-2">
+                <Opacity /> Humidity: {excursion.weather.humidity}%
+              </div>
+              <div className="col-span-2">
+                <span className="font-semibold">Description:</span> {excursion.weather.weatherDescription}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center gap-4">
           <button
