@@ -167,5 +167,10 @@ namespace backend.Repositories
             await excursionDbContext.SaveChangesAsync();
             return excursion;
         }
+
+        public async Task<bool> IsUserRegisteredAsync(string userId, int excursionId)
+        {
+            return await excursionDbContext.ExcursionUsers.AnyAsync(eu => eu.UserId == userId && eu.ExcursionId == excursionId);
+        }
     }
 }
