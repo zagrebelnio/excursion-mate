@@ -191,3 +191,23 @@ export async function addReaction(
     throw error;
   }
 }
+
+export async function getBookedExcursions(accessToken: string) {
+  try {
+    const response = await axiosInstance.get(
+      '/api/Booking/user-registrations',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (error.status === 404) {
+      return [];
+    }
+    console.error('Error fetching booked excursions:', error);
+    throw error;
+  }
+}
