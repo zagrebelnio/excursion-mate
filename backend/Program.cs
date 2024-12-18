@@ -80,6 +80,8 @@ builder.Services.AddScoped<IWeatherService, WeatherService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IViewedExcursionService, ViewedExcursionService>();
+builder.Services.AddScoped<IRecomendationsRepository, RecommendationRepository>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
