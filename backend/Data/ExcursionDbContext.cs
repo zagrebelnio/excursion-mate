@@ -15,6 +15,7 @@ namespace backend.Data
         public DbSet<ExcursionUser> ExcursionUsers { get; set; }
         public DbSet<FavoriteExcursion> FavoriteExcursions { get; set; }
         public DbSet<ExcursionReaction> ExcursionReactions { get; set; }
+        public DbSet<ViewedExcursion> ViewedExcursions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -86,6 +87,21 @@ namespace backend.Data
             builder.Entity<Excursion>()
                 .Property(e => e.Dislikes)
                 .HasDefaultValue(0);
+
+            builder.Entity<ViewedExcursion>()
+                .HasKey(ve => new { ve.UserId, ve.ExcursionId });
+
+            builder.Entity<ViewedExcursion>()
+                .HasOne(ve => ve.User)
+                .WithMany(u => u.ViewedExcursions)
+                .HasForeignKey(ve => ve.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<ViewedExcursion>()
+                .HasOne(ve => ve.Excursion)
+                .WithMany(e => e.ViewedExcursions)
+                .HasForeignKey(ve => ve.ExcursionId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<IdentityRole>().HasData(RoleSeedData.GetRoles());
         }
