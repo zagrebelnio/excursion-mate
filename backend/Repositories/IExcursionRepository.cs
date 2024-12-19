@@ -15,5 +15,7 @@ namespace backend.Repositories
         Task<string?> GetReactionAsync(string userId, int excursionId);
         Task AddViewedExcursionAsync(ViewedExcursion viewedExcursion);
         Task<bool> IsUserRegisteredAsync(string userId, int excursionId);
+        Task<ViewedExcursion?> GetViewedExcursionAsync(string userId, int excursionId);
+        Task UpdateViewedExcursionAsync(ViewedExcursion viewedExcursion);
     }
 }
