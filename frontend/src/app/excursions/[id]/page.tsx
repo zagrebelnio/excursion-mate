@@ -70,7 +70,7 @@ export default function ExcursionPage() {
   }, [params.id, token]);
 
   useEffect(() => {
-    if (excursion) {
+    if (excursion && token) {
       postView(token as string, excursion.id);
     }
   }, [excursion, token]);
