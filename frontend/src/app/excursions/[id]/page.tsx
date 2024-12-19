@@ -67,10 +67,13 @@ export default function ExcursionPage() {
     }
 
     fetchExcursion();
-    if (token) {
-      postView(token as string, Number(params.id));
-    }
   }, [params.id, token]);
+
+  useEffect(() => {
+    if (excursion) {
+      postView(token as string, excursion.id);
+    }
+  }, [excursion, token]);
 
   const handleFavoriteToggle = async () => {
     try {
