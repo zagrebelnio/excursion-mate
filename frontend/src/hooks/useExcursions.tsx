@@ -7,6 +7,7 @@ import {
   saveExcursion,
   unsaveExcursion,
   addReaction,
+  getBookedExcursions,
 } from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
 
@@ -149,6 +150,22 @@ export function useExcursions() {
     }
   };
 
+  const fetchBookedExcursions = async () => {
+    if (!session?.accessToken) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await getBookedExcursions(session?.accessToken as string);
+      setExcursions(data || []);
+    } catch (error) {
+      console.error('Error fetching booked excursions:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     filters,
     excursions,
@@ -163,5 +180,6 @@ export function useExcursions() {
     addToSaved,
     removeFromSaved,
     reactToExcursion,
+    fetchBookedExcursions,
   };
 }

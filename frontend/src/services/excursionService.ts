@@ -192,6 +192,61 @@ export async function addReaction(
   }
 }
 
+export async function getBookedExcursions(accessToken: string) {
+  try {
+    const response = await axiosInstance.get(
+      '/api/Booking/user-registrations',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (error.status === 404) {
+      return [];
+    }
+    console.error('Error fetching booked excursions:', error);
+    throw error;
+  }
+}
+
+export async function bookExcursion(accessToken: string, excursionId: number) {
+  try {
+    const response = await axiosInstance.post(
+      `/api/Booking/${excursionId}/register`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error booking excursion:', error);
+    throw error;
+  }
+}
+
+export async function cancelBooking(accessToken: string, excursionId: number) {
+  try {
+    const response = await axiosInstance.delete(
+      `/api/Booking/unregister/${excursionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error canceling booking:', error);
+    throw error;
+  }
+}
+
 export async function postView(accessToken: string, excursionId: number) {
   try {
     const response = await axiosInstance.post(
