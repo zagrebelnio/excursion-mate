@@ -5,6 +5,7 @@ import {
   getExcursion,
   bookExcursion,
   cancelBooking,
+  postView,
 } from '@/services/excursionService';
 import { useSession } from 'next-auth/react';
 import { ExcursionType } from '@/types/excursion';
@@ -66,6 +67,9 @@ export default function ExcursionPage() {
     }
 
     fetchExcursion();
+    if (token) {
+      postView(token as string, Number(params.id));
+    }
   }, [params.id, token]);
 
   const handleFavoriteToggle = async () => {
@@ -219,7 +223,8 @@ export default function ExcursionPage() {
                 <Opacity /> Humidity: {excursion.weather.humidity}%
               </div>
               <div className="col-span-2">
-                <span className="font-semibold">Description:</span> {excursion.weather.weatherDescription}
+                <span className="font-semibold">Description:</span>{' '}
+                {excursion.weather.weatherDescription}
               </div>
             </div>
           </div>
@@ -261,7 +266,9 @@ export default function ExcursionPage() {
           {!isBooked ? (
             <button
               onClick={token ? handleBook : undefined}
-              disabled={excursion.maxParticipants - excursion.currentParticipants <= 0}
+              disabled={
+                excursion.maxParticipants - excursion.currentParticipants <= 0
+              }
               className="flex items-center gap-1 text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-4 py-2"
             >
               <EventNote fontSize="small" />

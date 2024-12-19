@@ -269,11 +269,14 @@ export async function postView(accessToken: string, excursionId: number) {
 
 export async function getRecommededExcursion(accessToken: string) {
   try {
-    const response = await axiosInstance.get('/api/Excursions/recommended', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await axiosInstance.get(
+      '/api/Recommendation/recommendation',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     if (error.status === 404) {
