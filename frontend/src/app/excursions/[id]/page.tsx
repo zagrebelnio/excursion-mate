@@ -11,7 +11,9 @@ import { ExcursionType } from '@/types/excursion';
 import { useParams } from 'next/navigation';
 import {
   LocationOn,
+  LocationCity,
   Event,
+  AccessTime,
   AttachMoney,
   Group,
   ThumbUp,
@@ -40,6 +42,7 @@ export default function ExcursionPage() {
   const [likes, setLikes] = useState<number>(0);
   const [dislikes, setDislikes] = useState<number>(0);
   const [reaction, setReaction] = useState<null | 'Like' | 'Dislike'>(null);
+  const [isBooked, setIsBooked] = useState(false);
 
   useEffect(() => {
     async function fetchExcursion() {
@@ -53,6 +56,7 @@ export default function ExcursionPage() {
         setLikes(excursionData.likes);
         setDislikes(excursionData.dislikes);
         setReaction(excursionData.reaction);
+        setIsBooked(!excursionData.canRegister);
       } catch (err) {
         console.error('Error fetching excursion:', err);
         setError('Failed to fetch excursion details.');
@@ -123,7 +127,7 @@ export default function ExcursionPage() {
   const handleBook = async () => {
     try {
       await bookExcursion(token as string, excursion?.id as number);
-      alert('Excursion booked successfully!');
+      setIsBooked(true);
     } catch (error) {
       console.error('Error booking excursion:', error);
     }
@@ -132,7 +136,7 @@ export default function ExcursionPage() {
   const handleCancelBooking = async () => {
     try {
       await cancelBooking(token as string, excursion?.id as number);
-      alert('Booking canceled successfully!');
+      setIsBooked(false);
     } catch (error) {
       console.error('Error canceling booking:', error);
     }
@@ -163,13 +167,24 @@ export default function ExcursionPage() {
 
         <div className="flex flex-wrap items-center gap-4 text-gray-700 mb-6">
           <div className="flex items-center gap-2">
-            <LocationOn /> <span>{excursion.city}</span>
+            <LocationCity /> <span>{excursion.city}</span>
           </div>
           <div className="flex items-center gap-2">
             <LocationOn /> <span>{excursion.location}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Event /> <span>{new Date(excursion.date).toLocaleString()}</span>
+            <Event />
+            <span>{new Date(excursion.date).toLocaleDateString()}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <AccessTime />
+            <span>
+              {new Date(excursion.date).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+              })}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <AttachMoney /> <span>{excursion.price}</span>
@@ -243,9 +258,10 @@ export default function ExcursionPage() {
             <span>{isFavorite ? 'Saved' : 'Save'}</span>
           </button>
 
-          {excursion.canRegister ? (
+          {!isBooked ? (
             <button
               onClick={token ? handleBook : undefined}
+              disabled={excursion.maxParticipants - excursion.currentParticipants <= 0}
               className="flex items-center gap-1 text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-4 py-2"
             >
               <EventNote fontSize="small" />
