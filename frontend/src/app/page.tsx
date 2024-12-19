@@ -6,9 +6,12 @@ import { WideExcursionCard } from '@/components/excursionCards';
 import { ExcursionType } from '@/types/excursion';
 import { useUser } from '@/context/userContext';
 import { useExcursions } from '@/hooks/useExcursions';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { getRecommededExcursion } from '@/services/excursionService';
 
 export default function Home() {
+  const { data: session } = useSession();
   const { user, loading: userLoading } = useUser();
   const {
     filters,
@@ -18,12 +21,34 @@ export default function Home() {
     updateQueryParams,
   } = useExcursions();
 
+  const [recommendedExcursion, setRecommendedExcursion] =
+    useState<ExcursionType | null>(null);
+
   useEffect(() => {
     if (filters.pageSize !== 5) {
       updateQueryParams({ pageSize: 5 });
     }
     fetchExcursions({ pageSize: 5 });
   }, []);
+
+  useEffect(() => {
+    async function fetchRecommededExcursion() {
+      if (!session?.accessToken) {
+        setRecommendedExcursion(null);
+        return;
+      }
+
+      try {
+        const data = await getRecommededExcursion(session?.accessToken);
+        setRecommendedExcursion(data);
+      } catch (error) {
+        console.error('Error fetching recommended excursion:', error);
+        setRecommendedExcursion(null);
+      }
+    }
+
+    fetchRecommededExcursion();
+  }, [session?.accessToken]);
 
   const handleSearchClick = () => {
     updateQueryParams({ pageSize: 5 });
@@ -77,6 +102,17 @@ export default function Home() {
           ExcursionMate
         </h1>
       </div>
+
+      {recommendedExcursion && (
+        <section className="bg-blue-100 py-6 shadow-md px-10">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold mb-4 text-gray-800">
+              Recommended Excursion
+            </h2>
+            <WideExcursionCard excursion={recommendedExcursion} />
+          </div>
+        </section>
+      )}
 
       <div className="bg-white py-6 shadow-md px-10">
         <div className="max-w-4xl mx-auto">
