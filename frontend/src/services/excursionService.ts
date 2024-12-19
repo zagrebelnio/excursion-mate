@@ -191,3 +191,40 @@ export async function addReaction(
     throw error;
   }
 }
+
+export async function postView(accessToken: string, excursionId: number) {
+  try {
+    const response = await axiosInstance.post(
+      '/api/Excursions/viewed',
+      {
+        excursionId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error posting view:', error);
+    throw error;
+  }
+}
+
+export async function getRecommededExcursion(accessToken: string) {
+  try {
+    const response = await axiosInstance.get('/api/Excursions/recommended', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (error.status === 404) {
+      return null;
+    }
+    console.error('Error fetching recommended excursion:', error);
+    throw error;
+  }
+}
