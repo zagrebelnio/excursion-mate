@@ -49,6 +49,12 @@ export default function ProfilePage() {
             >
               Saved
             </Link>
+            <Link
+              href="/profile/bookings"
+              className="px-4 py-2 border border-black text-black text-center rounded-lg hover:bg-gray-100 transition"
+            >
+              Bookings
+            </Link>
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
               className="px-4 py-2 border border-black text-black text-center rounded-lg hover:bg-gray-100 transition"
