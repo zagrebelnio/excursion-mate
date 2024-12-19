@@ -171,10 +171,21 @@ namespace backend.Repositories
             await excursionDbContext.ViewedExcursions.AddAsync(viewedExcursion);
             await excursionDbContext.SaveChangesAsync();
         }
-        
+
         public async Task<bool> IsUserRegisteredAsync(string userId, int excursionId)
         {
             return await excursionDbContext.ExcursionUsers.AnyAsync(eu => eu.UserId == userId && eu.ExcursionId == excursionId);
+        }
+
+        public async Task<ViewedExcursion?> GetViewedExcursionAsync(string userId, int excursionId)
+        {
+            return await excursionDbContext.ViewedExcursions.FirstOrDefaultAsync(v => v.UserId == userId && v.ExcursionId == excursionId);
+        }
+
+        public async Task UpdateViewedExcursionAsync(ViewedExcursion viewedExcursion)
+        {
+            excursionDbContext.ViewedExcursions.Update(viewedExcursion);
+            await excursionDbContext.SaveChangesAsync();
         }
     }
 }
