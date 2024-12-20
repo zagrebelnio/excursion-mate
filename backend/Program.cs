@@ -84,6 +84,7 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IViewedExcursionService, ViewedExcursionService>();
 builder.Services.AddScoped<IRecomendationsRepository, RecommendationRepository>();
 builder.Services.AddScoped<IRecommendationService, RecommendationService>();
+builder.Services.AddScoped<IExternalAuthService, ExternalAuthService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
